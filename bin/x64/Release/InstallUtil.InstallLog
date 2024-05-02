@@ -1,0 +1,102 @@
+﻿
+Выполняется групповая операция установки.
+
+Начинается этап установки процедуры установки.
+См. файл журнала выполнения операция для сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Данный файл находится в C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog.
+
+На этапе установки возникло исключение.
+System.InvalidOperationException: Не удалось получить типы программы установки в сборке C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Возникло внутреннее исключение System.Reflection.ReflectionTypeLoadException со следующим сообщением об ошибке: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений..
+
+Начинается этап отката процедуры установки.
+См. файл журнала выполнения операция для сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Данный файл находится в C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog.
+При выполнении программы установки System.Configuration.Install.AssemblyInstaller на этапе отката возникло исключение.
+System.InvalidOperationException: Не удалось получить типы программы установки в сборке C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Возникло внутреннее исключение System.Reflection.ReflectionTypeLoadException со следующим сообщением об ошибке: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений..
+На этапе отката процедуры установки возникло исключение. Это исключение будет проигнорировано, и откат будет продолжен. Однако после завершения отката компьютер может не вернуться полностью в исходное состояние.
+
+Этап отката выполнен успешно.
+
+Групповая операция установки выполнена.
+
+Выполняется групповая операция установки.
+
+Начинается этап установки процедуры установки.
+См. файл журнала выполнения операция для сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Данный файл находится в C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog.
+
+На этапе установки возникло исключение.
+System.InvalidOperationException: Не удалось получить типы программы установки в сборке C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Возникло внутреннее исключение System.Reflection.ReflectionTypeLoadException со следующим сообщением об ошибке: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений..
+
+Начинается этап отката процедуры установки.
+См. файл журнала выполнения операция для сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Данный файл находится в C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog.
+При выполнении программы установки System.Configuration.Install.AssemblyInstaller на этапе отката возникло исключение.
+System.InvalidOperationException: Не удалось получить типы программы установки в сборке C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Возникло внутреннее исключение System.Reflection.ReflectionTypeLoadException со следующим сообщением об ошибке: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений..
+На этапе отката процедуры установки возникло исключение. Это исключение будет проигнорировано, и откат будет продолжен. Однако после завершения отката компьютер может не вернуться полностью в исходное состояние.
+
+Этап отката выполнен успешно.
+
+Групповая операция установки выполнена.
+
+Выполняется групповая операция установки.
+
+Начинается этап установки процедуры установки.
+См. файл журнала выполнения операция для сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Данный файл находится в C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog.
+
+На этапе установки возникло исключение.
+System.InvalidOperationException: Не удалось получить типы программы установки в сборке C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Возникло внутреннее исключение System.Reflection.ReflectionTypeLoadException со следующим сообщением об ошибке: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений..
+
+Начинается этап отката процедуры установки.
+См. файл журнала выполнения операция для сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Данный файл находится в C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog.
+При выполнении программы установки System.Configuration.Install.AssemblyInstaller на этапе отката возникло исключение.
+System.InvalidOperationException: Не удалось получить типы программы установки в сборке C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Возникло внутреннее исключение System.Reflection.ReflectionTypeLoadException со следующим сообщением об ошибке: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений..
+На этапе отката процедуры установки возникло исключение. Это исключение будет проигнорировано, и откат будет продолжен. Однако после завершения отката компьютер может не вернуться полностью в исходное состояние.
+
+Этап отката выполнен успешно.
+
+Групповая операция установки выполнена.
+
+Выполняется групповая операция установки.
+
+Начинается этап установки процедуры установки.
+См. файл журнала выполнения операция для сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Данный файл находится в C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog.
+
+На этапе установки возникло исключение.
+System.InvalidOperationException: Не удалось получить типы программы установки в сборке C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Возникло внутреннее исключение System.Reflection.ReflectionTypeLoadException со следующим сообщением об ошибке: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений..
+
+Начинается этап отката процедуры установки.
+См. файл журнала выполнения операция для сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Данный файл находится в C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog.
+При выполнении программы установки System.Configuration.Install.AssemblyInstaller на этапе отката возникло исключение.
+System.InvalidOperationException: Не удалось получить типы программы установки в сборке C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Возникло внутреннее исключение System.Reflection.ReflectionTypeLoadException со следующим сообщением об ошибке: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений..
+На этапе отката процедуры установки возникло исключение. Это исключение будет проигнорировано, и откат будет продолжен. Однако после завершения отката компьютер может не вернуться полностью в исходное состояние.
+
+Этап отката выполнен успешно.
+
+Групповая операция установки выполнена.
+
+Выполняется групповая операция установки.
+
+Начинается этап установки процедуры установки.
+См. файл журнала выполнения операция для сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Данный файл находится в C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog.
+
+Этап установки успешно выполнен, начинается этап фиксации.
+См. файл журнала выполнения операция для сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Данный файл находится в C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog.
+
+Этап фиксации выполнен успешно.
+
+Групповая операция установки выполнена.

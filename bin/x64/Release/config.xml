@@ -1,0 +1,28 @@
+<root>
+  <Data TypeId="1062216552">
+    <ApplicationFonts TypeId="-304816164">
+      <item TypeId="-1925994758">
+        <Id TypeId="1727199146">-1336522434</Id>
+        <Style TypeId="989716858">Bold</Style>
+        <Family TypeId="1642033309">Arial</Family>
+        <Description TypeId="1642033309">
+        </Description>
+      </item>
+    </ApplicationFonts>
+    <Projects TypeId="1009763160">
+      <item TypeId="-1293740184">
+        <ProductsAutoUpdate TypeId="-491435614">False</ProductsAutoUpdate>
+        <UID TypeId="-1913220081">744d36a9-d7ee-43ee-9f5f-38f725164d2f</UID>
+        <ProjectId TypeId="1642033309">VRU</ProjectId>
+      </item>
+    </Projects>
+  </Data>
+  <Types>
+    <WorkSpace Id="1062216552" Guid="(4a08d5b0-6cff-396f-b806-58432a54fa85)">Smartproj.WorkSpace, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</WorkSpace>
+    <FontCollection Id="-304816164" Guid="(a03cd6cc-e622-3d06-b43a-29abe137d6d5)">Smartproj.FontCollection, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</FontCollection>
+    <FontClass Id="-1925994758" Guid="(b0a656d7-d006-3aa2-b848-6f8dd6583a8a)">Smartproj.FontClass, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</FontClass>
+    <ProjectCollection Id="1009763160" Guid="(107b614c-4179-347b-a1f2-ae0d8d4c1271)">Smartproj.ProjectCollection, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</ProjectCollection>
+    <Project Id="-1293740184" Guid="(c59a4bdb-69f0-3b83-b071-ea3baf984c55)">Smartproj.Project, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Project>
+    <FontStyle Id="989716858" Guid="(e31d55f8-7c58-36fa-b7d6-b42857df44b7)">System.Drawing.FontStyle, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</FontStyle>
+  </Types>
+</root>

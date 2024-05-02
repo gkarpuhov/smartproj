@@ -1,0 +1,27 @@
+<root>
+  <Data TypeId="1062216552">
+    <Projects TypeId="1009763160">
+      <item TypeId="-1293740184">
+        <ProductsAutoUpdate TypeId="-491435614">False</ProductsAutoUpdate>
+        <UID TypeId="-1913220081">d6859d0b-7189-4ed3-b435-a0fb4c292c75</UID>
+        <ProductKeys TypeId="593491458" />
+        <ProjectId TypeId="1642033309">MPP</ProjectId>
+      </item>
+      <item TypeId="-1293740184">
+        <ProductsAutoUpdate TypeId="-491435614">False</ProductsAutoUpdate>
+        <UID TypeId="-1913220081">a4d909a1-c682-4fc2-8827-95a625a44c31</UID>
+        <ProductKeys TypeId="593491458">
+          <item TypeId="-1913220081">3e83dd55-37d2-4e02-aa03-1e6a5ddd85e9</item>
+          <item TypeId="-1913220081">86afb4df-a676-4ef2-a93f-9e086d88ea8d</item>		  
+        </ProductKeys>
+        <ProjectId TypeId="1642033309">VRU</ProjectId>
+      </item>
+    </Projects>
+  </Data>
+  <Types>
+    <WorkSpace Id="1062216552" Guid="(4a08d5b0-6cff-396f-b806-58432a54fa85)">Smartproj.WorkSpace, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</WorkSpace>
+    <ProjectCollection Id="1009763160" Guid="(107b614c-4179-347b-a1f2-ae0d8d4c1271)">Smartproj.ProjectCollection, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</ProjectCollection>
+    <Project Id="-1293740184" Guid="(c59a4bdb-69f0-3b83-b071-ea3baf984c55)">Smartproj.Project, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Project>
+    <List-1 Id="593491458" Guid="(5af00c2e-048b-3ab3-8ccd-548134771d38)">System.Collections.Generic.List`1[[System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</List-1>
+  </Types>
+</root>

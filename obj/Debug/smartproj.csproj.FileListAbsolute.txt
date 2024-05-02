@@ -1,0 +1,6 @@
+C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\obj\Debug\smartproj.csproj.AssemblyReference.cache
+C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\obj\Debug\smartproj.csproj.SuggestedBindingRedirects.cache
+C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\obj\Debug\Smartproj.ProjectInstaller.resources
+C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\obj\Debug\Smartproj.Service1.resources
+C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\obj\Debug\smartproj.csproj.GenerateResource.cache
+C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\obj\Debug\smartproj.csproj.CoreCompileInputs.cache

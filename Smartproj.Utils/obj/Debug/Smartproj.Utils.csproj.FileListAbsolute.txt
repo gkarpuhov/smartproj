@@ -1,0 +1,2 @@
+C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\Smartproj.Utils\obj\Debug\Smartproj.Utils.csproj.AssemblyReference.cache
+C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\Smartproj.Utils\obj\Debug\Smartproj.Utils.csproj.CoreCompileInputs.cache

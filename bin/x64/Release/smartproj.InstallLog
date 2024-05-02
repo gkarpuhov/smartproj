@@ -1,0 +1,166 @@
+﻿Выполняется установка сборки 'C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Устанавливается служба smartproj...
+Служба smartproj успешно установлена.
+Создается исходный EventLog smartproj в журнале Application...
+Выполняется фиксация сборки 'C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Выполняется удаление сборки 'C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   assemblypath = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Выполняется удаление источника EventLog smartproj.
+Выполняется удаление службы smartproj из системы...
+Служба smartproj успешно удалена из системы.
+Выполняется установка сборки 'C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Устанавливается служба smartproj...
+Служба smartproj успешно установлена.
+Создается исходный EventLog smartproj в журнале Application...
+Выполняется фиксация сборки 'C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Выполняется удаление сборки 'C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   assemblypath = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Выполняется удаление источника EventLog smartproj.
+Выполняется удаление службы smartproj из системы...
+Служба smartproj успешно удалена из системы.
+Выполняется установка сборки 'C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Устанавливается служба smartproj...
+Служба smartproj успешно установлена.
+Создается исходный EventLog smartproj в журнале Application...
+Выполняется фиксация сборки 'C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Выполняется установка сборки 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Возникло исключение при попытке найти программы установки в сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+System.Reflection.ReflectionTypeLoadException: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений.
+Выполняется прерывание установки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Выполняется откат для сборки 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Возникло исключение при попытке найти программы установки в сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+System.Reflection.ReflectionTypeLoadException: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений.
+Выполняется прерывание установки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Выполняется установка сборки 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Возникло исключение при попытке найти программы установки в сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+System.Reflection.ReflectionTypeLoadException: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений.
+Выполняется прерывание установки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Выполняется откат для сборки 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Возникло исключение при попытке найти программы установки в сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+System.Reflection.ReflectionTypeLoadException: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений.
+Выполняется прерывание установки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Выполняется установка сборки 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Возникло исключение при попытке найти программы установки в сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+System.Reflection.ReflectionTypeLoadException: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений.
+Выполняется прерывание установки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Выполняется откат для сборки 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Возникло исключение при попытке найти программы установки в сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+System.Reflection.ReflectionTypeLoadException: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений.
+Выполняется прерывание установки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Выполняется установка сборки 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Возникло исключение при попытке найти программы установки в сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+System.Reflection.ReflectionTypeLoadException: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений.
+Выполняется прерывание установки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Выполняется откат для сборки 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Возникло исключение при попытке найти программы установки в сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+System.Reflection.ReflectionTypeLoadException: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений.
+Выполняется прерывание установки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Выполняется установка сборки 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Возникло исключение при попытке найти программы установки в сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+System.Reflection.ReflectionTypeLoadException: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений.
+Выполняется прерывание установки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Выполняется откат для сборки 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Возникло исключение при попытке найти программы установки в сборки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+System.Reflection.ReflectionTypeLoadException: Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений.
+Выполняется прерывание установки C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe.
+Выполняется установка сборки 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
+Устанавливается служба smartproj...
+Служба smartproj успешно установлена.
+Создается исходный EventLog smartproj в журнале Application...
+Выполняется фиксация сборки 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe'.
+Затронуты следующие параметры:
+   logtoconsole = 
+   i = 
+   assemblypath = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.exe
+   logfile = C:\Users\admin\source\repos\smartproj\bin\x64\Release\smartproj.InstallLog
