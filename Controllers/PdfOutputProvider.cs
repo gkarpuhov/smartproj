@@ -39,96 +39,100 @@ namespace Smartproj
         /// Также метод проверяет все доступные шаблоны на несовпадение параметров размера и вылетов
         /// </summary>
         /// <param name="_settings"></param>
-        public override bool Activate(params object[] _settings)
+        public override bool Start(params object[] _settings)
         {
-            if (!base.Activate(_settings))
+            if (Enabled)
             {
-                return false;
-            }
+                CurrentStatus = ControllerStatusEnum.Processing;
 
-            Job job = Owner?.Owner?.Owner;
-
-            Product product = Owner?.Owner;
-            if (product.LayoutSpace.Count == 0 || !product.LayoutSpace.Any(x => x.TemplateCollection.Count > 0))
-            {
-                Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Не опеределено ни одного доступного шаблона (Job '{job.UID}')");
-                StatusEnum = ControllerStatusEnum.Error;
-                return false;
-            }
-
-            PdfObject = new GdPicturePDF();
-            if (PdfObject.NewPDF() != GdPictureStatus.OK)
-            {
-                Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Ошибка создания экземпляра PDF документа (Job '{job.UID}')");
-                StatusEnum = ControllerStatusEnum.Error;
-                return false;
-            }
-            PdfObject.SetMeasurementUnit(PdfMeasurementUnit.PdfMeasurementUnitMillimeter);
-
-            SizeF size = default;
-            float bleed = -100;
-
-            // Определение формата документа
-            foreach (var item in product.LayoutSpace)
-            {
-                for (int i = 0; i < item.TemplateCollection.Count; i++)
+                if (!base.Start(_settings))
                 {
-                    if ((item.TemplateCollection[i].DetailFilter & DetailType) == DetailType)
-                    {
-                        SizeF current = (product.Binding == BindingEnum.LayFlat || product.Binding == BindingEnum.ThreadStitching) ? item.TemplateCollection[i].Trim : new SizeF((float)Math.Round(item.TemplateCollection[i].Trim.Width / 2), (float)Math.Round(item.TemplateCollection[i].Trim.Height / 2));
+                    CurrentStatus = ControllerStatusEnum.Error;
+                    return false;
+                }
 
-                        if (size == default)
+                Job job = Owner?.Owner?.Owner;
+
+                Product product = Owner?.Owner;
+                if (product.LayoutSpace.Count == 0 || !product.LayoutSpace.Any(x => x.TemplateCollection.Count > 0))
+                {
+                    Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Не опеределено ни одного доступного шаблона (Job '{job.UID}')");
+                    CurrentStatus = ControllerStatusEnum.Error;
+                    return false;
+                }
+
+                PdfObject = new GdPicturePDF();
+                if (PdfObject.NewPDF() != GdPictureStatus.OK)
+                {
+                    Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Ошибка создания экземпляра PDF документа (Job '{job.UID}')");
+                    CurrentStatus = ControllerStatusEnum.Error;
+                    return false;
+                }
+                PdfObject.SetMeasurementUnit(PdfMeasurementUnit.PdfMeasurementUnitMillimeter);
+
+                SizeF size = default;
+                float bleed = -100;
+
+                // Определение формата документа
+                foreach (var item in product.LayoutSpace)
+                {
+                    for (int i = 0; i < item.TemplateCollection.Count; i++)
+                    {
+                        if ((item.TemplateCollection[i].DetailFilter & DetailType) == DetailType)
                         {
-                            size = current;
-                        }
-                        else
-                        {
-                            if (size.Width != current.Width || size.Height != current.Height)
+                            SizeF current = (product.Binding == BindingEnum.LayFlat || product.Binding == BindingEnum.ThreadStitching) ? item.TemplateCollection[i].Trim : new SizeF((float)Math.Round(item.TemplateCollection[i].Trim.Width / 2), (float)Math.Round(item.TemplateCollection[i].Trim.Height / 2));
+
+                            if (size == default)
                             {
-                                Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Размеры доступных шаблонов должны совпадать (Job '{job.UID}')");
-                                StatusEnum = ControllerStatusEnum.Error;
-                                return false;
+                                size = current;
                             }
-                        }
-                        if (bleed == -100)
-                        {
-                            bleed = item.TemplateCollection[i].Bleed;
-                        }
-                        else
-                        {
-                            if (bleed != item.TemplateCollection[i].Bleed)
+                            else
                             {
-                                Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Отступы навылет доступных шаблонов должны совпадать (Job '{job.UID}')");
-                                StatusEnum = ControllerStatusEnum.Error;
-                                return false;
+                                if (size.Width != current.Width || size.Height != current.Height)
+                                {
+                                    Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Размеры доступных шаблонов должны совпадать (Job '{job.UID}')");
+                                    CurrentStatus = ControllerStatusEnum.Error;
+                                    return false;
+                                }
+                            }
+                            if (bleed == -100)
+                            {
+                                bleed = item.TemplateCollection[i].Bleed;
+                            }
+                            else
+                            {
+                                if (bleed != item.TemplateCollection[i].Bleed)
+                                {
+                                    Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Отступы навылет доступных шаблонов должны совпадать (Job '{job.UID}')");
+                                    CurrentStatus = ControllerStatusEnum.Error;
+                                    return false;
+                                }
                             }
                         }
                     }
                 }
-            }
-            if (size == default || bleed == -100)
-            {
-                Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Не определены размеры макета (Job '{job.UID}')");
-                StatusEnum = ControllerStatusEnum.Error;
-                return false;
+                if (size == default || bleed == -100)
+                {
+                    Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Не определены размеры макета (Job '{job.UID}')");
+                    CurrentStatus = ControllerStatusEnum.Error;
+                    return false;
+                }
+
+                if (PdfObject.NewPage(size.Width + 2 * bleed, size.Height + 2 * bleed) != GdPictureStatus.OK)
+                {
+                    Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Ошибка при добавлении страницы в PDF документ (Job '{job.UID}')");
+                    CurrentStatus = ControllerStatusEnum.Error;
+                    return false;
+                }
+                PdfObject.SetPageBox(PdfPageBox.PdfPageBoxCropBox, 0, 0, size.Width + 2 * bleed, size.Height + 2 * bleed);
+                PdfObject.SetPageBox(PdfPageBox.PdfPageBoxTrimBox, bleed, bleed, size.Width + bleed, size.Height + bleed);
+                Log?.WriteInfo("PdfOutputProvider.Activate", $"PDF документ успешно инициализирован. Продукт: '{product.ProductCode}'; Деталь: {DetailType}; CropBox: {size.Width + 2 * bleed}x{size.Height + 2 * bleed} мм; Bleed: {bleed} мм (Job '{job.UID}')");
+
+                CurrentStatus = ControllerStatusEnum.Finished;
+                return true;
             }
 
-            if (PdfObject.NewPage(size.Width + 2 * bleed, size.Height + 2 * bleed) != GdPictureStatus.OK)
-            {
-                Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Ошибка при добавлении страницы в PDF документ (Job '{job.UID}')");
-                StatusEnum = ControllerStatusEnum.Error;
-                return false;
-            }
-            PdfObject.SetPageBox(PdfPageBox.PdfPageBoxCropBox, 0, 0, size.Width + 2 * bleed, size.Height + 2 * bleed);
-            PdfObject.SetPageBox(PdfPageBox.PdfPageBoxTrimBox, bleed, bleed, size.Width + bleed, size.Height + bleed);
-            Log?.WriteInfo("PdfOutputProvider.Activate", $"PDF документ успешно инициализирован. Продукт: '{product.ProductCode}'; Деталь: {DetailType}; CropBox: {size.Width + 2 * bleed}x{size.Height + 2 * bleed} мм; Bleed: {bleed} мм (Job '{job.UID}')");
-            StatusEnum = ControllerStatusEnum.Activated;
-
-            return true;
-        }
-        public override void Start()
-        {
-            throw new NotImplementedException();
+            return false;
         }
         protected override void Dispose(bool _disposing)
         {

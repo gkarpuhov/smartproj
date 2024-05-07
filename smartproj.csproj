@@ -243,6 +243,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\Interface.cs" />
+    <Compile Include="Adapters\VruAdapter.cs" />
+    <Compile Include="Controllers\AbstractInputProvider.cs" />
     <Compile Include="Controllers\HotFolderImagesPackInputProvider.cs" />
     <Compile Include="Controllers\PdfOutputProvider.cs" />
     <Compile Include="Detail\Detail.cs" />

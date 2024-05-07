@@ -6,10 +6,15 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Xml.Serialization;
 
 namespace Smartproj
 {
+    /// <summary>
+    /// Коллекция для объектов <see cref="Project"/>
+    /// </summary>
     public class ProjectCollection : IEnumerable<Project>
     {
         private List<Project> mItems;
@@ -44,22 +49,60 @@ namespace Smartproj
             mItems = new List<Project>();
         }
     }
+    /// <summary>
+    /// Реализация класса, опредляющего контейнер для хранения параметров и выполнение заданий относящихся к логически одному источнику (например по брэнду проекта, или по конкретному клиенту)
+    /// Автоматическая десериализация экземпляров класса при инициализации рабочего пространства
+    /// Данный контейнер не содержит сериализованной информации непосредственно о конкретном продукте
+    /// </summary>
     public partial class Project : IDisposable
     {
+        private string mProjectId;
         private bool mIsDisposed;
-        public readonly string ProjectPath;
+        /// <summary>
+        /// Если свойство принимает значение false, контроллеры InputProviders не будут активированы
+        /// </summary>
+        public bool Enabled { get; set; }
+        /// <summary>
+        /// Ссылка на объект, логирующий события. Исползуется для всех структурр и классов, зависящих от данного экземпляра <see cref="Project"/>
+        /// </summary>
         public readonly Logger Log;
-        public string Home => Path.Combine(Owner.Owner.Config, ProjectId);
+        /// <summary>
+        /// Полный путь на диске к директории, содержащей временные и рабочие файлы, находящиеся в работе
+        /// </summary>
+        public string ProjectPath { get; private set; }
+        /// <summary>
+        /// Полный путь на диске к директории, содержащие все настройки, конфигурационные файлы, необходимые для работы
+        /// </summary>
+        public string Home => Path.Combine(Owner.Owner.Config, mProjectId);
         public ProjectCollection Owner { get; set; }
-        [XmlElement]
-        public bool ProductsAutoUpdate { get; set; }
-        //public ProductCollection Products { get; set; }
+        /// <summary>
+        /// Уникальный идентификатор объекта
+        /// </summary>
         [XmlElement]
         public Guid UID { get; set; }
-        //[XmlCollection(false, false, typeof(Guid))]
-        //public List<Guid> ProductKeys { get; set; }
+        /// <summary>
+        /// Уникальный идентификатор проекта. Рекомендуется использовать идентификатор из трех заглавных латинских букв для совместимости с другими системами автоматизации производства
+        /// </summary>
         [XmlElement]
-        public string ProjectId { get; set; }
+        public string ProjectId 
+        {
+            get { return mProjectId; }
+            set
+            {
+                mProjectId = value;
+                ProjectPath = Path.Combine(WorkSpace.WorkingPath, "Temp", "~" + mProjectId);
+                if (!Directory.Exists(ProjectPath))
+                {
+                    Directory.CreateDirectory(ProjectPath);
+                }
+            }
+        }
+        /// <summary>
+        /// Коллекция контроллеров <see cref="AbstractInputProvider"/>, определяющих механизм инициализации рабочего процесса, реализованного классом <see cref="Job"/>, и выполняющий работу в соответствии со структурой данных и контроллеров, связанного объекта <see cref="Product"/>
+        /// Объекты данной коллекции инициализируются (асинхронно) исключительно при старте службы, и деактивируются, соответсвенно, при остановке выполнения сервиса
+        /// </summary>
+        [XmlCollection(true, false, typeof(AbstractInputProvider), typeof(Project))]
+        public ControllerColelction InputProviders { get; set; }
         //
         /*
         internal void CreateProducts()
@@ -102,18 +145,27 @@ namespace Smartproj
             }
         }
         */
-        protected Project() : this("") { }
+        /// <summary>
+        /// Конструктор для создания экземпляра класса путём десериализации
+        /// </summary>
+        protected Project() : this("") 
+        {
+        }
+        /// <summary>
+        /// Конструктор по умолчанию для использовании в коде при ручном создании экземпляра
+        /// </summary>
+        /// <param name="_cid"></param>
         public Project(string _cid)
         {
             mIsDisposed = false;
             ProjectId = _cid;
             UID = Guid.NewGuid();
-            ProjectPath = Path.Combine(WorkSpace.WorkingPath, "Temp", UID.ToString());
-            //ProductKeys = new List<Guid>();
-            Directory.CreateDirectory(ProjectPath);
-            Directory.CreateDirectory(Path.Combine(ProjectPath, "~Files"));
-            Directory.CreateDirectory(Path.Combine(ProjectPath, "~Cms"));
-            ProductsAutoUpdate = false;
+            SourceDataFilter = TagFileTypeEnum.JPEG | TagFileTypeEnum.PNG | TagFileTypeEnum.TIFF | TagFileTypeEnum.JFIF;
+
+
+            //Directory.CreateDirectory(Path.Combine(ProjectPath, "~Files"));
+            //Directory.CreateDirectory(Path.Combine(ProjectPath, "~Cms"));
+
             Log = new Logger();
             Log.Open(Path.Combine(ProjectPath, "log.txt"));
         }
@@ -1449,11 +1501,34 @@ namespace Smartproj
 
             return effectiveRes;
         }
+        /// <summary>
+        /// Освобождение ресурсов объекта <see cref="Project"/>. Также освобождает ресурсы связанных объектов <see cref="AbstractInputProvider"/>. Метод ожидает завершения работы контроллеров, и процессов, происходящих в них, и только после этого передает управление
+        /// </summary>
+        /// <param name="_disposing"></param>
+        /// <exception cref="ObjectDisposedException"></exception>
         protected void Dispose(bool _disposing)
         {
             if (_disposing)
             {
                 if (mIsDisposed) throw new ObjectDisposedException(this.GetType().FullName);
+                if (InputProviders != null && InputProviders.Count > 0)
+                {
+                    // После завершения работы метода Stop, провайдер начнет процедуру остановки с последующим освобождением внутренних ресурсов объекта
+                    // Метод Stop возвращает соответствующий IAsyncResult завершения
+                    var callbacks = InputProviders.Select(x => ((AbstractInputProvider)x).Stop().AsyncWaitHandle).Where(y => y != null);
+
+                    WaitHandle.WaitAll(callbacks.ToArray());
+
+                    foreach (AbstractInputProvider provider in InputProviders)
+                    {
+                       provider.Dispose();
+                    }
+                    foreach (var callback in callbacks)
+                    {
+                        callback.Close();
+                    }
+                }
+                Log.WriteInfo("Project.Dispose", $"{mProjectId}: ресурсы освобождены");
                 Log.Close();
             }
 

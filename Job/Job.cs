@@ -12,19 +12,32 @@ namespace Smartproj
 {
     public class Job : IDisposable
     {
-        public Job(Project _project) 
+        public Job(Project _project)
         {
             Owner = _project;
             mIsDisposed = false;
             UID = Guid.NewGuid();
+            Clusters = new ExifTaggedFileSegments();
+            DataContainer = new List<ExifTaggedFile>();
+            JobPath = Path.Combine(Owner.ProjectPath, UID.ToString());
+            Directory.CreateDirectory(JobPath);
         }
         private bool mIsDisposed;
         public Logger Log => Owner?.Log; 
         public Project Owner { get; }
+        public string JobPath { get; private set; }
+        public List<ExifTaggedFile> DataContainer { get; }
+        public Segment Clusters { get; }
         public Product Product { get; private set; }
         public Guid UID { get; }
         public virtual void Create(Product _product, Size _productSize)
         {
+            string JobPath = Path.Combine(Owner.ProjectPath, UID.ToString());
+            if (!Directory.Exists(JobPath))
+            {
+                Directory.CreateDirectory(JobPath);
+            }
+
             Product = _product;
             Product.Owner = this;
             Product.CreateLayoutSpace(_productSize);
