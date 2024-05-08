@@ -105,7 +105,7 @@ namespace Smartproj
                     {
                         foreach (AbstractInputProvider input in proj.InputProviders)
                         {
-                            input.Start(this);
+                            input.Start(null);
                         }
                     }
                 }

@@ -10,9 +10,10 @@ namespace Smartproj
     /// Текущее состояние процесса контроллера.
     /// Статус Stopping актуален только для реализации контроллера AbstractInputProvider. Определяет состояние пока происходит остановки выполяемых процессов
     /// </summary>
-    public enum ControllerStatusEnum
+    public enum ProcessStatusEnum
     {
         New = 0,
+        Initalizing,
         Processing,
         Stopping,
         Error,
@@ -40,7 +41,7 @@ namespace Smartproj
         /// <summary>
         /// Текущий статус выполнения процессов контроллером
         /// </summary>
-        ControllerStatusEnum CurrentStatus { get; }
+        ProcessStatusEnum CurrentStatus { get; }
         /// <summary>
         /// Начинает выполнение определенного для данного контроллера, процесса
         ///  Если свойство Enabled имеет значение false, то при вызове метода никаиrе действия не будут выполнены, и метод вернет значение false
@@ -84,6 +85,15 @@ namespace Smartproj
     public abstract class AbstractController : IController
     {
         /// <summary>
+        /// Набор параметров, переданных в метод Start
+        /// </summary>
+        public object[] StartParameters { get; protected set; }
+        /// <summary>
+        /// Описание контроллера
+        /// </summary>
+        [XmlElement]
+        public string Label { get; set; }
+        /// <summary>
         /// Уникальный идентификатор
         /// </summary>
         [XmlElement]
@@ -102,7 +112,7 @@ namespace Smartproj
         /// <summary>
         /// Текущий статус выполнения процессов контроллером
         /// </summary>
-        public abstract ControllerStatusEnum CurrentStatus { get; protected set; }
+        public abstract ProcessStatusEnum CurrentStatus { get; protected set; }
         public Logger Log => Owner?.Log;
         /// <summary>
         /// Конструктор по умолчанию

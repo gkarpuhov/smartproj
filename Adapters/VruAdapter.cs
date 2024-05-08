@@ -1,55 +1,86 @@
 ﻿using Smartproj;
 using Smartproj.Utils;
 using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace smartproj.Adapters
 {
     public class VruAdapter : IAdapter
     {
         public AbstractInputProvider Owner { get; }
-
-        public SourceParametersTypeEnum ParametersType => SourceParametersTypeEnum.XML;
-
-        public TagFileTypeEnum FileDataFilter => TagFileTypeEnum.JPEG;
-        public bool GetNext(Job _job, out string _link, out string _data)
+        [XmlElement]
+        public SourceParametersTypeEnum MetadataType { get; set; }
+        [XmlElement]
+        public TagFileTypeEnum FileDataFilter { get; set; }
+        public bool GetNext(Project _project, out Job _job)
         {
-            _link = ""; _data = "";
+            _job = null;
             if (Owner?.Source == null || Owner.Source == "" || !Directory.Exists(Owner.Source))
             {
+                Owner.Log?.WriteError("VruAdapter.GetNext", $"{_project.ProjectId} => Входная директория не определена или не существует '{Owner.Source}'");
                 return false;
             }
 
             var inputFiles = Directory.GetFiles(Owner.Source, "*.zip").OrderBy(x => (new FileInfo(x)).LastWriteTime);
+
             foreach (string file in inputFiles)
             {
                 long filesize = FileProcess.CheckForProcessFile(file);
                 if (filesize > 1024)
                 {
+                    _job = new Job(_project);
+                    _job.Status = ProcessStatusEnum.Initalizing;
                     try
                     {
                         string origPath = Path.Combine(_job.JobPath, "~Original");
                         Directory.CreateDirectory(origPath);
                         string tempZip = Path.Combine(origPath, Path.GetFileName(file));
                         System.IO.File.Move(file, tempZip);
-                        string zipDir = Path.Combine(origPath, Path.GetFileNameWithoutExtension(tempZip));
-                        Directory.CreateDirectory(zipDir);
-                        ZipFile.ExtractToDirectory(tempZip, zipDir);
+                        ZipFile.ExtractToDirectory(tempZip, origPath);
                         File.Delete(tempZip);
-                        _link = zipDir;
-                        Owner.Log?.WriteInfo("VruAdapter.GetNext", $"Процесс {_job.UID}: файлы для работы получены");
-                        return true;
+                 
+                        Owner.Log?.WriteInfo("VruAdapter.GetNext", $"Процесс {_project.ProjectId} => {_job.UID}: файлы для работы получены");
                     }
                     catch (Exception ex)
                     {
-                        Owner.Log?.WriteError("VruAdapter.GetNext", $"Процесс {_job.UID}: ошибка при извлечении файлов ({ex.Message})");
+                        Owner.Log?.WriteError("VruAdapter.GetNext", $"Процесс {_project.ProjectId} => {_job.UID}: ошибка при извлечении файлов ({ex.Message})");
+                        _job.Dispose();
+                        _job = null;
                         return false;
                     }
+                    // Разбор содержимого метадаты из извлеченных файлов
+                    string metadata = "";
+                    string[] allproducts = Directory.GetFiles(Path.Combine(_project.Home, "Products"), "*.xml", SearchOption.AllDirectories);
+                    // Тут надо определить из исходных данных идентификатор продукта
+                    string productId = "ef0bd6b1-1c95-4b6e-9502-96f61a3da7e3"; // Например
+                    string productFile = Path.Combine(_project.Home, "Products", productId + ".xml");
+                    // Тут надо определить из исходных данных формат продукта
+                    Size productSize = new Size(200, 280);  // Например
+                    //
+                    Owner.Log?.WriteInfo("VruAdapter.GetNext", $"Продукт  {_project.ProjectId} => {productId} ({productSize}) передан процессу {_job.UID} для инициализации");
+
+                    if (productFile != null && productFile != "")
+                    {
+                        try
+                        {
+                            _job.Create((Product)Serializer.LoadXml(productFile), productSize, metadata, MetadataType, FileDataFilter);
+                            Owner.Log?.WriteInfo("VruAdapter.GetNext", $"Продукт  {_project.ProjectId} => {productId} ({productSize}) успешно иницализирован процессом {_job.UID}");
+                            return true;
+                        }
+                        catch (Exception ex)
+                        {
+                            Owner.Log?.WriteError("VruAdapter.GetNext", $"Ошибка при загрузке продукта '{productFile}: {ex.Message}");
+                            Owner.Log?.WriteError("VruAdapter.GetNext", $"Ошибка при загрузке продукта '{productFile}: {ex.StackTrace}");
+                        }
+                    }
+
+                    Owner.Log?.WriteError("VruAdapter.GetNext", $"Процесс {_project.ProjectId} => {_job.UID}: ошибка загрузки продукта {_project.ProjectId} => {productId}");
+                    _job.Dispose();
+                    _job = null;
                 }
             }
 
@@ -58,6 +89,8 @@ namespace smartproj.Adapters
         public VruAdapter(AbstractInputProvider _owner) 
         {
             Owner = _owner;
+            MetadataType = SourceParametersTypeEnum.XML;
+            FileDataFilter = TagFileTypeEnum.JPEG;
         }
     }
 }

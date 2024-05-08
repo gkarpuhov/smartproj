@@ -1,15 +1,10 @@
 ﻿using Smartproj.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace Smartproj
 {
     public enum SourceParametersTypeEnum
     {
+        None,
         XML,
         JSON,
         KeyValue
@@ -17,8 +12,8 @@ namespace Smartproj
     public interface IAdapter
     {
         AbstractInputProvider Owner { get; }
-        SourceParametersTypeEnum ParametersType { get; }
+        SourceParametersTypeEnum MetadataType { get; }
         TagFileTypeEnum FileDataFilter { get; }
-        bool GetNext(Job _job, out string _link, out string _data);
+        bool GetNext(Project _project, out Job _job);
     }
 }

@@ -5,103 +5,159 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Smartproj
 {
     public class HotFolderImagesPackInputProvider : AbstractInputProvider
     {
+        private bool mIsLocked;
         public bool AutoExifParse { get; set; }
         public HotFolderImagesPackInputProvider(Project _project) : base(_project)
         {
             AutoExifParse = true;
+            mIsLocked = false;
+            Label = "Запуск процесса обработки изображений из горячей папки";
+        }
+        bool CheckAndBlock()
+        {
+            mSyncRoot.EnterWriteLock();
+            try
+            {
+                if (!mIsLocked)
+                {
+                    mIsLocked = true;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            finally
+            {
+                mSyncRoot.ExitWriteLock();
+            }
+        }
+        void UnBlock()
+        {
+            mSyncRoot.EnterWriteLock();
+            mIsLocked = false;
+            mSyncRoot.ExitWriteLock();
         }
         protected override void ProcessHandler(object _obj)
         {
-            if (Enabled)
+            Job job = null;
+            bool nextprocess = false;
+
+            if (Enabled && CheckAndBlock())
             {
-                if (Source == null || Source == "" || !File.Exists(Source) || Path.GetExtension(Source).ToLower() != ".zip")
+                try
                 {
-                    Log?.WriteError("HotFolderImagesInputProvider.ProcessHandler", $"Ошибка при активации контроллера входных данных. Входная директория не определена или не существует '{Source}'");
-                    CurrentStatus = ControllerStatusEnum.Error;
-                    return;
+                    nextprocess = Adapter.GetNext(Owner.Project, out job);
+                }
+                finally
+                {
+                    UnBlock();
+                }
+            }
+            if (!nextprocess) return;
+
+            List<KeyValuePair<string, List<string>>> extractData = new List<KeyValuePair<string, List<string>>>();
+            FileProcess.ExtractFiles(Path.Combine(job.JobPath, "~Original"), extractData, Adapter.FileDataFilter, true, true);
+
+            ExifTaggedFileSegments topSegment = (ExifTaggedFileSegments)job.Clusters;
+            ExifTaggedFileSegments fsSegment = (ExifTaggedFileSegments)topSegment.Add(SegmentTypeEnum.FileStructure, "0");
+
+            int count = extractData.Sum(x => x.Value.Count);
+
+            Log?.WriteInfo("HotFolderImagesInputProvider.ProcessHandler", $"{Owner.Project.ProjectId} => Файловая структура для выполнения процесса '{job.UID}' загружена: {count} файлов");
+
+            int index = 0;
+
+            for (int i = 0; i < extractData.Count; i++)
+            {
+                List<ExifTaggedFile> parsed = null;
+                if (AutoExifParse)
+                {
+                    parsed = ExifParser(extractData[i].Key, extractData[i].Value, index);
+                    job.DataContainer.AddRange(parsed);
+                }
+                else
+                {
+                    parsed = new List<ExifTaggedFile>();
+                    for (int j = 0; j < extractData[i].Value.Count; j++)
+                    {
+                        ExifTaggedFile item = new ExifTaggedFile(index, extractData[i].Value[j], extractData[i].Key);
+                        parsed.Add(item);
+                        job.DataContainer.Add(item);
+                    }
                 }
 
-                Job job = new Job(Owner.Project);
-                string link;
-                string data;
-                if (Adapter.GetNext(job, out link, out data))
+                index = index + parsed.Count;
+
+                if (parsed.Count > 0)
                 {
-                    List<KeyValuePair<string, List<string>>> extractData = new List<KeyValuePair<string, List<string>>>();
-                    FileProcess.ExtractFiles(link, extractData, Adapter.FileDataFilter, true, true);
-
-                    ExifTaggedFileSegments topSegment = (ExifTaggedFileSegments)job.Clusters;
-                    ExifTaggedFileSegments fsSegment = (ExifTaggedFileSegments)topSegment.Add(SegmentTypeEnum.FileStructure, "0");
-
-                    int index = 0;
-
-                    for (int i = 0; i < extractData.Count; i++)
-                    {
-                        List<ExifTaggedFile> parsed = null;
-                        if (AutoExifParse)
-                        {
-                            parsed = ExifParser(extractData[i].Key, extractData[i].Value, index);
-                            job.DataContainer.AddRange(parsed);
-                        }
-                        else
-                        {
-                            parsed = new List<ExifTaggedFile>();
-                            for (int j = 0; j < extractData[i].Value.Count; j++)
-                            {
-                                ExifTaggedFile item = new ExifTaggedFile(index, extractData[i].Value[j], extractData[i].Key);
-                                parsed.Add(item);
-                                job.DataContainer.Add(item);
-                            }
-                        }
-
-                        index = index + parsed.Count;
-
-                        if (parsed.Count > 0)
-                        {
-                            fsSegment.ImportFiles(extractData[i].Key, parsed, x => Path.GetFileNameWithoutExtension(x.FileName), x => x.Index);
-                        }
-                    }
-
-                    if (job.DataContainer.Count > 0)
-                    {
-                        // В результате формирования сегментов файловой структуры (ImportFiles), порядок сортировки файлов может быть изменен
-                        // Свойство Index уже не будет отражать порядок расположения файлов, теперь за это будет отвечать свойство OrderBy
-                        // Установим сквозной порядковый индекс по возрастанию в соответствии со структурой сегментов: 
-
-                        int ordercounter = 0;
-                        for (int i = 0; i < fsSegment.ChildNodes.Count; i++)
-                        {
-                            var directory = fsSegment.ChildNodes[i];
-                            for (int j = 0; j < directory.ChildNodes.Count; j++)
-                            {
-                                List<int> d = (List<int>)directory.ChildNodes[j].Data;
-                                for (int k = 0; k < d.Count; k++)
-                                {
-                                    job.DataContainer[d[k]].OrderBy = ordercounter++;
-                                }
-                                // Меняем список на хеш-контейнер для более быстрой обработки
-                                directory.ChildNodes[j].Data = new HashSet<int>(directory.ChildNodes[j].Data);
-                            }
-                        }
-                    }
-
+                    fsSegment.ImportFiles(extractData[i].Key, parsed, x => Path.GetFileNameWithoutExtension(x.FileName), x => x.Index);
                 }
-          
+            }
 
+            if (job.DataContainer.Count > 0)
+            {
+                // В результате формирования сегментов файловой структуры (ImportFiles), порядок сортировки файлов может быть изменен
+                // Свойство Index уже не будет отражать порядок расположения файлов, теперь за это будет отвечать свойство OrderBy
+                // Установим сквозной порядковый индекс по возрастанию в соответствии со структурой сегментов: 
 
+                int ordercounter = 0;
+                for (int i = 0; i < fsSegment.ChildNodes.Count; i++)
+                {
+                    var directory = fsSegment.ChildNodes[i];
+                    for (int j = 0; j < directory.ChildNodes.Count; j++)
+                    {
+                        List<int> d = (List<int>)directory.ChildNodes[j].Data;
+                        for (int k = 0; k < d.Count; k++)
+                        {
+                            job.DataContainer[d[k]].OrderBy = ordercounter++;
+                        }
+                        // Меняем список на хеш-контейнер для более быстрой обработки
+                        directory.ChildNodes[j].Data = new HashSet<int>(directory.ChildNodes[j].Data);
+                    }
+                }
 
+                Log?.WriteInfo("HotFolderImagesInputProvider.ProcessHandler", $"{Owner.Project.ProjectId} => Процесс формирование данных для обработки завершен. Процесс '{job.UID}'");
+                job.Status = ProcessStatusEnum.Processing;
+                
+                if (job.Product.Controllers != null)
+                {
+                    foreach (AbstractController controller in job.Product.Controllers.OrderByDescending(x => x.Priority))
+                    {
+                        if (job.Status != ProcessStatusEnum.Processing) break;
+                        controller.Start(null);
+                    }
+                }
+                if (DefaultOutput != null)
+                {
+                    foreach (AbstractController controller in DefaultOutput.OrderByDescending(x => x.Priority))
+                    {
+                        if (job.Status != ProcessStatusEnum.Processing) break;
+                        controller.Start(job);
+                    }
+                }
 
-
+                if (job.Status == ProcessStatusEnum.Processing)
+                {
+                    job.Status = ProcessStatusEnum.Finished;
+                    Log?.WriteInfo("HotFolderImagesInputProvider.ProcessHandler", $"{Owner.Project.ProjectId} => Выполнение процесса '{job.UID}' успешно завершено");
+                }
+                else
+                {
+                    Log?.WriteError("HotFolderImagesInputProvider.ProcessHandler", $"{Owner.Project.ProjectId} => Выполнение процесса '{job.UID}' не выполнено");
+                }
             }
         }
         private List<ExifTaggedFile> ExifParser(string _dirNameKey, List<string> _files, int _firstIndex)
         {
-            Job job = Owner?.Owner?.Owner;
             List<ExifTaggedFile> data = new List<ExifTaggedFile>();
             var extractor = new ExifTool(new ExifToolOptions() { EscapeTagValues = false, ExtractICCProfile = true });
             int index = _firstIndex;
@@ -362,7 +418,7 @@ namespace Smartproj
                         }
                     }
 
-                    if ((job.Owner.SourceDataFilter & fileNameType) != fileNameType)
+                    if ((Adapter.FileDataFilter & fileNameType) != fileNameType)
                     {
                         //errors.Add($"{filesTree[i].Value[j]}: Не определен формат файла");
                         continue;

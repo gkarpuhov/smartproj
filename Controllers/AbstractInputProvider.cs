@@ -15,7 +15,7 @@ namespace Smartproj
         private Timer mTimer;
         private AutoResetEvent mStopWaitHandle;
         protected ReaderWriterLockSlim mSyncRoot;
-        private ControllerStatusEnum mCurrentStatus;
+        private ProcessStatusEnum mCurrentStatus;
         delegate void StopAsyncMethodCaller();
         /// <summary>
         /// Строка, определеющая путь источника получения данных
@@ -29,11 +29,11 @@ namespace Smartproj
         /// <summary>
         /// Текущий статус выполнения процессов контроллером. Является потокобезопасным.
         /// </summary>
-        public override ControllerStatusEnum CurrentStatus
+        public override ProcessStatusEnum CurrentStatus
         {
             get
             {
-                if (mCurrentStatus == ControllerStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
+                if (mCurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
                 mSyncRoot.EnterReadLock();
                 try
                 {
@@ -43,7 +43,7 @@ namespace Smartproj
             }
             protected set
             {
-                if (mCurrentStatus == ControllerStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
+                if (mCurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
                 mSyncRoot.EnterWriteLock();
                 try
                 {
@@ -63,13 +63,13 @@ namespace Smartproj
         /// <exception cref="ObjectDisposedException"></exception>
         public IAsyncResult Stop()
         {
-            if (mCurrentStatus == ControllerStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
+            if (mCurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
             mSyncRoot.EnterWriteLock();
             try
             {
-                if (mTimer != null && mCurrentStatus == ControllerStatusEnum.Processing)
+                if (mTimer != null && mCurrentStatus == ProcessStatusEnum.Processing)
                 {
-                    mCurrentStatus = ControllerStatusEnum.Stopping;
+                    mCurrentStatus = ProcessStatusEnum.Stopping;
                     void StopHandle()
                     {
                         if (!mTimer.Dispose(mStopWaitHandle))
@@ -77,7 +77,7 @@ namespace Smartproj
                             mStopWaitHandle.Set();
                         }
                         WaitHandle.WaitAll(new WaitHandle[] { mStopWaitHandle });
-                        CurrentStatus = ControllerStatusEnum.Finished;
+                        CurrentStatus = ProcessStatusEnum.Finished;
                         Log.WriteInfo("AbstractInputProvider.Stop", $"{this.GetType().Name}: контроллер завершил работу");
                         mTimer = null;
                     }
@@ -101,14 +101,16 @@ namespace Smartproj
         /// </summary>
         public override bool Start(params object[] _settings)
         {
-            if (mCurrentStatus == ControllerStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
+            if (mCurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
+
             mSyncRoot.EnterWriteLock();
             try
             {
                 if (Enabled)
                 {
+                    StartParameters = _settings;
                     mTimer = new Timer(ProcessHandler, _settings, 0, 5000);
-                    mCurrentStatus = ControllerStatusEnum.Processing;
+                    mCurrentStatus = ProcessStatusEnum.Processing;
                     Log.WriteInfo("AbstractInputProvider.Start", $"{this.GetType().Name}: контроллер начал работу");
                     return true;
                 }
@@ -126,12 +128,12 @@ namespace Smartproj
         {
             if (_disposing)
             {
-                if (mCurrentStatus == ControllerStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
+                if (mCurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
                 mSyncRoot.Dispose();
                 mStopWaitHandle.Close();
                 Log.WriteInfo("AbstractInputProvider.Dispose", $"{this.GetType().Name}: ресурсы освобождены");
             }
-            mCurrentStatus = ControllerStatusEnum.Disposed;
+            mCurrentStatus = ProcessStatusEnum.Disposed;
         }
         /// <summary>
         /// Конструктор по умолчанию
@@ -140,7 +142,7 @@ namespace Smartproj
         protected AbstractInputProvider(Project _project) : base()
         {
             DefaultOutput = new ControllerColelction(_project, null);
-            mCurrentStatus = ControllerStatusEnum.New;
+            mCurrentStatus = ProcessStatusEnum.New;
             mSyncRoot = new ReaderWriterLockSlim();
             mStopWaitHandle = new AutoResetEvent(false);
         }

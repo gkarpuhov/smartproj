@@ -160,8 +160,6 @@ namespace Smartproj
             mIsDisposed = false;
             ProjectId = _cid;
             UID = Guid.NewGuid();
-            SourceDataFilter = TagFileTypeEnum.JPEG | TagFileTypeEnum.PNG | TagFileTypeEnum.TIFF | TagFileTypeEnum.JFIF;
-
 
             //Directory.CreateDirectory(Path.Combine(ProjectPath, "~Files"));
             //Directory.CreateDirectory(Path.Combine(ProjectPath, "~Cms"));

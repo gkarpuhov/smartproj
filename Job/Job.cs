@@ -1,12 +1,8 @@
-﻿using System;
+﻿using Smartproj.Utils;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GdPicture14;
-using Smartproj.Utils;
 
 namespace Smartproj
 {
@@ -15,6 +11,7 @@ namespace Smartproj
         public Job(Project _project)
         {
             Owner = _project;
+            mStatus = ProcessStatusEnum.New;
             mIsDisposed = false;
             UID = Guid.NewGuid();
             Clusters = new ExifTaggedFileSegments();
@@ -23,6 +20,9 @@ namespace Smartproj
             Directory.CreateDirectory(JobPath);
         }
         private bool mIsDisposed;
+        private object mSyncRoot = new Object();
+        private ProcessStatusEnum mStatus;
+        public ProcessStatusEnum Status { get { lock (mSyncRoot) { return mStatus; } } set { lock (mSyncRoot) { mStatus = value; } } }
         public Logger Log => Owner?.Log; 
         public Project Owner { get; }
         public string JobPath { get; private set; }
@@ -30,36 +30,17 @@ namespace Smartproj
         public Segment Clusters { get; }
         public Product Product { get; private set; }
         public Guid UID { get; }
-        public virtual void Create(Product _product, Size _productSize)
+        public SourceParametersTypeEnum MetadataType { get; private set; }
+        public TagFileTypeEnum FileDataFilter { get; private set; }
+        public string Metadata { get; private set; }
+        public virtual void Create(Product _product, Size _productSize, string _metadata, SourceParametersTypeEnum _metadataType, TagFileTypeEnum _fileDataFilter)
         {
-            string JobPath = Path.Combine(Owner.ProjectPath, UID.ToString());
-            if (!Directory.Exists(JobPath))
-            {
-                Directory.CreateDirectory(JobPath);
-            }
-
+            MetadataType = _metadataType;
+            FileDataFilter = _fileDataFilter;
+            Metadata = _metadata;
             Product = _product;
             Product.Owner = this;
             Product.CreateLayoutSpace(_productSize);
-        }
-        public bool Create(Guid _productId, Size _productSize)
-        {
-            string[] files = Directory.GetFiles(Path.Combine(Owner.Home, "Products"), "*.xml", SearchOption.AllDirectories);
-            string productFile = files.SingleOrDefault(x => String.Compare(Path.GetFileNameWithoutExtension(x), _productId.ToString(), true) == 0);
-            if (productFile != null)
-            {
-                try
-                {
-                    Create((Product)Serializer.LoadXml(productFile), _productSize);
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    Log.WriteError("CreateProducts", $"Ошибка при загрузке продукта '{productFile}: {ex.Message}");
-                    Log.WriteError("CreateProducts", $"Ошибка при загрузке продукта '{productFile}: {ex.StackTrace}");
-                }
-            }
-            return false;
         }
         protected void Dispose(bool _disposing)
         {

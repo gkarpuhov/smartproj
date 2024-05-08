@@ -43,11 +43,12 @@ namespace Smartproj
         {
             if (Enabled)
             {
-                CurrentStatus = ControllerStatusEnum.Processing;
+                StartParameters = _settings;
+                CurrentStatus = ProcessStatusEnum.Processing;
 
                 if (!base.Start(_settings))
                 {
-                    CurrentStatus = ControllerStatusEnum.Error;
+                    CurrentStatus = ProcessStatusEnum.Error;
                     return false;
                 }
 
@@ -57,7 +58,7 @@ namespace Smartproj
                 if (product.LayoutSpace.Count == 0 || !product.LayoutSpace.Any(x => x.TemplateCollection.Count > 0))
                 {
                     Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Не опеределено ни одного доступного шаблона (Job '{job.UID}')");
-                    CurrentStatus = ControllerStatusEnum.Error;
+                    CurrentStatus = ProcessStatusEnum.Error;
                     return false;
                 }
 
@@ -65,7 +66,7 @@ namespace Smartproj
                 if (PdfObject.NewPDF() != GdPictureStatus.OK)
                 {
                     Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Ошибка создания экземпляра PDF документа (Job '{job.UID}')");
-                    CurrentStatus = ControllerStatusEnum.Error;
+                    CurrentStatus = ProcessStatusEnum.Error;
                     return false;
                 }
                 PdfObject.SetMeasurementUnit(PdfMeasurementUnit.PdfMeasurementUnitMillimeter);
@@ -91,7 +92,7 @@ namespace Smartproj
                                 if (size.Width != current.Width || size.Height != current.Height)
                                 {
                                     Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Размеры доступных шаблонов должны совпадать (Job '{job.UID}')");
-                                    CurrentStatus = ControllerStatusEnum.Error;
+                                    CurrentStatus = ProcessStatusEnum.Error;
                                     return false;
                                 }
                             }
@@ -104,7 +105,7 @@ namespace Smartproj
                                 if (bleed != item.TemplateCollection[i].Bleed)
                                 {
                                     Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Отступы навылет доступных шаблонов должны совпадать (Job '{job.UID}')");
-                                    CurrentStatus = ControllerStatusEnum.Error;
+                                    CurrentStatus = ProcessStatusEnum.Error;
                                     return false;
                                 }
                             }
@@ -114,21 +115,21 @@ namespace Smartproj
                 if (size == default || bleed == -100)
                 {
                     Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Не определены размеры макета (Job '{job.UID}')");
-                    CurrentStatus = ControllerStatusEnum.Error;
+                    CurrentStatus = ProcessStatusEnum.Error;
                     return false;
                 }
 
                 if (PdfObject.NewPage(size.Width + 2 * bleed, size.Height + 2 * bleed) != GdPictureStatus.OK)
                 {
                     Log?.WriteError("PdfOutputProvider.Activate", $"Ошибка при активации контроллера создания PDF файла. Ошибка при добавлении страницы в PDF документ (Job '{job.UID}')");
-                    CurrentStatus = ControllerStatusEnum.Error;
+                    CurrentStatus = ProcessStatusEnum.Error;
                     return false;
                 }
                 PdfObject.SetPageBox(PdfPageBox.PdfPageBoxCropBox, 0, 0, size.Width + 2 * bleed, size.Height + 2 * bleed);
                 PdfObject.SetPageBox(PdfPageBox.PdfPageBoxTrimBox, bleed, bleed, size.Width + bleed, size.Height + bleed);
                 Log?.WriteInfo("PdfOutputProvider.Activate", $"PDF документ успешно инициализирован. Продукт: '{product.ProductCode}'; Деталь: {DetailType}; CropBox: {size.Width + 2 * bleed}x{size.Height + 2 * bleed} мм; Bleed: {bleed} мм (Job '{job.UID}')");
 
-                CurrentStatus = ControllerStatusEnum.Finished;
+                CurrentStatus = ProcessStatusEnum.Finished;
                 return true;
             }
 
