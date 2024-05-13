@@ -59,13 +59,9 @@ namespace Smartproj
         private string mProjectId;
         private bool mIsDisposed;
         /// <summary>
-        /// Если свойство принимает значение false, контроллеры InputProviders не будут активированы
-        /// </summary>
-        public bool Enabled { get; set; }
-        /// <summary>
         /// Ссылка на объект, логирующий события. Исползуется для всех структурр и классов, зависящих от данного экземпляра <see cref="Project"/>
         /// </summary>
-        public readonly Logger Log;
+        public Logger Log { get; private set; }
         /// <summary>
         /// Полный путь на диске к директории, содержащей временные и рабочие файлы, находящиеся в работе
         /// </summary>
@@ -75,6 +71,11 @@ namespace Smartproj
         /// </summary>
         public string Home => Path.Combine(Owner.Owner.Config, mProjectId);
         public ProjectCollection Owner { get; set; }
+        /// <summary>
+        /// Если свойство принимает значение false, контроллеры InputProviders не будут активированы
+        /// </summary>
+        [XmlElement]
+        public bool Enabled { get; set; }
         /// <summary>
         /// Уникальный идентификатор объекта
         /// </summary>
@@ -89,11 +90,19 @@ namespace Smartproj
             get { return mProjectId; }
             set
             {
-                mProjectId = value;
-                ProjectPath = Path.Combine(WorkSpace.WorkingPath, "Temp", "~" + mProjectId);
-                if (!Directory.Exists(ProjectPath))
+                if (value != null && value != "")
                 {
-                    Directory.CreateDirectory(ProjectPath);
+                    mProjectId = value;
+                    ProjectPath = Path.Combine(WorkSpace.WorkingPath, "~" + mProjectId);
+                    if (!Directory.Exists(ProjectPath))
+                    {
+                        Directory.CreateDirectory(ProjectPath);
+                    }
+                    if (Log == null)
+                    {
+                        Log = new Logger();
+                        Log.Open(Path.Combine(ProjectPath, "log.txt"));
+                    }
                 }
             }
         }
@@ -101,8 +110,8 @@ namespace Smartproj
         /// Коллекция контроллеров <see cref="AbstractInputProvider"/>, определяющих механизм инициализации рабочего процесса, реализованного классом <see cref="Job"/>, и выполняющий работу в соответствии со структурой данных и контроллеров, связанного объекта <see cref="Product"/>
         /// Объекты данной коллекции инициализируются (асинхронно) исключительно при старте службы, и деактивируются, соответсвенно, при остановке выполнения сервиса
         /// </summary>
-        [XmlCollection(true, false, typeof(AbstractInputProvider), typeof(Project))]
-        public ControllerColelction InputProviders { get; set; }
+        [XmlCollection(true, false, typeof(AbstractInputProvider))]
+        public ControllerCollection InputProviders { get; }
         //
         /*
         internal void CreateProducts()
@@ -159,13 +168,11 @@ namespace Smartproj
         {
             mIsDisposed = false;
             ProjectId = _cid;
+            Enabled = true;
             UID = Guid.NewGuid();
-
+            InputProviders = new ControllerCollection(this, null);
             //Directory.CreateDirectory(Path.Combine(ProjectPath, "~Files"));
             //Directory.CreateDirectory(Path.Combine(ProjectPath, "~Cms"));
-
-            Log = new Logger();
-            Log.Open(Path.Combine(ProjectPath, "log.txt"));
         }
         /*
         public void ExtractData(List<KeyValuePair<string, List<string>>> _filesTree)
@@ -1528,6 +1535,7 @@ namespace Smartproj
                 }
                 Log.WriteInfo("Project.Dispose", $"{mProjectId}: ресурсы освобождены");
                 Log.Close();
+                Log = null;
             }
 
             mIsDisposed = true;

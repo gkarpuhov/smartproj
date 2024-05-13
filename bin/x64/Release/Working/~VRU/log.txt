@@ -1,0 +1,33 @@
+13.05.2024 16:01:15: Error;  => 0
+13.05.2024 16:01:15: Error;  => Не найден метод 'Add/Clear' коллекции типа ControllerColelction
+13.05.2024 16:01:15: Error;  =>    в Smartproj.Utils.Serializer.LoadXml(Object _object, XmlDocument _xmlDoc, KeyValuePair`2[] _params)
+   в Smartproj.Service1.MainEventHandler(Object _state)
+13.05.2024 16:06:43: Error;  => 0
+13.05.2024 16:06:43: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
+13.05.2024 16:06:43: Error;  => 2
+13.05.2024 16:06:43: Message; Product:Save => Конфигурации продукта успешно сохранена 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Products\7B\5c9f8e22-e5b5-40b5-ad20-b3758d190ee8.xml'
+13.05.2024 16:10:16: Error;  => 0
+13.05.2024 16:10:16: Error;  => Не найден метод 'Add/Clear' коллекции типа ControllerCollection
+13.05.2024 16:10:16: Error;  =>    в Smartproj.Utils.Serializer.LoadXml(Object _object, XmlDocument _xmlDoc, KeyValuePair`2[] _params)
+   в Smartproj.Service1.MainEventHandler(Object _state)
+13.05.2024 16:27:12: Error;  => 0
+13.05.2024 16:27:12: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
+13.05.2024 16:27:12: Error;  => 2
+13.05.2024 16:27:12: Message; Product:Save => Конфигурации продукта успешно сохранена 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Products\7B\5c9f8e22-e5b5-40b5-ad20-b3758d190ee8.xml'
+13.05.2024 16:50:34: Message; AbstractInputProvider.Start => HotFolderImagesPackInputProvider: контроллер начал работу
+13.05.2024 16:52:18: Message; VruAdapter.GetNext => Процесс VRU => d8443bd4-f006-4f42-9c06-9f875a3d939b: файлы для работы получены
+13.05.2024 16:52:18: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) передан процессу d8443bd4-f006-4f42-9c06-9f875a3d939b для инициализации
+13.05.2024 16:52:18: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
+13.05.2024 16:52:18: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) успешно иницализирован процессом d8443bd4-f006-4f42-9c06-9f875a3d939b
+13.05.2024 16:52:18: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Файловая структура для выполнения процесса 'd8443bd4-f006-4f42-9c06-9f875a3d939b' загружена: 83 файлов
+13.05.2024 16:52:28: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Процесс формирование данных для обработки завершен. Процесс 'd8443bd4-f006-4f42-9c06-9f875a3d939b'
+13.05.2024 16:54:57: Message; AbstractInputProvider.Start => HotFolderImagesPackInputProvider: контроллер начал работу
+13.05.2024 16:56:26: Message; VruAdapter.GetNext => Процесс VRU => a027ff37-7e41-41bf-b2ff-011464214a01: файлы для работы получены
+13.05.2024 16:56:26: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) передан процессу a027ff37-7e41-41bf-b2ff-011464214a01 для инициализации
+13.05.2024 16:56:26: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
+13.05.2024 16:56:26: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) успешно иницализирован процессом a027ff37-7e41-41bf-b2ff-011464214a01
+13.05.2024 16:56:26: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Файловая структура для выполнения процесса 'a027ff37-7e41-41bf-b2ff-011464214a01' загружена: 83 файлов
+13.05.2024 16:56:34: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Процесс формирование данных для обработки завершен. Процесс 'a027ff37-7e41-41bf-b2ff-011464214a01'
+13.05.2024 16:56:34: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Выполнение процесса 'a027ff37-7e41-41bf-b2ff-011464214a01' успешно завершено
+13.05.2024 16:57:54: Message; AbstractInputProvider.Stop => HotFolderImagesPackInputProvider: контроллер завершил работу
+13.05.2024 16:57:54: Message; AbstractInputProvider.Dispose => HotFolderImagesPackInputProvider: ресурсы освобождены

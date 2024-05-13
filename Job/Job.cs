@@ -16,7 +16,7 @@ namespace Smartproj
             UID = Guid.NewGuid();
             Clusters = new ExifTaggedFileSegments();
             DataContainer = new List<ExifTaggedFile>();
-            JobPath = Path.Combine(Owner.ProjectPath, UID.ToString());
+            JobPath = Path.Combine(Owner.ProjectPath, "Jobs", UID.ToString());
             Directory.CreateDirectory(JobPath);
         }
         private bool mIsDisposed;

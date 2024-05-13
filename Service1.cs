@@ -1,19 +1,12 @@
-﻿using Emgu.CV.Dnn;
-using GdPicture14;
-using lcmsNET;
-using smartproj.Products;
+﻿using smartproj.Products;
 using Smartproj.Utils;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading;
-using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Net.WebRequestMethods;
+using static Emgu.CV.OCR.Tesseract;
 
 namespace Smartproj
 {
@@ -21,8 +14,6 @@ namespace Smartproj
     {
         private WorkSpace Work;
         private Timer mTimer;
-        private string mInPath;
-        private string mOutPath;
         private object mSyncroot;
         private bool mIsRunning;
         public bool CheckForRun()
@@ -59,7 +50,7 @@ namespace Smartproj
         {
             if (CheckForRun())
             {
-                var infiles = Directory.GetFiles(mInPath, "*.zip", SearchOption.TopDirectoryOnly);
+                var infiles = Directory.GetFiles(Path.Combine(WorkSpace.ApplicationPath, "works", "in"), "*.zip", SearchOption.TopDirectoryOnly);
 
                 if (infiles.Length > 0 && FileProcess.CheckForProcessFile(infiles))
                 {
@@ -81,32 +72,45 @@ namespace Smartproj
                     if (Work != null) return;
 
                     //Work = new WorkSpace();
+                    // 1
                     Work = (WorkSpace)Serializer.LoadXml(Path.Combine(WorkSpace.ApplicationPath, "config.xml"));
+                    // 2 : InputProviders - инициализация внутри Project. Понятие продукта пока не существует
+                    Project vru = Work.Projects["VRU"];
+                    // 3 : Новый поставщик - ! Ссылка на проект пока не определена
+                    //var inprovider = new HotFolderImagesPackInputProvider();
+                    // 4 : Добавление в коллекцию - теперь провайдер имеет создателя (InputProviders), и через него сразу имеет связь с проектом, так как создатель был создан проетом при инициализации
+                    // --- 
+                    // 5 : Специфический адаптер абработки входных данных для проекта VRU
+                    //inprovider.Adapter = new VruAdapter(inprovider);
+                    //vru.InputProviders.Add(inprovider);
+                    // 6 : Стандартные новый контроллер вывода в PDF
+                    //inprovider.DefaultOutput.Add(new PdfOutputProvider(DetailTypeEnum.Block));
+
                     //Work.Projects = new ProjectCollection(Work);
                     //Project vru = new Project("VRU");
-                    Project vru = Work.Projects["VRU"];
+
                     //Work.Projects.Add(vru);
                     try
                     {
                         vru.Log.WriteError("", "0");
-                        string tempPath = Path.Combine(vru.ProjectPath, "~Original");
-                        Directory.CreateDirectory(tempPath);
-                        for (int i = 0; i < infiles.Length; i++)
-                        {
-                            System.IO.File.Move(infiles[i], Path.Combine(tempPath, Path.GetFileName(infiles[i])));
-                        }
 
+                        // 6 : Создаем новый объект продукта
+                        //LayFlat lf = new LayFlat("7B", "");
+                        LayFlat lf = (LayFlat)Serializer.LoadXml(@"C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Products\7B\5c9f8e22-e5b5-40b5-ad20-b3758d190ee8.xml");
+                        //lf.Add(new CoverDetail() { LayoutType = DetailLayoutTypeEnum.Lainer });
+                        //lf.Add(new BlockDetail() { LayoutType = DetailLayoutTypeEnum.Spread });
+                        // 7 : Определяем набор контроллеров для данного продукта
+                        //((HotFolderImagesPackInputProvider)vru.InputProviders.First()).Source = @"C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Input";
                         Size size = new Size(200, 280);
-                        vru.Log.WriteError("", "1");
                         Job job = new Job(vru);
-                        LayFlat lf = new LayFlat("7B", "");
-                        lf.Add(new CoverDetail() { LayoutType = DetailLayoutTypeEnum.Lainer });
-                        lf.Add(new BlockDetail() { LayoutType = DetailLayoutTypeEnum.Spread });
-                        job.Create(lf, size);
+                        job.Create(lf, size, "", SourceParametersTypeEnum.XML, TagFileTypeEnum.JPEG);
                         vru.Log.WriteError("", "2");
+                        lf.Save();
+                        Work.SaveXml(Path.Combine(WorkSpace.ApplicationPath, "config.xml"));
+                        return;
+
                         //LayFlat lf = (LayFlat)job.Product;
-           
-                        vru.Log.WriteError("", "25");
+
                         /*
                         // read mode
                         Layout layout = lf.LayoutSpace[size];
@@ -402,31 +406,22 @@ namespace Smartproj
         }
         protected override void OnStart(string[] args)
         {
-            //Work = (WorkSpace)Serializer.LoadXml(Path.Combine(WorkSpace.ApplicationPath, "config.xml"));
-
-
-            mInPath = Path.Combine(WorkSpace.ApplicationPath, "works", "in");
-            mOutPath = Path.Combine(WorkSpace.ApplicationPath, "works", "out");
-
-            if (!Directory.Exists(mInPath))
-            {
-                Directory.CreateDirectory(mInPath);
-            }
-            if (!Directory.Exists(mOutPath))
-            {
-                Directory.CreateDirectory(mOutPath);
-            }
-
-            mTimer = new Timer(MainEventHandler, this, 0, 5000);
-
+            //mTimer = new Timer(MainEventHandler, this, 0, 5000);
+            Work = (WorkSpace)Serializer.LoadXml(Path.Combine(WorkSpace.ApplicationPath, "config.xml"));
+            Work.Initilize();
             WorkSpace.SystemLog.Open(Path.Combine(WorkSpace.ApplicationPath, "log.txt"));
             WorkSpace.SystemLog.WriteInfo("Сервис", "Процессы активированы");
         }
         protected override void OnStop()
         {
-            mTimer.Dispose();
-            WorkSpace.SystemLog.WriteInfo("Сервис", "Процессы остановлены");
-            WorkSpace.SystemLog.Close();
+            if (Work != null)
+            {
+                Work.Dispose();
+                Work = null;
+                //mTimer.Dispose();
+                WorkSpace.SystemLog.WriteInfo("Сервис", "Процессы остановлены");
+                WorkSpace.SystemLog.Close();
+            }
         }
     }
 }

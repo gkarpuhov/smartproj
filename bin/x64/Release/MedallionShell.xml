@@ -1,0 +1,991 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MedallionShell</name>
+    </assembly>
+    <members>
+        <member name="T:Medallion.Shell.Command">
+            <summary>
+            Represents an executing <see cref="P:Medallion.Shell.Command.Process"/> as well as related asynchronous activity (e. g. the piping of
+            input and output streams)
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Command.Process">
+            <summary>
+            The <see cref="T:System.Diagnostics.Process"/> associated with this <see cref="T:Medallion.Shell.Command"/>. In a multi-process command,
+            this will be the final <see cref="T:System.Diagnostics.Process"/> in the chain. NOTE: this property cannot be accessed when using
+            the <see cref="M:Medallion.Shell.Shell.Options.DisposeOnExit(System.Boolean)"/> option
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Command.Processes">
+            <summary>
+            All <see cref="T:System.Diagnostics.Process"/>es associated with this <see cref="T:Medallion.Shell.Command"/>. NOTE: this property cannot be accessed when using
+            the <see cref="M:Medallion.Shell.Shell.Options.DisposeOnExit(System.Boolean)"/> option
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Command.ProcessId">
+            <summary>
+            The PID of the process associated with this <see cref="T:Medallion.Shell.Command"/>. In a multi-process command,
+            this will be the PID of the final <see cref="T:System.Diagnostics.Process"/> in the chain. NOTE: unlike
+            the <see cref="P:Medallion.Shell.Command.Process"/> property, this property is compatible with the <see cref="M:Medallion.Shell.Shell.Options.DisposeOnExit(System.Boolean)"/>
+            option
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Command.ProcessIds">
+            <summary>
+            All PIDs of the <see cref="T:System.Diagnostics.Process"/>es associated with this <see cref="T:Medallion.Shell.Command"/>. NOTE: unlike
+            the <see cref="P:Medallion.Shell.Command.Processes"/> property, this property is compatible with the
+            <see cref="M:Medallion.Shell.Shell.Options.DisposeOnExit(System.Boolean)"/> option
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Command.StandardInput">
+            <summary>
+            Writes to the process's standard input
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Command.StandardOutput">
+            <summary>
+            Reads from the process's standard output
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Command.StandardError">
+            <summary>
+            Reads from the process's standard error
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.Kill">
+            <summary>
+            Kills the <see cref="P:Medallion.Shell.Command.Process"/> if it is still executing
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.TrySignalAsync(Medallion.Shell.CommandSignal)">
+            <summary>
+            Attempts to send the specified <see cref="T:Medallion.Shell.CommandSignal"/> to each <see cref="T:System.Diagnostics.Process"/>
+            underlying the current <see cref="T:Medallion.Shell.Command"/>. Returns true if at least one <see cref="T:System.Diagnostics.Process"/>
+            received the signal and false otherwise.
+            
+            There are several reasons that signaling could fail, for example:
+            * The provided signal number is not valid for the OS
+            * The <see cref="T:System.Diagnostics.Process"/> has already exited
+            * On Windows, signals can only be sent to console processes
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.Wait">
+            <summary>
+            A convenience method for <code>command.Task.Wait()</code>. If the task faulted or was canceled,
+            this will throw the faulting <see cref="T:System.Exception"/> or <see cref="T:System.Threading.Tasks.TaskCanceledException"/> rather than
+            the wrapped <see cref="T:System.AggregateException"/> thrown by <see cref="P:System.Threading.Tasks.Task`1.Result"/>
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Command.Result">
+            <summary>
+            A convenience method for <code>command.Task.Result</code>. If the task faulted or was canceled,
+            this will throw the faulting <see cref="T:System.Exception"/> or <see cref="T:System.Threading.Tasks.TaskCanceledException"/> rather than
+            the wrapped <see cref="T:System.AggregateException"/> thrown by <see cref="P:System.Threading.Tasks.Task`1.Result"/>
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Command.Task">
+            <summary>
+            A <see cref="P:Medallion.Shell.Command.Task"/> representing the progress of this <see cref="T:Medallion.Shell.Command"/>
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.PipeTo(Medallion.Shell.Command)">
+            <summary>
+            Implements <see cref="T:Medallion.Shell.Command"/> piping as in bash. The first <see cref="T:Medallion.Shell.Command"/>'s standard output is piped
+            to the second's standard input. Returns a new <see cref="T:Medallion.Shell.Command"/> instance whose <see cref="P:Medallion.Shell.Command.Task"/> tracks
+            the progress of the entire chain
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectTo(System.IO.Stream)">
+            <summary>
+            Standard output redirection as in bash. The <see cref="T:Medallion.Shell.Command"/>'s standard output is written to the given
+            <paramref name="stream"/>. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress
+            of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectStandardErrorTo(System.IO.Stream)">
+            <summary>
+            Standard error redirection as in bash. The <see cref="T:Medallion.Shell.Command"/>'s standard error is written to the given
+            <paramref name="stream"/>. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress
+            of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectFrom(System.IO.Stream)">
+            <summary>
+            Standard input redirection as in bash. The given <paramref name="stream"/> is written to the <see cref="T:Medallion.Shell.Command"/>'s
+            standard output. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress
+            of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectTo(System.IO.FileInfo)">
+            <summary>
+            Standard output redirection as in bash. The <see cref="T:Medallion.Shell.Command"/>'s standard output is written to the given
+            <paramref name="file"/>. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress
+            of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectStandardErrorTo(System.IO.FileInfo)">
+            <summary>
+            Standard error redirection as in bash. The <see cref="T:Medallion.Shell.Command"/>'s standard error is written to the given
+            <paramref name="file"/>. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress
+            of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectFrom(System.IO.FileInfo)">
+            <summary>
+            Standard input redirection as in bash. The given <paramref name="file"/> is written to the <see cref="T:Medallion.Shell.Command"/>'s
+            standard output. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress
+            of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectTo(System.Collections.Generic.ICollection{System.String})">
+            <summary>
+            Standard output redirection as in bash. The lines of <see cref="T:Medallion.Shell.Command"/>'s standard output are added to the given
+            collection (<paramref name="lines"/> Returns a new <see cref="T:Medallion.Shell.Command"/>  whose <see cref="P:Medallion.Shell.Command.Task"/> tracks
+            the progress of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectStandardErrorTo(System.Collections.Generic.ICollection{System.String})">
+            <summary>
+            Standard error redirection as in bash. The lines of <see cref="T:Medallion.Shell.Command"/>'s standard error are added to the given
+            collection (<paramref name="lines"/> Returns a new <see cref="T:Medallion.Shell.Command"/>  whose <see cref="P:Medallion.Shell.Command.Task"/> tracks
+            the progress of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectFrom(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Standard input redirection as in bash. The items in <paramref name="lines"/> are written to the <see cref="T:Medallion.Shell.Command"/>'s
+            standard output as lines of text. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the
+            progress of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectTo(System.Collections.Generic.ICollection{System.Char})">
+            <summary>
+            Standard output redirection as in bash. The chars of <see cref="T:Medallion.Shell.Command"/>'s standard output are added to the given
+            collection (<paramref name="chars"/> Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks
+            the progress of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectStandardErrorTo(System.Collections.Generic.ICollection{System.Char})">
+            <summary>
+            Standard error redirection as in bash. The chars of <see cref="T:Medallion.Shell.Command"/>'s standard error are added to the given
+            collection (<paramref name="chars"/> Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks
+            the progress of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectFrom(System.Collections.Generic.IEnumerable{System.Char})">
+            <summary>
+            Standard input redirection as in bash. The items in <paramref name="chars"/> are written to the <see cref="T:Medallion.Shell.Command"/>'s
+            standard output. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the
+            progress of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectTo(System.IO.TextWriter)">
+            <summary>
+            Standard output redirection as in bash. The <see cref="T:Medallion.Shell.Command"/>'s standard output is written to the given
+            <paramref name="writer"/>. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress
+            of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectStandardErrorTo(System.IO.TextWriter)">
+            <summary>
+            Standard error redirection as in bash. The <see cref="T:Medallion.Shell.Command"/>'s standard error is written to the given
+            <paramref name="writer"/>. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress
+            of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.RedirectFrom(System.IO.TextReader)">
+            <summary>
+            Standard input redirection as in bash. The given <paramref name="reader"/> is written to the <see cref="T:Medallion.Shell.Command"/>'s
+            standard output. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress
+            of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.GetOutputAndErrorLines">
+             <summary>
+             Returns a single streaming <see cref="T:System.Collections.Generic.IEnumerable`1"/> which merges the outputs of
+             <see cref="M:Medallion.Shell.Streams.ProcessStreamReader.GetLines"/> on <see cref="P:Medallion.Shell.Command.StandardOutput"/> and
+             <see cref="P:Medallion.Shell.Command.StandardError"/>. This is similar to doing 2>&amp;1 on the command line.
+            
+             Merging at the line level means that interleaving of the outputs cannot break up any single
+             lines
+             </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.op_BitwiseOr(Medallion.Shell.Command,Medallion.Shell.Command)">
+            <summary>
+            Implements <see cref="T:Medallion.Shell.Command"/> piping as in bash. The first <see cref="T:Medallion.Shell.Command"/>'s standard output is piped
+            to the second's standard input. Returns a new <see cref="T:Medallion.Shell.Command"/> instance whose <see cref="P:Medallion.Shell.Command.Task"/> tracks
+            the progress of the entire chain
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.op_GreaterThan(Medallion.Shell.Command,System.IO.Stream)">
+            <summary>
+            Standard output redirection as in bash. The <see cref="T:Medallion.Shell.Command"/>'s standard output is written to the given
+            <paramref name="stream"/>. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress
+            of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.op_LessThan(Medallion.Shell.Command,System.IO.Stream)">
+            <summary>
+            Standard input redirection as in bash. The given <paramref name="stream"/> is written to the <see cref="T:Medallion.Shell.Command"/>'s
+            standard output. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress
+            of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.op_GreaterThan(Medallion.Shell.Command,System.IO.FileInfo)">
+            <summary>
+            Standard output redirection as in bash. The <see cref="T:Medallion.Shell.Command"/>'s standard output is written to the given
+            <paramref name="file"/>. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress
+            of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.op_LessThan(Medallion.Shell.Command,System.IO.FileInfo)">
+            <summary>
+            Standard input redirection as in bash. The given <paramref name="file"/> is written to the <see cref="T:Medallion.Shell.Command"/>'s
+            standard output. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress
+            of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.op_GreaterThan(Medallion.Shell.Command,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Standard output redirection as in bash. The lines of <see cref="T:Medallion.Shell.Command"/>'s standard output are added to the given
+            collection (<paramref name="lines"/> MUST be an instance of <see cref="T:System.Collections.Generic.ICollection`1"/>; the use of the <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            type is to provide the required parity with the input redirection operator. Returns a new <see cref="T:Medallion.Shell.Command"/>
+            whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.op_LessThan(Medallion.Shell.Command,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Standard input redirection as in bash. The items in <paramref name="lines"/> are written to the <see cref="T:Medallion.Shell.Command"/>'s
+            standard output as lines of text. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the
+            progress of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.op_GreaterThan(Medallion.Shell.Command,System.Collections.Generic.IEnumerable{System.Char})">
+            <summary>
+            Standard output redirection as in bash. The chars of <see cref="T:Medallion.Shell.Command"/>'s standard output are added to the given
+            collection (<paramref name="chars"/> MUST be an instance of <see cref="T:System.Collections.Generic.ICollection`1"/>; the use of the <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            type is to provide the required parity with the input redirection operator. Returns a new <see cref="T:Medallion.Shell.Command"/>
+            whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the progress of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.op_LessThan(Medallion.Shell.Command,System.Collections.Generic.IEnumerable{System.Char})">
+            <summary>
+            Standard input redirection as in bash. The items in <paramref name="chars"/> are written to the <see cref="T:Medallion.Shell.Command"/>'s
+            standard output. Returns a new <see cref="T:Medallion.Shell.Command"/> whose <see cref="P:Medallion.Shell.Command.Task"/> tracks the
+            progress of both this <see cref="T:Medallion.Shell.Command"/> and the IO being performed
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.Run(System.String,System.Collections.Generic.IEnumerable{System.Object},System.Action{Medallion.Shell.Shell.Options})">
+            <summary>
+            A convenience method for calling <see cref="M:Medallion.Shell.Shell.Run(System.String,System.Collections.Generic.IEnumerable{System.Object},System.Action{Medallion.Shell.Shell.Options})"/> on <see cref="P:Medallion.Shell.Shell.Default"/>
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.TryAttachToProcess(System.Int32,System.Action{Medallion.Shell.Shell.Options},Medallion.Shell.Command@)">
+            <summary>
+            A convenience method for calling <see cref="M:Medallion.Shell.Shell.TryAttachToProcess(System.Int32,System.Action{Medallion.Shell.Shell.Options},Medallion.Shell.Command@)"/> on <see cref="P:Medallion.Shell.Shell.Default"/>
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.TryAttachToProcess(System.Int32,Medallion.Shell.Command@)">
+            <summary>
+            A convenience method for calling <see cref="M:Medallion.Shell.Shell.TryAttachToProcess(System.Int32,Medallion.Shell.Command@)"/> on <see cref="P:Medallion.Shell.Shell.Default"/>
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.Run(System.String,System.Object[])">
+            <summary>
+            A convenience method for calling <see cref="M:Medallion.Shell.Shell.Run(System.String,System.Object[])"/> on <see cref="P:Medallion.Shell.Shell.Default"/>
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.System#IDisposable#Dispose">
+            <summary>
+            Releases all resources associated with this <see cref="T:Medallion.Shell.Command"/>. This is only required
+            if the <see cref="M:Medallion.Shell.Shell.Options.DisposeOnExit(System.Boolean)"/> has been set to false
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.DisposeInternal">
+            <summary>
+            Subclass-specific implementation of <see cref="M:System.IDisposable.Dispose"/>
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Command.ThrowIfDisposed">
+            <summary>
+            Throws <see cref="T:System.ObjectDisposedException"/> if the <see cref="T:Medallion.Shell.Command"/> has been disposed
+            </summary>
+        </member>
+        <member name="T:Medallion.Shell.CommandLineSyntax">
+            <summary>
+            Acts as an abstract class for handling the escaping of arguments when passed to a <see cref="T:System.Diagnostics.Process"/>.
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.CommandLineSyntax.CreateArgumentString(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a combined argument string that can be used with <see cref="P:System.Diagnostics.ProcessStartInfo.Arguments"/>. The combined
+            string should escape all arguments appropriately so that the process receives the same strings as passed into this method
+            </summary>
+            <param name="arguments">the arguments to the process</param>
+            <returns>the argument string</returns>
+        </member>
+        <member name="T:Medallion.Shell.CommandResult">
+            <summary>
+            The result of a <see cref="T:Medallion.Shell.Command"/>
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.CommandResult.ExitCode">
+            <summary>
+            The exit code of the command's process
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.CommandResult.Success">
+            <summary>
+            Returns true iff the exit code is 0 (indicating success)
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.CommandResult.StandardOutput">
+            <summary>
+            If available, the full standard output text of the command
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.CommandResult.StandardError">
+            <summary>
+            If available, the full standard error text of the command
+            </summary>
+        </member>
+        <member name="T:Medallion.Shell.CommandSignal">
+            <summary>
+            Represents a "signal" that can be sent to a <see cref="T:Medallion.Shell.Command"/>
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.CommandSignal.ControlC">
+            <summary>
+            The input interupt signal (CTRL_C_EVENT on Windows, SIGINT on Unix).
+            
+            By default, this will terminate the process, but processes may register a handle for the signal
+            in order to do something else instead (e. g. graceful shutdown)
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.CommandSignal.FromSystemValue(System.Int32)">
+            <summary>
+            Creates a <see cref="T:Medallion.Shell.CommandSignal"/> using an operating system-specific numeric value.
+            The resulting <see cref="T:Medallion.Shell.CommandSignal"/> will likely NOT be compatible across platforms
+            </summary>
+        </member>
+        <member name="T:Medallion.Shell.ErrorExitCodeException">
+            <summary>
+            Represents a process that failed with a non-zero exit code. This will be thrown by a <see cref="T:Medallion.Shell.Command"/>
+            created with <see cref="M:Medallion.Shell.Shell.Options.ThrowOnError(System.Boolean)"/> called
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.ErrorExitCodeException.ExitCode">
+            <summary>
+            The exit code of the process
+            </summary>
+        </member>
+        <member name="T:Medallion.Shell.MonoUnixCommandLineSyntax">
+            <summary>
+            Mono on unix uses a different, incompatible method of splitting the command line into arguments
+            than is the default on Windows. This is referenced here: https://bugzilla.xamarin.com/show_bug.cgi?id=19296,
+            although the "quick fix" it mentions does not fully account for the differences.
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.PlatformCompatibilityHelper.SafeStart(System.Diagnostics.Process,System.IO.StreamWriter@,System.IO.StreamReader@,System.IO.StreamReader@)">
+             <summary>
+             Starts the given <paramref name="process"/> and captures the standard IO streams. This method works around Mono.Android-specific
+             issue https://github.com/madelson/MedallionShell/issues/22, where a process that exits quickly causes the initialization of
+             the standard input writer to fail (since setting AutoFlush = true triggers a write which on Mono crashes for a closed process).
+            
+             If https://github.com/mono/mono/issues/8478 is ever addressed, we wouldn't need this any more.
+             </summary>
+        </member>
+        <member name="F:Medallion.Shell.ProcessCommand.fileName">
+            <summary>
+            Used for <see cref="M:Medallion.Shell.ProcessCommand.ToString"/>
+            </summary>
+        </member>
+        <member name="F:Medallion.Shell.ProcessCommand.arguments">
+            <summary>
+            Used for <see cref="M:Medallion.Shell.ProcessCommand.ToString"/>
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.ProcessCommand.CreateProcessMonitoringTask(System.Diagnostics.Process)">
+            <summary>
+            Creates a <see cref="T:System.Threading.Tasks.Task"/> which watches for the given <paramref name="process"/> to exit.
+            This must be configured BEFORE starting the process since otherwise there is a race between subscribing
+            to the exited event and the event firing.
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.ProcessHelper.CreateProcessTask(System.Diagnostics.Process,System.Threading.Tasks.Task,System.Boolean,System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            Creates a task which will either return the exit code for the <paramref name="process"/>, throw
+            <see cref="T:Medallion.Shell.ErrorExitCodeException"/>, throw <see cref="T:System.TimeoutException"/> or be canceled. When
+            the returned <see cref="T:System.Threading.Tasks.Task"/> completes, the <paramref name="process"/> is guaranteed to have
+            exited
+            </summary>
+        </member>
+        <member name="T:Medallion.Shell.Shell">
+            <summary>
+            Represents an object which can be used to dispatch <see cref="T:Medallion.Shell.Command"/>s
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.#ctor(System.Action{Medallion.Shell.Shell.Options})">
+            <summary>
+            Creates a shell whose commands will receive the given configuration options
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.Run(System.String,System.Collections.Generic.IEnumerable{System.Object},System.Action{Medallion.Shell.Shell.Options})">
+            <summary>
+            Executes the given <paramref name="executable"/> with the given <paramref name="arguments"/> and
+            <paramref name="options"/>
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.TryAttachToProcess(System.Int32,Medallion.Shell.Command@)">
+            <summary>
+            Tries to attach to an already running process, given its <paramref name="processId"/>,
+            giving <paramref name="attachedCommand" /> representing the process and returning
+            true if this succeeded, otherwise false.
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.TryAttachToProcess(System.Int32,System.Action{Medallion.Shell.Shell.Options},Medallion.Shell.Command@)">
+            <summary>
+            Tries to attach to an already running process, given its <paramref name="processId"/>
+            and <paramref name="options"/>,  giving <paramref name="attachedCommand" /> representing
+            the process and returning true if this succeeded, otherwise false.
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.Run(System.String,System.Object[])">
+            <summary>
+            Executes the given <paramref name="executable"/> with the given <paramref name="arguments"/>
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Shell.Default">
+            <summary>
+            A <see cref="T:Medallion.Shell.Shell"/> that uses default options
+            </summary>
+        </member>
+        <member name="T:Medallion.Shell.Shell.Options">
+            <summary>
+            Provides a builder interface for configuring the options for creating and executing
+            a <see cref="T:Medallion.Shell.Command"/>
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.Options.RestoreDefaults">
+            <summary>
+            Restores all settings to the default value
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.Options.StartInfo(System.Action{System.Diagnostics.ProcessStartInfo})">
+            <summary>
+            Specifies a function which can modify the <see cref="T:System.Diagnostics.ProcessStartInfo"/>. Multiple such functions
+            can be specified this way
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.Options.Command(System.Action{Medallion.Shell.Command})">
+            <summary>
+            Specifies a function which can modify the <see cref="T:Medallion.Shell.Command"/>. Multiple such functions
+            can be specified this way
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.Options.Command(System.Func{Medallion.Shell.Command,Medallion.Shell.Command})">
+            <summary>
+            Specifies a function which can project the <see cref="T:Medallion.Shell.Command"/> to a new <see cref="T:Medallion.Shell.Command"/>.
+            Intended to be used with <see cref="T:Medallion.Shell.Command"/>-producing "pipe" functions like <see cref="M:Medallion.Shell.Command.RedirectTo(System.Collections.Generic.ICollection{System.Char})"/>
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.Options.WorkingDirectory(System.String)">
+            <summary>
+            Sets the initial working directory of the <see cref="T:Medallion.Shell.Command"/> (defaults to the current working directory)
+            </summary>.
+        </member>
+        <member name="M:Medallion.Shell.Shell.Options.EnvironmentVariable(System.String,System.String)">
+            <summary>
+            Adds or overwrites an environment variable to be passed to the <see cref="T:Medallion.Shell.Command"/>
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.Options.EnvironmentVariables(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Adds or overwrites a set of environmental variables to be passed to the <see cref="T:Medallion.Shell.Command"/>
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.Options.ThrowOnError(System.Boolean)">
+            <summary>
+            If specified, a non-zero exit code will cause the <see cref="T:Medallion.Shell.Command"/>'s <see cref="T:System.Threading.Tasks.Task"/> to fail
+            with <see cref="T:Medallion.Shell.ErrorExitCodeException"/>. Defaults to false
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.Options.DisposeOnExit(System.Boolean)">
+             <summary>
+             If specified, the underlying <see cref="T:System.Diagnostics.Process"/> object for the command will be disposed when the process exits.
+             This means that there is no need to dispose of a <see cref="T:Medallion.Shell.Command"/>.
+            
+             This also means that <see cref="P:Medallion.Shell.Command.Process"/> cannot be reliably accessed,
+             since it may exit at any time.
+            
+             Defaults to true
+             </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.Options.Syntax(Medallion.Shell.CommandLineSyntax)">
+            <summary>
+            Specifies the <see cref="P:Medallion.Shell.Shell.Options.CommandLineSyntax"/> to use for escaping arguments. Defaults to
+            an appropriate value for the current platform
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.Options.Timeout(System.TimeSpan)">
+            <summary>
+            Specifies a timeout after which the process should be killed. Defaults to <see cref="F:System.Threading.Timeout.InfiniteTimeSpan"/>
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.Options.Encoding(System.Text.Encoding)">
+             <summary>
+             Specifies an <see cref="M:Medallion.Shell.Shell.Options.Encoding(System.Text.Encoding)"/> to be used for StandardOutput, StandardError, and StandardInput.
+            
+             By default, <see cref="T:System.Diagnostics.Process"/> will use <see cref="P:System.Console.OutputEncoding"/> for output streams and <see cref="P:System.Console.InputEncoding"/>
+             for input streams.
+            
+             Note that the output encodings can be set individually via <see cref="T:System.Diagnostics.ProcessStartInfo"/>. If you need to specify different encodings
+             for different streams, use this method to set the StandardInput encoding and then use <see cref="M:Medallion.Shell.Shell.Options.StartInfo(System.Action{System.Diagnostics.ProcessStartInfo})"/>
+             to further override the two output encodings
+             </summary>
+        </member>
+        <member name="M:Medallion.Shell.Shell.Options.CancellationToken(System.Threading.CancellationToken)">
+            <summary>
+            Specifies a <see cref="T:System.Threading.CancellationToken"/> which will abort the command when canceled.
+            When a command is aborted, the underlying process will be killed as if using <see cref="M:Medallion.Shell.Command.Kill"/>
+            </summary>
+        </member>
+        <member name="F:Medallion.Shell.Signals.WindowsProcessSignaler.SignalFromCurrentProcessLock">
+            <summary>
+            Since signaling from the current process requires mucking with global state (CTRL handlers), we limit to one
+            concurrent access.
+            </summary>
+        </member>
+        <member name="T:Medallion.Shell.Streams.CompatibilityStandardInputWrapperStream">
+            <summary>
+            On .NET Core and .NET Framework on Windows, writing to the standard input <see cref="T:System.IO.Stream"/> after the process exits is a noop.
+            
+            However, on Mono this will throw a "Write Fault" exception (https://github.com/madelson/MedallionShell/issues/6)
+            while .NET Core on Linux throws a "Broken Pipe" exception (https://github.com/madelson/MedallionShell/issues/46).
+            
+            This class wraps the underlying <see cref="T:System.IO.Stream"/> to provide consistent behavior across platforms.
+            </summary>
+        </member>
+        <member name="F:Medallion.Shell.Streams.InternalProcessStreamReader.processStream">
+            <summary>
+            The underlying <see cref="T:System.IO.Stream"/> from the <see cref="T:System.Diagnostics.Process"/>
+            </summary>
+        </member>
+        <member name="F:Medallion.Shell.Streams.Pipe.MaxStableSize">
+            <summary>
+            The maximum size at which the pipe will be left empty. Using 2 * <see cref="F:Medallion.Shell.Constants.ByteBufferSize"/>
+            helps prevent thrashing if data is being pushed through the pipe at that rate
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.Pipe.UpdateSignalsNoLock">
+             <summary>
+             MA: I used to have the signals updated in various ways and in various places
+             throughout the code. Now I have just one function that sets both signals to the correct
+             values. This is called from <see cref="M:Medallion.Shell.Streams.Pipe.ReadNoLock(System.Byte[],System.Int32,System.Int32)"/>, <see cref="M:Medallion.Shell.Streams.Pipe.WriteNoLock(System.Byte[],System.Int32,System.Int32)"/>,
+             <see cref="M:Medallion.Shell.Streams.Pipe.InternalCloseReadSideNoLock"/>, and <see cref="M:Medallion.Shell.Streams.Pipe.InternalCloseWriteSideNoLock"/>.
+            
+             While it may seem like this does extra work, nearly all cases are necessary. For example, we used
+             to say "signal bytes available if count > 0" at the end of <see cref="M:Medallion.Shell.Streams.Pipe.WriteNoLock(System.Byte[],System.Int32,System.Int32)"/>. The problem is
+             that we could have the following sequence of operations:
+             1. <see cref="M:Medallion.Shell.Streams.Pipe.ReadNoLockAsync(System.Byte[],System.Int32,System.Int32,System.TimeSpan,System.Threading.CancellationToken)"/> blocks on <see cref="F:Medallion.Shell.Streams.Pipe.bytesAvailableSignal"/>
+             2. <see cref="M:Medallion.Shell.Streams.Pipe.WriteNoLock(System.Byte[],System.Int32,System.Int32)"/> writes and signals
+             3. <see cref="M:Medallion.Shell.Streams.Pipe.ReadNoLockAsync(System.Byte[],System.Int32,System.Int32,System.TimeSpan,System.Threading.CancellationToken)"/> wakes up
+             4. Another <see cref="M:Medallion.Shell.Streams.Pipe.WriteNoLock(System.Byte[],System.Int32,System.Int32)"/> call writes and re-signals
+             5. <see cref="M:Medallion.Shell.Streams.Pipe.ReadNoLockAsync(System.Byte[],System.Int32,System.Int32,System.TimeSpan,System.Threading.CancellationToken)"/> reads ALL content and returns, leaving <see cref="F:Medallion.Shell.Streams.Pipe.bytesAvailableSignal"/> signaled (invalid)
+            
+             This new implementation avoids this because the <see cref="M:Medallion.Shell.Streams.Pipe.ReadNoLock(System.Byte[],System.Int32,System.Int32)"/> call inside <see cref="M:Medallion.Shell.Streams.Pipe.ReadNoLockAsync(System.Byte[],System.Int32,System.Int32,System.TimeSpan,System.Threading.CancellationToken)"/> will
+             properly unsignal after it consumes ALL the contents
+             </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.PipeHelpers.CopyToAsyncWithAutoFlush(System.IO.Stream,System.IO.Stream)">
+            <summary>
+            Similar to <see cref="M:System.IO.Stream.CopyToAsync(System.IO.Stream)"/>, but performs a <see cref="M:System.IO.Stream.FlushAsync"/>
+            following each <see cref="M:System.IO.Stream.WriteAsync(System.Byte[],System.Int32,System.Int32)"/>. The benefit of this is that data
+            moves through the pipe instead of becoming caught in the write buffer of <paramref name="destination"/>
+            </summary>
+        </member>
+        <member name="T:Medallion.Shell.Streams.ProcessStreamReader">
+            <summary>
+            An implementation of <see cref="T:System.IO.TextReader"/> with additional methods to control behavior. The
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Streams.ProcessStreamReader.BaseStream">
+            <summary>
+            Provides access to the underlying <see cref="T:System.IO.Stream"/>. Equivalent to <see cref="P:System.IO.StreamReader.BaseStream"/>
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Streams.ProcessStreamReader.Encoding">
+            <summary>
+            Specifies the encoding being used by the <see cref="T:System.IO.TextReader"/>. Equivalent to <see cref="P:System.IO.StreamReader.CurrentEncoding"/>
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamReader.GetLines">
+            <summary>
+            Enumerates each remaining line of output. The enumerable cannot be re-used
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamReader.Discard">
+            <summary>
+            Discards all output from the underlying stream. This prevents the process from blocking because
+            the output pipe's buffer is full without wasting any memory on buffering the output
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamReader.StopBuffering">
+            <summary>
+            By default, the underlying stream output is buffered to prevent the process from blocking
+            because the output pipe's buffer is full. Calling this method disables this behavior. This is useful
+            when it is desirable to have the process block while waiting for output to be read
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamReader.PipeToAsync(System.IO.Stream,System.Boolean,System.Boolean)">
+            <summary>
+            Pipes the output of the underlying stream to the given stream. This occurs asynchronously, so this
+            method returns before all content has been written
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamReader.PipeToAsync(System.IO.TextWriter,System.Boolean,System.Boolean)">
+            <summary>
+            Pipes the output of the reader to the given writer. This occurs asynchronously, so this
+            method returns before all content has been written
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamReader.PipeToAsync(System.Collections.Generic.ICollection{System.String},System.Boolean)">
+            <summary>
+            Asynchronously copies each line of output to the given collection
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamReader.PipeToAsync(System.IO.FileInfo,System.Boolean)">
+            <summary>
+            Asynchronously writes all output to the given file
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamReader.PipeToAsync(System.Collections.Generic.ICollection{System.Char},System.Boolean)">
+            <summary>
+            Asynchronously copies each charater to the given collection
+            </summary>
+        </member>
+        <member name="T:Medallion.Shell.Streams.ProcessStreamWriter">
+            <summary>
+            Provides functionality similar to a <see cref="T:System.IO.StreamWriter"/> but with additional methods to simplify
+            working with a process's standard input
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Streams.ProcessStreamWriter.BaseStream">
+            <summary>
+            Provides access to the underlying <see cref="T:System.IO.Stream"/>. Equivalent to <see cref="P:System.IO.StreamWriter.BaseStream"/>
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Streams.ProcessStreamWriter.AutoFlush">
+            <summary>
+            Determines whether writes are automatically flushed to the underlying <see cref="T:System.IO.Stream"/> after each write.
+            Equivalent to <see cref="P:System.IO.StreamWriter.AutoFlush"/>. Defaults to TRUE
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.PipeFromAsync(System.IO.Stream,System.Boolean,System.Boolean)">
+            <summary>
+            Asynchronously copies <paramref name="stream"/> to this stream
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.PipeFromAsync(System.Collections.Generic.IEnumerable{System.String},System.Boolean)">
+            <summary>
+            Asynchronously writes each item in <paramref name="lines"/> to this writer as a separate line
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.PipeFromAsync(System.IO.TextReader,System.Boolean,System.Boolean)">
+            <summary>
+            Asynchronously writes all content from <paramref name="reader"/> to this writer
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.PipeFromAsync(System.IO.FileInfo,System.Boolean)">
+            <summary>
+            Asynchronously writes all content from <paramref name="file"/> to this stream
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.PipeFromAsync(System.Collections.Generic.IEnumerable{System.Char},System.Boolean)">
+            <summary>
+            Asynchronously writes all content from <paramref name="chars"/> to this writer
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Dispose(System.Boolean)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Streams.ProcessStreamWriter.Encoding">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Flush">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.FlushAsync">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Streams.ProcessStreamWriter.FormatProvider">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="P:Medallion.Shell.Streams.ProcessStreamWriter.NewLine">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.Boolean)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.Char)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.Char[])">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.Decimal)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.Double)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.Single)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.Int32)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.Int64)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.Object)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.String,System.Object)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.String,System.Object,System.Object)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.String,System.Object,System.Object,System.Object)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.String,System.Object[])">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.String)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.UInt32)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.Write(System.UInt64)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteAsync(System.Char)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteAsync(System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteAsync(System.String)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.Boolean)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.Char)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.Char[])">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.Decimal)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.Double)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.Single)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.Int32)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.Int64)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.Object)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.String,System.Object)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.String,System.Object,System.Object)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.String,System.Object,System.Object,System.Object)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.String,System.Object[])">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.String)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.UInt32)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLine(System.UInt64)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLineAsync">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLineAsync(System.Char)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLineAsync(System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Streams.ProcessStreamWriter.WriteLineAsync(System.String)">
+            <summary>
+            Forwards to the implementation in the <see cref="T:System.IO.StreamWriter"/> class
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Throw.IfNull``1(``0,System.String)">
+            <summary>
+            Throws an <see cref="T:System.ArgumentNullException"/> if the given value is null
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Throw.If(System.Boolean,System.String)">
+            <summary>
+            Throws an <see cref="T:System.ArgumentException"/> if the given condition is true
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Throw.IfOutOfRange``1(``0,System.String,System.Nullable{``0},System.Nullable{``0})">
+            <summary>
+            Throws an <see cref="T:System.ArgumentOutOfRangeException"/> if the given value is outside of the specified range
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Throw`1.If(System.Boolean,System.String)">
+            <summary>
+            Throws an exception of type <typeparamref name="TException"/> if the condition is true
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.Throw`1.If(System.Boolean,System.Func{System.String})">
+            <summary>
+            As <see cref="M:Medallion.Shell.Throw.If(System.Boolean,System.String)"/>, but allows the message to be specified lazily. The message function will only be evaluated
+            if the condition is true
+            </summary>
+        </member>
+        <member name="T:Medallion.Shell.WindowsCommandLineSyntax">
+            <summary>
+            Provides <see cref="T:Medallion.Shell.CommandLineSyntax"/> functionality for windows.
+            
+            Note that while this class uses windows parsing rules, .NET Core actually follows the same rules when parsing
+            <see cref="P:System.Diagnostics.ProcessStartInfo.Arguments"/> into argv for unix-like systems. Therefore, this class is actually
+            cross-platform compatible. The one exception is Mono running on Unix, which uses a different escaping scheme.
+            </summary>
+        </member>
+        <member name="M:Medallion.Shell.WindowsCommandLineSyntax.CreateArgumentString(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Provides <see cref="T:Medallion.Shell.CommandLineSyntax"/> functionality for windows
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -10,7 +10,7 @@ namespace Smartproj
     /// <summary>
     /// Контроллер, определяющий методы для вывода результата обработки в PDF файл. Наследует класс <see cref="AbstractController"/> и реализует интерфейс <see cref="IInputProvider"/>
     /// </summary>
-    public class PdfOutputProvider : AbstractController, IOutputProvider
+    public class PdfOutputProvider : AbstractOutputProvider
     {
         public PdfOutputProvider(DetailTypeEnum _detail) : base()
         {
@@ -29,10 +29,6 @@ namespace Smartproj
         /// Ссылка на объект <see cref="GdPicturePDF"/>, содержащий PDF файл для данной детали
         /// </summary>
         public GdPicturePDF PdfObject { get; private set; }
-        /// <summary>
-        /// В данной реализации интерфейса путь для сохранения конечного PDF файла
-        /// </summary>
-        public string Destination { get; set; }
         /// <summary>
         /// Активация контроллера для вывода макета в PDF файл. 
         /// Создает новый объект <see cref="GdPicturePDF"/> с характеристиками, соответствующими текущей комбинации экземпляров <see cref="Product"/>, <see cref="Job"/>, <see cref="Detail"/>

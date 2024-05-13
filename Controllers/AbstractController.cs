@@ -21,11 +21,11 @@ namespace Smartproj
         Disposed
     }
     /// <summary>
-    /// Общий интерфейс для любых обработчиков данных
+    /// Общий интерфейс для любых обработчиков данных. Относиться к определенному экземпляру проекта
     /// </summary>
     public interface IController : IDisposable
     {
-        ControllerColelction Owner { get; set; }
+        ControllerCollection Owner { get; set; }
         /// <summary>
         /// Свойство определяет порядок запуска в синхронной общей очереди на обработку
         /// </summary>
@@ -68,10 +68,10 @@ namespace Smartproj
         /// </summary>
         string Source { get; }
         /// <summary>
-        /// Коллекция контроллеров, реализующих логику интерфейса <see cref="IOutputProvider"/>. Определянт механизм вывода результата обработки. Предназначена для глобального применения ко всем заданияем, созданным данным объектом IInputProvider.
+        /// Коллекция контроллеров, реализующих логику интерфейса <see cref="IInputProvider"/>. Определянт механизм вывода результата обработки. Предназначена для глобального применения ко всем заданияем, созданным данным объектом IInputProvider.
         /// Кроме экземпляров данной коллекции, подобные контроллеры могут быть добавлены и на локальном уровне продукта. Все они будут отработаны
         /// </summary>
-        ControllerColelction DefaultOutput { get; }
+        ControllerCollection DefaultOutput { get; }
         /// <summary>
         /// Остановка выполнеия контроллера. Контроллер должен дождаться завершения текущего процесса обработки и остановиться. После этого новые задания на обработку больше не инициируются.
         /// Метод должен освободить ресурсы
@@ -108,7 +108,7 @@ namespace Smartproj
         /// </summary>
         [XmlElement]
         public bool Enabled { get; set; }
-        public ControllerColelction Owner { get; set; }
+        public ControllerCollection Owner { get; set; }
         /// <summary>
         /// Текущий статус выполнения процессов контроллером
         /// </summary>
@@ -120,6 +120,7 @@ namespace Smartproj
         protected AbstractController()
         {
             UID = Guid.NewGuid();
+            Enabled = true;
         }
         /// <summary>
         /// Начинает выполнение определенного для данного контроллера, процесса
@@ -144,52 +145,6 @@ namespace Smartproj
         ~AbstractController()
         {
             Dispose(false);
-        }
-    }
-    /// <summary>
-    /// Реализует коллекцию контроллеров <see cref="IController"/>
-    /// </summary>
-    public class ControllerColelction : IEnumerable<IController>
-    {
-        private List<IController> mItems;
-        public int Count => mItems.Count;
-        public Logger Log => Owner?.Log;
-        public Project Project { get; }
-        public Product Owner { get; }
-        public IController this[Guid _uid] => mItems.Find(x => x.UID == _uid);
-        public ControllerColelction(Project _project, Product _owner) 
-        {
-            mItems = new List<IController>();
-            Owner = _owner;
-            if (_project == null)
-            {
-                Project = Owner?.Owner?.Owner;
-            }
-        }
-        public IController Add(IController _controller)
-        {
-            if (_controller != null)
-            {
-                _controller.Owner = this;
-                mItems.Add(_controller);
-            }
-            return _controller;
-        }
-        public void Clear()
-        {
-            foreach (var item in mItems)
-            {
-                item.Owner = null;
-            }
-            mItems.Clear();
-        }
-        public IEnumerator<IController> GetEnumerator()
-        {
-            return mItems.GetEnumerator();
-        }
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return mItems.GetEnumerator();
         }
     }
 }

@@ -97,8 +97,8 @@ namespace Smartproj
         public string Name { get; set; }
         [XmlCollection(false, false, typeof(Guid))]
         public List<Guid> TemplateKeys { get; set; }
-        [XmlCollection(true, false, typeof(IController), typeof(Product))]
-        public ControllerColelction Controllers { get; set; }
+        [XmlCollection(true, false, typeof(AbstractController))]
+        public ControllerCollection Controllers { get; }
         public void CreateLayoutSpace() => CreateLayoutSpace(default);
         public void CreateLayoutSpace(Size _size)
         {
@@ -175,6 +175,7 @@ namespace Smartproj
             TempletesAutoUpdate = false;
             TemplateKeys = new List<Guid>();
             UID = Guid.NewGuid();
+            Controllers = new ControllerCollection(null, this);
         }
         public bool HasPart(string _id)
         {

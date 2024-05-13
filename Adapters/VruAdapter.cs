@@ -1,5 +1,4 @@
-﻿using Smartproj;
-using Smartproj.Utils;
+﻿using Smartproj.Utils;
 using System;
 using System.Drawing;
 using System.IO;
@@ -7,7 +6,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace smartproj.Adapters
+namespace Smartproj
 {
     public class VruAdapter : IAdapter
     {
@@ -56,8 +55,8 @@ namespace smartproj.Adapters
                     string metadata = "";
                     string[] allproducts = Directory.GetFiles(Path.Combine(_project.Home, "Products"), "*.xml", SearchOption.AllDirectories);
                     // Тут надо определить из исходных данных идентификатор продукта
-                    string productId = "ef0bd6b1-1c95-4b6e-9502-96f61a3da7e3"; // Например
-                    string productFile = Path.Combine(_project.Home, "Products", productId + ".xml");
+                    string productId = "5c9f8e22-e5b5-40b5-ad20-b3758d190ee8"; // Например
+                    string productFile = allproducts.SingleOrDefault(x => x.Contains(productId));
                     // Тут надо определить из исходных данных формат продукта
                     Size productSize = new Size(200, 280);  // Например
                     //

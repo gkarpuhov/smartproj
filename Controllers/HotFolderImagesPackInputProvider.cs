@@ -14,7 +14,7 @@ namespace Smartproj
     {
         private bool mIsLocked;
         public bool AutoExifParse { get; set; }
-        public HotFolderImagesPackInputProvider(Project _project) : base(_project)
+        public HotFolderImagesPackInputProvider() : base()
         {
             AutoExifParse = true;
             mIsLocked = false;

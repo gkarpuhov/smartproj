@@ -1,6 +1,7 @@
 ﻿using Smartproj.Utils;
 using System;
 using System.Threading;
+using System.Xml.Serialization;
 
 namespace Smartproj
 {
@@ -20,12 +21,14 @@ namespace Smartproj
         /// <summary>
         /// Строка, определеющая путь источника получения данных
         /// </summary>
+        [XmlElement]
         public string Source { get; set; }
         /// <summary>
-        /// Коллекция контроллеров, реализующих логику интерфейса <see cref="IOutputProvider"/>. Определянт механизм вывода результата обработки. Предназначена для глобального применения ко всем заданияем, созданным данным объектом IInputProvider.
+        /// Коллекция контроллеров, реализующих логику интерфейса <see cref="IOutputProvider"/>. Определяет механизм вывода результата обработки. Предназначена для глобального применения ко всем заданияем, созданным данным объектом IInputProvider.
         /// Кроме экземпляров данной коллекции, подобные контроллеры могут быть добавлены и на локальном уровне продукта. Все они будут отработаны
         /// </summary>
-        public ControllerColelction DefaultOutput { get; }
+        [XmlCollection(true, false, typeof(AbstractOutputProvider))]
+        public ControllerCollection DefaultOutput { get; }
         /// <summary>
         /// Текущий статус выполнения процессов контроллером. Является потокобезопасным.
         /// </summary>
@@ -61,7 +64,7 @@ namespace Smartproj
         /// </summary>
         /// <returns></returns>
         /// <exception cref="ObjectDisposedException"></exception>
-        public IAsyncResult Stop()
+        public virtual IAsyncResult Stop()
         {
             if (mCurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
             mSyncRoot.EnterWriteLock();
@@ -139,9 +142,9 @@ namespace Smartproj
         /// Конструктор по умолчанию
         /// </summary>
         /// <param name="_project"></param>
-        protected AbstractInputProvider(Project _project) : base()
+        protected AbstractInputProvider() : base()
         {
-            DefaultOutput = new ControllerColelction(_project, null);
+            DefaultOutput = new ControllerCollection(Owner?.Project, null);
             mCurrentStatus = ProcessStatusEnum.New;
             mSyncRoot = new ReaderWriterLockSlim();
             mStopWaitHandle = new AutoResetEvent(false);
