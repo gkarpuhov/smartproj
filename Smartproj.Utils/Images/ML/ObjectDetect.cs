@@ -3,10 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Smartproj.Utils
 {
@@ -15,7 +11,7 @@ namespace Smartproj.Utils
         public string CascadesPath { get; set; }
         public Logger DetectLog { get; set; }
         public ObjectDetectImageEnum ObjectDetectType { get; set; }
-        public void FaceDetect(IEnumerable<ExifTaggedFile> _input, Func<ExifTaggedFile, string> _nameSelector)
+        public void Detect(IEnumerable<ExifTaggedFile> _input, Func<ExifTaggedFile, string> _nameSelector)
         {
             CascadeClassifier frontalface = null;
             CascadeClassifier profileface = null;
@@ -42,7 +38,6 @@ namespace Smartproj.Utils
                     {
                         try
                         {
-                            //string file = Path.Combine(Source, "~Files", item.GUID + ".jpg");
                             string file = _nameSelector(item);
                             if (!File.Exists(file))
                             {
@@ -146,6 +141,7 @@ namespace Smartproj.Utils
                         catch (Exception ex)
                         {
                             errors.Add($"File = {item.FileName}; Error = {ex.Message}");
+                            item.AddStatus(ImageStatusEnum.Error);
                         }
                     }
                 }
@@ -154,6 +150,9 @@ namespace Smartproj.Utils
             {
                 if (frontalface != null) frontalface.Dispose();
                 if (profileface != null) profileface.Dispose();
+                if (fullbody != null) fullbody.Dispose();
+                if (upperbody != null) upperbody.Dispose();
+                if (lowerbody != null) lowerbody.Dispose();
             }
 
             messages.Add($"Общее время обработки = {Math.Round((DateTime.Now - start).TotalSeconds)} сек");

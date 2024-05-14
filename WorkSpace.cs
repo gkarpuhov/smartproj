@@ -16,18 +16,15 @@ namespace Smartproj
     public class WorkSpace : IDisposable
     {
         private bool mIsDisposed;
-        public static readonly string ApplicationPath;
-        public static readonly string ResourcesPath;
-        public static readonly string WorkingPath;
+        public static string ApplicationPath;
+        public static string ResourcesPath;
+        public static string WorkingPath;
         public static readonly Logger SystemLog;
         public static readonly string Fonts;
         //
         public readonly string MLData;
-        public string Config;
+        public readonly string Config;
         public readonly string Profiles;
-
-        public readonly string Input;
-        public readonly string Output;
         /// <summary>
         /// Сериализованный глобальный список доступных шрифтов <see cref="FontClass"/>
         /// По смыслу данный список имеет статус "статического", но для сериализации необходимо поместить его в экземпляр класса
@@ -80,10 +77,8 @@ namespace Smartproj
             Config = Path.Combine(ResourcesPath, "Config");
 
             Profiles = Path.Combine(ResourcesPath, "Profiles");
-            Input = Path.Combine(WorkingPath, "Input");
-            Output = Path.Combine(WorkingPath, "Output");
 
-            foreach (var dir in new string[] { MLData, Config, Profiles, Input, Output })
+            foreach (var dir in new string[] { MLData, Config, Profiles})
             {
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             }

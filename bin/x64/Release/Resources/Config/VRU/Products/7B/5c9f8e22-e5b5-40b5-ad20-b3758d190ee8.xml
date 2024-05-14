@@ -12,7 +12,20 @@
       <item TypeId="-1913220081">2066b204-9de7-46ae-9107-720bf1478d81</item>
       <item TypeId="-1913220081">b22006cd-5464-44a0-a9bc-5897797c45f4</item>
     </TemplateKeys>
-    <Controllers TypeId="1481613391" />
+    <Controllers TypeId="1481613391">
+      <item TypeId="849896578">
+        <Label TypeId="1642033309">Конвертация всех изображение в sRGB (JPEG)</Label>
+        <UID TypeId="-1913220081">4859926c-b057-4178-94b9-83dc07cf6e12</UID>
+        <Priority TypeId="1727199146">1</Priority>
+        <Enabled TypeId="-491435614">True</Enabled>
+      </item>
+      <item TypeId="1684027808">
+        <Label TypeId="1642033309">Распознование лиц на изображениях</Label>
+        <UID TypeId="-1913220081">53a73f9f-bc6b-4a55-9c5c-0e4ec4e7c6de</UID>
+        <Priority TypeId="1727199146">0</Priority>
+        <Enabled TypeId="-491435614">True</Enabled>
+      </item>
+    </Controllers>
     <KeyId TypeId="1642033309">null</KeyId>
     <TreeNodeItems TypeId="2018040348">
       <item TypeId="2136525265">
@@ -34,6 +47,8 @@
     <BindingEnum Id="1905268263" Guid="(946e118c-a1a4-33c4-9e59-f934a774ce44)">Smartproj.Utils.BindingEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</BindingEnum>
     <List-1 Id="593491458" Guid="(5af00c2e-048b-3ab3-8ccd-548134771d38)">System.Collections.Generic.List`1[[System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</List-1>
     <ControllerCollection Id="1481613391" Guid="(f038ac85-352a-3936-a4cd-14e25c913334)">Smartproj.ControllerCollection, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</ControllerCollection>
+    <ImageConverterController Id="849896578" Guid="(9e0ddda7-66f4-3583-bf54-7e15035fb70e)">Smartproj.ImageConverterController, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</ImageConverterController>
+    <ObjectDetectorController Id="1684027808" Guid="(680c6298-7071-3eac-b4be-f72abc7f8537)">Smartproj.ObjectDetectorController, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</ObjectDetectorController>
     <List-1 Id="2018040348" Guid="(5af00c2e-048b-3ab3-8ccd-548134771d38)">System.Collections.Generic.List`1[[Smartproj.Utils.Tree, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</List-1>
     <CoverDetail Id="2136525265" Guid="(a0c8452a-0a52-3ada-8642-b1c377f22dc3)">Smartproj.CoverDetail, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</CoverDetail>
     <BlockDetail Id="325654921" Guid="(a7f7ad64-204f-3ad7-a959-3ac857e70990)">Smartproj.BlockDetail, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</BlockDetail>

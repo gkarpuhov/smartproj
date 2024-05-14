@@ -22,8 +22,7 @@ namespace Smartproj
         }
         bool CheckAndBlock()
         {
-            mSyncRoot.EnterWriteLock();
-            try
+            lock (mSyncRoot)
             {
                 if (!mIsLocked)
                 {
@@ -35,16 +34,13 @@ namespace Smartproj
                     return false;
                 }
             }
-            finally
-            {
-                mSyncRoot.ExitWriteLock();
-            }
         }
         void UnBlock()
         {
-            mSyncRoot.EnterWriteLock();
-            mIsLocked = false;
-            mSyncRoot.ExitWriteLock();
+            lock (mSyncRoot)
+            {
+                mIsLocked = false;
+            }
         }
         protected override void ProcessHandler(object _obj)
         {
@@ -133,7 +129,7 @@ namespace Smartproj
                     foreach (AbstractController controller in job.Product.Controllers.OrderByDescending(x => x.Priority))
                     {
                         if (job.Status != ProcessStatusEnum.Processing) break;
-                        controller.Start(null);
+                        controller.Start(new object[] { job });
                     }
                 }
                 if (DefaultOutput != null)
@@ -141,7 +137,7 @@ namespace Smartproj
                     foreach (AbstractController controller in DefaultOutput.OrderByDescending(x => x.Priority))
                     {
                         if (job.Status != ProcessStatusEnum.Processing) break;
-                        controller.Start(job);
+                        controller.Start(new object[] { job });
                     }
                 }
 
@@ -155,6 +151,8 @@ namespace Smartproj
                     Log?.WriteError("HotFolderImagesInputProvider.ProcessHandler", $"{Owner.Project.ProjectId} => Выполнение процесса '{job.UID}' не выполнено");
                 }
             }
+
+            job.Dispose();
         }
         private List<ExifTaggedFile> ExifParser(string _dirNameKey, List<string> _files, int _firstIndex)
         {

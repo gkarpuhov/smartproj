@@ -1515,13 +1515,25 @@ namespace Smartproj
         {
             if (_disposing)
             {
+                Log?.WriteInfo("Project.Dispose", $"{mProjectId}: Освобождение ресурсов системы...");
                 if (mIsDisposed) throw new ObjectDisposedException(this.GetType().FullName);
                 if (InputProviders != null && InputProviders.Count > 0)
                 {
                     // После завершения работы метода Stop, провайдер начнет процедуру остановки с последующим освобождением внутренних ресурсов объекта
                     // Метод Stop возвращает соответствующий IAsyncResult завершения
-                    var callbacks = InputProviders.Select(x => ((AbstractInputProvider)x).Stop().AsyncWaitHandle).Where(y => y != null);
-
+                    List<WaitHandle> callbacks = new List<WaitHandle>();
+                    foreach (AbstractInputProvider provider in InputProviders)
+                    {
+                        if (provider != null)
+                        {
+                            var callback = provider.Stop();
+                            if (callback != null)
+                            {
+                                callbacks.Add(callback.AsyncWaitHandle);
+                            }
+                        }
+                    }
+                    Log?.WriteInfo("Project.Dispose", $"{mProjectId}: Ожидание завершения процессов...");
                     WaitHandle.WaitAll(callbacks.ToArray());
 
                     foreach (AbstractInputProvider provider in InputProviders)
@@ -1530,11 +1542,11 @@ namespace Smartproj
                     }
                     foreach (var callback in callbacks)
                     {
-                        callback.Close();
+                        callback.Dispose();
                     }
                 }
-                Log.WriteInfo("Project.Dispose", $"{mProjectId}: ресурсы освобождены");
-                Log.Close();
+                Log?.WriteInfo("Project.Dispose", $"{mProjectId}: Ресурсы освобождены");
+                Log?.Close();
                 Log = null;
             }
 

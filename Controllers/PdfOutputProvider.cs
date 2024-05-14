@@ -35,7 +35,7 @@ namespace Smartproj
         /// Также метод проверяет все доступные шаблоны на несовпадение параметров размера и вылетов
         /// </summary>
         /// <param name="_settings"></param>
-        public override bool Start(params object[] _settings)
+        public override bool Start(object[] _settings)
         {
             if (Enabled)
             {
@@ -131,16 +131,6 @@ namespace Smartproj
 
             return false;
         }
-        protected override void Dispose(bool _disposing)
-        {
-            base.Dispose(_disposing);
-            if (_disposing)
-            {
-                if (PdfObject != null)
-                {
-                    PdfObject.Dispose();
-                }
-            }
-        }
+
     }
 }

@@ -249,6 +249,8 @@
     <Compile Include="Controllers\AbstractOutputProvider.cs" />
     <Compile Include="Controllers\ControllerColelctions.cs" />
     <Compile Include="Controllers\HotFolderImagesPackInputProvider.cs" />
+    <Compile Include="Controllers\ImageConverterController.cs" />
+    <Compile Include="Controllers\ObjectDetectorController.cs" />
     <Compile Include="Controllers\PdfOutputProvider.cs" />
     <Compile Include="Detail\Detail.cs" />
     <Compile Include="DistanceStructs.cs" />

@@ -15,7 +15,7 @@ namespace Smartproj
     {
         private Timer mTimer;
         private AutoResetEvent mStopWaitHandle;
-        protected ReaderWriterLockSlim mSyncRoot;
+        protected object mSyncRoot = new object();
         private ProcessStatusEnum mCurrentStatus;
         delegate void StopAsyncMethodCaller();
         /// <summary>
@@ -37,22 +37,18 @@ namespace Smartproj
             get
             {
                 if (mCurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
-                mSyncRoot.EnterReadLock();
-                try
+                lock (mSyncRoot)
                 {
                     return mCurrentStatus;
                 }
-                finally { mSyncRoot.ExitReadLock(); }
             }
             protected set
             {
                 if (mCurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
-                mSyncRoot.EnterWriteLock();
-                try
+                lock (mSyncRoot)
                 {
                     mCurrentStatus = value;
                 }
-                finally { mSyncRoot.ExitWriteLock(); }
             }
         }
         [XmlContainer(typeof(AbstractInputProvider))]
@@ -66,9 +62,14 @@ namespace Smartproj
         /// <exception cref="ObjectDisposedException"></exception>
         public virtual IAsyncResult Stop()
         {
+            Log?.WriteInfo("AbstractInputProvider.Stop", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Запрос на завершения работы запускающего контроллера... Статус {mCurrentStatus}");
             if (mCurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
-            mSyncRoot.EnterWriteLock();
-            try
+            if (!Enabled)
+            {
+                Log?.WriteInfo("AbstractInputProvider.Stop", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Запускающий контроллер не требует остановки так как не был активирован");
+                return null;
+            }
+            lock (mSyncRoot)
             {
                 if (mTimer != null && mCurrentStatus == ProcessStatusEnum.Processing)
                 {
@@ -79,9 +80,13 @@ namespace Smartproj
                         {
                             mStopWaitHandle.Set();
                         }
+                        else
+                        {
+                            Log?.WriteInfo("AbstractInputProvider.Stop", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Ожидание завершения процессов запускающего контроллера...");
+                        }
                         WaitHandle.WaitAll(new WaitHandle[] { mStopWaitHandle });
                         CurrentStatus = ProcessStatusEnum.Finished;
-                        Log.WriteInfo("AbstractInputProvider.Stop", $"{this.GetType().Name}: контроллер завершил работу");
+                        Log?.WriteInfo("AbstractInputProvider.Stop", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Запускающий контроллер завершил работу");
                         mTimer = null;
                     }
                     StopAsyncMethodCaller caller = new StopAsyncMethodCaller(StopHandle);
@@ -91,7 +96,6 @@ namespace Smartproj
 
                 return null;
             }
-            finally { mSyncRoot.ExitWriteLock(); }
         }
         /// <summary>
         /// Метод вызова обработки события Timer
@@ -102,23 +106,21 @@ namespace Smartproj
         /// Начинает выполнение определенного для данного контроллера, процесса
         ///  Если свойство Enabled имеет значение false, то при вызове метода никаиrе действия не будут выполнены, и метод вернет значение false
         /// </summary>
-        public override bool Start(params object[] _settings)
+        public override bool Start(object[] _settings)
         {
             if (mCurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
 
-            mSyncRoot.EnterWriteLock();
-            try
+            lock (mSyncRoot)
             {
                 if (Enabled)
                 {
                     StartParameters = _settings;
                     mTimer = new Timer(ProcessHandler, _settings, 0, 5000);
                     mCurrentStatus = ProcessStatusEnum.Processing;
-                    Log.WriteInfo("AbstractInputProvider.Start", $"{this.GetType().Name}: контроллер начал работу");
+                    Log?.WriteInfo("AbstractInputProvider.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Запускающий контроллер начал работу");
                     return true;
                 }
             }
-            finally { mSyncRoot.ExitWriteLock(); }
 
             return false;
         }
@@ -132,9 +134,15 @@ namespace Smartproj
             if (_disposing)
             {
                 if (mCurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
-                mSyncRoot.Dispose();
                 mStopWaitHandle.Close();
-                Log.WriteInfo("AbstractInputProvider.Dispose", $"{this.GetType().Name}: ресурсы освобождены");
+                Log?.WriteInfo("AbstractInputProvider.Dispose", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Запускающий контроллер => Ресурсы освобождены");
+                if (DefaultOutput != null)
+                {
+                    foreach (var output in DefaultOutput)
+                    {
+                        output.Dispose();
+                    }
+                }
             }
             mCurrentStatus = ProcessStatusEnum.Disposed;
         }
@@ -146,7 +154,6 @@ namespace Smartproj
         {
             DefaultOutput = new ControllerCollection(Owner?.Project, null);
             mCurrentStatus = ProcessStatusEnum.New;
-            mSyncRoot = new ReaderWriterLockSlim();
             mStopWaitHandle = new AutoResetEvent(false);
         }
     }

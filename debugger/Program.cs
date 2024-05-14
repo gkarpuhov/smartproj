@@ -15,6 +15,9 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using System.IO;
 using System.Windows.Forms;
+using static Emgu.CV.OCR.Tesseract;
+using System.Diagnostics;
+using smartproj.Products;
 
 namespace debugger
 {
@@ -134,6 +137,30 @@ namespace debugger
         }
         static void Main(string[] args)
         {
+            WorkSpace.ApplicationPath = @"C:\Users\admin\source\repos\smartproj\bin\x64\Release";
+            WorkSpace.ResourcesPath = Path.Combine(WorkSpace.ApplicationPath, "Resources");
+            WorkSpace.WorkingPath = Path.Combine(WorkSpace.ApplicationPath, "Working");
+            var Fonts = Path.Combine(WorkSpace.ResourcesPath, "Fonts");
+            if (!Directory.Exists(Fonts)) Directory.CreateDirectory(Fonts);
+            GdPictureDocumentUtilities.AddFontFolder(Fonts);
+            string gdcache = Path.Combine(WorkSpace.ApplicationPath, "Temp");
+            if (!Directory.Exists(gdcache)) Directory.CreateDirectory(gdcache);
+            GdPictureDocumentUtilities.SetCacheFolder(gdcache);
+
+            WorkSpace Work = (WorkSpace)Serializer.LoadXml(Path.Combine(WorkSpace.ApplicationPath, "config.xml"));
+            Project vru = Work.Projects["VRU"];
+            LayFlat lf = (LayFlat)Serializer.LoadXml(@"C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Products\7B\5c9f8e22-e5b5-40b5-ad20-b3758d190ee8.xml");
+            Size size = new Size(200, 280);
+            Job job = new Job(vru);
+            job.Create(lf, size, "", SourceParametersTypeEnum.XML, TagFileTypeEnum.JPEG);
+
+            lf.Controllers.Add(new ObjectDetectorController());
+            lf.Save();
+
+            Console.ReadLine();
+            return;
+
+
             GdPicture14.GdPicturePDF doc = new GdPicturePDF();
             GdPictureDocumentUtilities.AddFontFolder(@"C:\Temp\using");
       
@@ -225,8 +252,6 @@ namespace debugger
 
 
 
-            Console.ReadLine();
-            return;
 
             var client = new TelegramBotClient("7010027401:AAGSPgWQ8SVvuIAceJJQWEFjMo70A63MNQg");
             client.StartReceiving(TG_Update, TG_Error);
@@ -301,20 +326,6 @@ namespace debugger
 
 
 
-
-            string p = $@"C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\Resources\Config";
-            WorkSpace ws = new WorkSpace();
-            ws.Config = p;
-            ws.Projects = new ProjectCollection(ws);
-            Project mpp = ws.Projects.Add(new Project("MPP"));
-            Project vru = ws.Projects.Add(new Project("VRU"));
-
-            ws.SaveXml($@"C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\Resources\config.xml");
-
-            //mpp.Products = new ProductCollection(mpp);
-            //ClassicBook product = (ClassicBook)mpp.Products.Add((ClassicBook)Serializer.LoadXml(Path.Combine(p, "MPP", "Products", "73", "4bcc121e-694f-40fc-b44f-f889c293e83e_1.xml")));
-
-            //product.SaveXml(Path.Combine(p, mpp.ProjectId, "Products", product.ProductCode, $"{product.UID}.xml"));
 
 
 

@@ -456,7 +456,7 @@ namespace Smartproj
         public void DetectAnyObjects(Func<ExifTaggedFile, string> _nameSelector)
         {
             if (ObjectDetector == null) throw new ArgumentNullException();
-            ObjectDetector.FaceDetect(mData, _nameSelector);
+            ObjectDetector.Detect(mData, _nameSelector);
         }
         public ImageProcessor(RIP _owner)
         {

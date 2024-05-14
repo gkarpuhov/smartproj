@@ -6,17 +6,27 @@ using System.Threading.Tasks;
 
 namespace Smartproj
 {
-    public class AbstractOutputProvider : AbstractController, IOutputProvider
+    public abstract class AbstractOutputProvider : AbstractController, IOutputProvider
     {
         public override ProcessStatusEnum CurrentStatus { get; protected set; }
         public string Destination { get; set; }
-        public override bool Start(params object[] _settings)
+        public override bool Start(object[] _settings)
         {
             throw new NotImplementedException();
         }
         protected override void Dispose(bool _disposing)
         {
-            throw new NotImplementedException();
+            if (CurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
+            Log?.WriteInfo("AbstractOutputProvider.Dispose", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер вывода => Ресурсы освобождены");
+            if (_disposing)
+            {
+
+            }
+            CurrentStatus = ProcessStatusEnum.Disposed;
+        }
+        protected AbstractOutputProvider() : base() 
+        {
+            CurrentStatus = ProcessStatusEnum.New;
         }
     }
 }

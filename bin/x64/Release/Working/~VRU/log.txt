@@ -1,33 +1,224 @@
-13.05.2024 16:01:15: Error;  => 0
-13.05.2024 16:01:15: Error;  => Не найден метод 'Add/Clear' коллекции типа ControllerColelction
-13.05.2024 16:01:15: Error;  =>    в Smartproj.Utils.Serializer.LoadXml(Object _object, XmlDocument _xmlDoc, KeyValuePair`2[] _params)
-   в Smartproj.Service1.MainEventHandler(Object _state)
-13.05.2024 16:06:43: Error;  => 0
-13.05.2024 16:06:43: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
-13.05.2024 16:06:43: Error;  => 2
-13.05.2024 16:06:43: Message; Product:Save => Конфигурации продукта успешно сохранена 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Products\7B\5c9f8e22-e5b5-40b5-ad20-b3758d190ee8.xml'
-13.05.2024 16:10:16: Error;  => 0
-13.05.2024 16:10:16: Error;  => Не найден метод 'Add/Clear' коллекции типа ControllerCollection
-13.05.2024 16:10:16: Error;  =>    в Smartproj.Utils.Serializer.LoadXml(Object _object, XmlDocument _xmlDoc, KeyValuePair`2[] _params)
-   в Smartproj.Service1.MainEventHandler(Object _state)
-13.05.2024 16:27:12: Error;  => 0
-13.05.2024 16:27:12: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
-13.05.2024 16:27:12: Error;  => 2
-13.05.2024 16:27:12: Message; Product:Save => Конфигурации продукта успешно сохранена 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Products\7B\5c9f8e22-e5b5-40b5-ad20-b3758d190ee8.xml'
-13.05.2024 16:50:34: Message; AbstractInputProvider.Start => HotFolderImagesPackInputProvider: контроллер начал работу
-13.05.2024 16:52:18: Message; VruAdapter.GetNext => Процесс VRU => d8443bd4-f006-4f42-9c06-9f875a3d939b: файлы для работы получены
-13.05.2024 16:52:18: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) передан процессу d8443bd4-f006-4f42-9c06-9f875a3d939b для инициализации
-13.05.2024 16:52:18: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
-13.05.2024 16:52:18: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) успешно иницализирован процессом d8443bd4-f006-4f42-9c06-9f875a3d939b
-13.05.2024 16:52:18: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Файловая структура для выполнения процесса 'd8443bd4-f006-4f42-9c06-9f875a3d939b' загружена: 83 файлов
-13.05.2024 16:52:28: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Процесс формирование данных для обработки завершен. Процесс 'd8443bd4-f006-4f42-9c06-9f875a3d939b'
-13.05.2024 16:54:57: Message; AbstractInputProvider.Start => HotFolderImagesPackInputProvider: контроллер начал работу
-13.05.2024 16:56:26: Message; VruAdapter.GetNext => Процесс VRU => a027ff37-7e41-41bf-b2ff-011464214a01: файлы для работы получены
-13.05.2024 16:56:26: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) передан процессу a027ff37-7e41-41bf-b2ff-011464214a01 для инициализации
-13.05.2024 16:56:26: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
-13.05.2024 16:56:26: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) успешно иницализирован процессом a027ff37-7e41-41bf-b2ff-011464214a01
-13.05.2024 16:56:26: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Файловая структура для выполнения процесса 'a027ff37-7e41-41bf-b2ff-011464214a01' загружена: 83 файлов
-13.05.2024 16:56:34: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Процесс формирование данных для обработки завершен. Процесс 'a027ff37-7e41-41bf-b2ff-011464214a01'
-13.05.2024 16:56:34: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Выполнение процесса 'a027ff37-7e41-41bf-b2ff-011464214a01' успешно завершено
-13.05.2024 16:57:54: Message; AbstractInputProvider.Stop => HotFolderImagesPackInputProvider: контроллер завершил работу
-13.05.2024 16:57:54: Message; AbstractInputProvider.Dispose => HotFolderImagesPackInputProvider: ресурсы освобождены
+14.05.2024 14:14:21: Message; AbstractInputProvider.Start => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер начал работу
+14.05.2024 14:14:52: Message; VruAdapter.GetNext => Процесс VRU => 8f9c8062-378d-41f0-b078-f09d47aa6370: файлы для работы получены
+14.05.2024 14:14:52: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) передан процессу 8f9c8062-378d-41f0-b078-f09d47aa6370 для инициализации
+14.05.2024 14:14:52: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
+14.05.2024 14:14:52: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) успешно иницализирован процессом 8f9c8062-378d-41f0-b078-f09d47aa6370
+14.05.2024 14:14:52: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Файловая структура для выполнения процесса '8f9c8062-378d-41f0-b078-f09d47aa6370' загружена: 83 файлов
+14.05.2024 14:15:00: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Процесс формирование данных для обработки завершен. Процесс '8f9c8062-378d-41f0-b078-f09d47aa6370'
+14.05.2024 14:15:00: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер начал работу с процессом '8f9c8062-378d-41f0-b078-f09d47aa6370'
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 4: Не требуется. Файл: shutterstock_423917653.jpg -> 9208cf45-c427-42f1-98d0-5dd5939439c2.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 9: Не требуется. Файл: shutterstock_468938591.jpg -> 9582d950-1c97-4097-a390-06d76d84a876.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 13: Использован входной профиль RgbData: Ver = 4,2; '[199 114 178 210 106 143 36 80 206 13 167 172 44 81 31 76] [image P3]'. Файл: 2.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 13: Трансформация выполнена: RGB:Format24bppRgb -> RGB. Файл: 2.jpg -> c6b43d96-ec92-43ff-95ae-5194bbef192d.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 16: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3328.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 16: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3328.jpg -> c2999f21-bba9-4657-8d95-773b8695ea54.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 21: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Gen, CMYK EPP LtGCR 320UCR]'. Файл: foto.3885.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 21: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3885.jpg -> 906d64b9-fcc5-4697-abf9-03e2f1d0ad19.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 30: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3321.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 30: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3321.jpg -> ba464c36-98eb-4a46-804b-6ba614d962a3.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 53: Не требуется. Файл: shutterstock_233495782.jpg -> 08781bbe-3a0d-4b2f-b983-2a08125bee25.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 54: Не требуется. Файл: shutterstock_233942890.jpg -> 9fc8a818-7f88-4cc4-b684-dd2b68202c52.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 56: Не требуется. Файл: shutterstock_235946896.jpg -> 98bab0f8-52ed-40ac-8b60-7ca528cb24ee.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 58: Не требуется. Файл: shutterstock_236006170.jpg -> e001ffb0-ac26-401c-badc-6c82c8056391.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 60: Не требуется. Файл: shutterstock_261812411.jpg -> 654e675b-6bad-4a2d-86bd-2e88f8b56a8b.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 63: Не требуется. Файл: shutterstock_261812432.jpg -> c53a99b8-01f8-47d0-aab0-36ca2de4bbe1.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 65: Не требуется. Файл: shutterstock_283825949.jpg -> f3d329e8-b63a-4065-9de0-9bcec99746f0.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 68: Не требуется. Файл: shutterstock_313134317.jpg -> 6bbbcbe7-54a0-4cc5-9486-a61c1fbacdb8.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 70: Не требуется. Файл: shutterstock_340597160.jpg -> 52fd8c35-fa3a-49a3-8f3c-fbcd3707c234.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 72: Не требуется. Файл: shutterstock_345344879.jpg -> cb40efeb-e020-4290-8299-15cef23dc1f4.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 75: Не требуется. Файл: shutterstock_354321143.jpg -> 4b823a6f-9d0e-479f-8acc-3eff4ca74ea0.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 76: Не требуется. Файл: shutterstock_356248274.jpg -> 21a9f3f1-53f3-4f65-85bd-ccd1ddfee93f.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 78: Не требуется. Файл: shutterstock_412463701.jpg -> 828f77d4-b090-4a33-bf00-689c8988117b.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 80: Не требуется. Файл: shutterstock_62052523.jpg -> d30c4dbb-5d35-49b7-b5c9-9215c33736e5.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 30) => ID 81: Не требуется. Файл: shutterstock_62208367.jpg -> c30deae9-db75-4134-95a0-4f9d02cd1c73.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 0: Не требуется. Файл: original (4).jpg -> 19f9762b-11d4-4acb-a9c4-4035e118be94.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 3: Не требуется. Файл: shutterstock_416402569.jpg -> 90600262-36aa-4184-af31-39b20e8307d7.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 8: Не требуется. Файл: shutterstock_463643660.jpg -> a727ee96-5594-4b67-b34f-b5be6a9533f1.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 12: Цветовой профиль источника соответствует профилю по умолчанию. Файл: shutterstock_472966438.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 12: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'. Файл: shutterstock_472966438.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 12: Трансформация выполнена: Grayscale:Format8bppIndexed -> RGB. Файл: shutterstock_472966438.jpg -> 307b4784-573b-4c35-941d-d614e9fa5244.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 18: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3331.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 18: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3331.jpg -> 2a208ca9-7e8d-40c0-9769-d538bfd29f6b.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 20: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Gen, CMYK EPP LtGCR 320UCR]'. Файл: foto.3884.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 20: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3884.jpg -> d805a73b-33e5-4a9d-9f7d-1f82fc680c24.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 29: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3320.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 29: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3320.jpg -> 5c066df2-c146-44d3-b7a2-d27b613b8096.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 33: Не требуется. Файл: original (10).jpg -> 4777c580-4355-483a-88fd-a168dfa6dd7c.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 34: Не требуется. Файл: original (11).jpg -> 4cb2e386-aa1d-4454-8519-ef40d52e1eb0.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 35: Не требуется. Файл: original (12).jpg -> 41f0ffa3-7e18-4b8a-b09b-546b26114100.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 36: Не требуется. Файл: original (2).jpg -> 19871b8a-306a-41c6-935b-cddc90679bd9.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 37: Не требуется. Файл: original (9).jpg -> 58ad72f4-6fe3-4631-b9a7-2a87e48bd799.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 38: Не требуется. Файл: shutterstock_109603298.jpg -> 9adb594c-c532-4e0b-aafe-3e99f24249e9.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 39: Не требуется. Файл: shutterstock_110065853.jpg -> 8b524d3c-5f45-4c3b-a103-beb077970885.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 40: Не требуется. Файл: shutterstock_111029240.jpg -> c3b0229c-c201-40da-873e-0702d84c4f11.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 41: Не требуется. Файл: shutterstock_111368450.jpg -> 0030df03-d126-43e7-999d-f2cfee205c38.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 42: Не требуется. Файл: shutterstock_117779284.jpg -> 306fe513-16f7-4951-bc6c-9e77a7ac9b20.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 43: Не требуется. Файл: shutterstock_121537738.jpg -> 68637ce6-4347-4d4e-b8cc-d992efd8ea0d.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 44: Не требуется. Файл: shutterstock_123923356.jpg -> b1d2ecc9-3d35-46e8-8e86-a255a755c266.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 45: Не требуется. Файл: shutterstock_127746875.jpg -> 6e98c682-1826-4a45-a5b5-f60a7f690fc1.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 46: Не требуется. Файл: shutterstock_136170224.jpg -> 55ac4532-c7ac-4a09-b151-73a7a69615e4.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 47: Не требуется. Файл: shutterstock_140653903.jpg -> d7f159c3-f5fb-4050-84f2-1a81a3229f93.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 48: Не требуется. Файл: shutterstock_159258020.jpg -> 073615fc-c6d7-4c62-979f-4d6f50ef723b.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 49: Не требуется. Файл: shutterstock_160286201.jpg -> 63db617d-8850-4a0c-8fe5-8b149f221af2.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 50: Не требуется. Файл: shutterstock_160784795.jpg -> 9ea00f65-1dc0-47f6-b2ad-ba3b5fb6992c.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 51: Не требуется. Файл: shutterstock_215968999.jpg -> 35b8f12f-1989-4ffa-ac3d-f1201c3fe4d4.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 52: Не требуется. Файл: shutterstock_231091645.jpg -> c8e6e15d-ba27-41cc-8497-eb54856caeb2.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 55: Не требуется. Файл: shutterstock_233942956.jpg -> c7749f98-6a5b-48b4-8ff8-0b18d6ac9920.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 57: Не требуется. Файл: shutterstock_235946914.jpg -> 894358d0-81a3-4e42-8ffe-ebce5fbaac2b.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 59: Не требуется. Файл: shutterstock_237772522.jpg -> d9ae2445-6ea3-4459-a1eb-6624a0b75841.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 61: Не требуется. Файл: shutterstock_261812420.jpg -> d9cc375b-b30b-45f0-afae-238b01575caa.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 62: Не требуется. Файл: shutterstock_261812429.jpg -> ff9f3dd4-bbd8-4dd7-9d0a-4c3189a8ff0d.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 64: Не требуется. Файл: shutterstock_283825943.jpg -> db10619b-12d5-4dba-86a2-607e5f7c7edd.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 66: Не требуется. Файл: shutterstock_313134305.jpg -> 95ee7aac-5559-4241-8f81-bb30dc17f21c.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 67: Не требуется. Файл: shutterstock_313134308.jpg -> d6fa8dfc-300d-4d51-9c5a-c48e5efd7fed.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 69: Не требуется. Файл: shutterstock_313134320.jpg -> ffdc9403-7fea-48ef-8143-452d64e3c4e5.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 71: Не требуется. Файл: shutterstock_341199383.jpg -> 970196e4-c7cb-4f74-83ec-dd9c05b9d8a6.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 73: Не требуется. Файл: shutterstock_348175364.jpg -> 9d79f7f5-51a1-44f5-8fbb-9e22d24229ac.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 74: Не требуется. Файл: shutterstock_351119852.jpg -> 1831cbca-fa29-4c47-9054-ca168a0deb69.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 77: Не требуется. Файл: shutterstock_378289693.jpg -> c1f70a22-8ed3-43b0-9ad9-3d9a0393aea8.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 79: Не требуется. Файл: shutterstock_60390211.jpg -> c5254435-03c1-47a8-ba6b-76fd921a37c5.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 27) => ID 82: Не требуется. Файл: shutterstock_93199567.jpg -> 7d073e44-65a6-4f7c-b8a1-7281ef39d7a3.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 29) => ID 2: Не требуется. Файл: shutterstock_415929772.jpg -> c0317774-2e6d-461f-a286-fe004541e220.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 29) => ID 7: Не требуется. Файл: shutterstock_438629968.jpg -> aa19aef6-0d5a-480c-b873-682b83e198b3.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 29) => ID 11: Не требуется. Файл: shutterstock_471595004.jpg -> b9ed17ef-b3ac-468e-9a29-005471d2f512.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 29) => ID 15: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3325.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 29) => ID 15: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3325.jpg -> 73c03730-d3be-48a2-b17c-96ceca9d546d.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 29) => ID 19: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Gen, CMYK EPP LtGCR 320UCR]'. Файл: foto.3883.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 29) => ID 19: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3883.jpg -> 524c6247-afa6-4889-8932-ff2ddead8097.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 29) => ID 23: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [OffsetEuro U340 K95 V25PO4]'. Файл: foto.3929.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 29) => ID 23: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3929.jpg -> 82a47062-8574-47cd-9995-394d1f2756ac.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 29) => ID 31: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3322.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 29) => ID 31: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3322.jpg -> 4e819a68-1e81-4348-804d-6ee4b59145bc.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 1: Не требуется. Файл: original (5).jpg -> adea3e4b-e4d6-4eaa-bd33-2ce0ce0bc24d.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 5: Не требуется. Файл: shutterstock_423917692.jpg -> 9d9198ce-c89d-466d-a159-ea40c51af51f.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 6: Не требуется. Файл: shutterstock_423917704.jpg -> cd64edd5-c8f0-48bc-8656-856454fa0ba7.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 10: Не требуется. Файл: shutterstock_468938600.jpg -> b659dd81-7bd8-418e-92b7-ca49e9a928e5.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 14: Использован входной профиль RgbData: Ver = 4,2; '[199 114 178 210 106 143 36 80 206 13 167 172 44 81 31 76] [image P3]'. Файл: 3.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 14: Трансформация выполнена: RGB:Format24bppRgb -> RGB. Файл: 3.jpg -> d2b5e0eb-8e4b-42c0-9f0b-badbe974cae7.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 17: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3330.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 17: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3330.jpg -> 5e125e8a-6a59-4e2e-b86f-8d8250f93dd8.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 22: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [OffsetEuro U340 K95 V25PO4]'. Файл: foto.3928.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 22: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3928.jpg -> af48e597-87c2-4ed8-804a-3c6056bbd7d3.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 24: Не требуется. Файл: IMG_20240111_181247.jpg -> c9f79cf9-6e98-4a02-b9aa-50d404235751.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 25: Не требуется. Файл: IMG_20240111_182300.jpg -> e010a64f-6375-4512-899d-875a4ddf7132.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 26: Не требуется. Файл: shutterstock_37454374(-).jpg -> 32708f04-8cb8-4f9f-8262-69b9d4f08bb2.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 27: Не требуется. Файл: shutterstock_59977081.jpg -> 8b1a543a-988d-4822-90dd-9323b3c3095a.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 28: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3086™.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 28: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3086™.jpg -> 52bef8ce-7a31-49a8-ac93-8cc94b46de97.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 32: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3324.jpg
+14.05.2024 14:15:19: Message; Нормализация (Поток 28) => ID 32: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3324.jpg -> 95e0f3ff-36d9-4b85-aa69-521eb178525f.jpg
+14.05.2024 14:15:19: Message; Нормализация => sRGB Color Space Profile.icm: Использован RGB профиль по умолчанию: Ver = 2,1;  '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [sRGB IEC61966-2.1]'
+14.05.2024 14:15:19: Message; Нормализация => ID ISOcoated_v2_eci.icc: Использован CMYK профиль по умолчанию: Ver = 2,4;  '[231 152 204 29 159 101 154 97 85 172 53 173 154 195 131 187] [ISO Coated v2 (ECI)]'
+14.05.2024 14:15:19: Message; Нормализация => ID Generic Gray Gamma 2.2 Profile.icc: Использован Grayscale профиль по умолчанию: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'
+14.05.2024 14:15:19: Message; Нормализация => Общее время обработки = 19 сек
+14.05.2024 14:15:36: Message; Нормализация (Поток 21) => ID 12: Цветовой профиль источника соответствует профилю по умолчанию. Файл: shutterstock_472966438.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 21) => ID 12: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'. Файл: shutterstock_472966438.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 21) => ID 12: Трансформация выполнена: Grayscale:Format8bppIndexed -> RGB. Файл: shutterstock_472966438.jpg -> 307b4784-573b-4c35-941d-d614e9fa5244.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 21) => ID 18: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3331.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 21) => ID 18: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3331.jpg -> 2a208ca9-7e8d-40c0-9769-d538bfd29f6b.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 21) => ID 20: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Gen, CMYK EPP LtGCR 320UCR]'. Файл: foto.3884.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 21) => ID 20: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3884.jpg -> d805a73b-33e5-4a9d-9f7d-1f82fc680c24.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 21) => ID 29: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3320.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 21) => ID 29: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3320.jpg -> 5c066df2-c146-44d3-b7a2-d27b613b8096.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 0: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\19f9762b-11d4-4acb-a9c4-4035e118be94.jpg" уже существует.'. Файл: original (4).jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 5: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\9d9198ce-c89d-466d-a159-ea40c51af51f.jpg" уже существует.'. Файл: shutterstock_423917692.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 8: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\a727ee96-5594-4b67-b34f-b5be6a9533f1.jpg" уже существует.'. Файл: shutterstock_463643660.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 33: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\4777c580-4355-483a-88fd-a168dfa6dd7c.jpg" уже существует.'. Файл: original (10).jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 34: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\4cb2e386-aa1d-4454-8519-ef40d52e1eb0.jpg" уже существует.'. Файл: original (11).jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 35: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\41f0ffa3-7e18-4b8a-b09b-546b26114100.jpg" уже существует.'. Файл: original (12).jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 36: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\19871b8a-306a-41c6-935b-cddc90679bd9.jpg" уже существует.'. Файл: original (2).jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 37: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\58ad72f4-6fe3-4631-b9a7-2a87e48bd799.jpg" уже существует.'. Файл: original (9).jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 38: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\9adb594c-c532-4e0b-aafe-3e99f24249e9.jpg" уже существует.'. Файл: shutterstock_109603298.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 39: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\8b524d3c-5f45-4c3b-a103-beb077970885.jpg" уже существует.'. Файл: shutterstock_110065853.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 40: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\c3b0229c-c201-40da-873e-0702d84c4f11.jpg" уже существует.'. Файл: shutterstock_111029240.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 41: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\0030df03-d126-43e7-999d-f2cfee205c38.jpg" уже существует.'. Файл: shutterstock_111368450.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 42: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\306fe513-16f7-4951-bc6c-9e77a7ac9b20.jpg" уже существует.'. Файл: shutterstock_117779284.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 43: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\68637ce6-4347-4d4e-b8cc-d992efd8ea0d.jpg" уже существует.'. Файл: shutterstock_121537738.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 44: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\b1d2ecc9-3d35-46e8-8e86-a255a755c266.jpg" уже существует.'. Файл: shutterstock_123923356.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 45: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\6e98c682-1826-4a45-a5b5-f60a7f690fc1.jpg" уже существует.'. Файл: shutterstock_127746875.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 46: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\55ac4532-c7ac-4a09-b151-73a7a69615e4.jpg" уже существует.'. Файл: shutterstock_136170224.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 47: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\d7f159c3-f5fb-4050-84f2-1a81a3229f93.jpg" уже существует.'. Файл: shutterstock_140653903.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 48: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\073615fc-c6d7-4c62-979f-4d6f50ef723b.jpg" уже существует.'. Файл: shutterstock_159258020.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 49: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\63db617d-8850-4a0c-8fe5-8b149f221af2.jpg" уже существует.'. Файл: shutterstock_160286201.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 50: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\9ea00f65-1dc0-47f6-b2ad-ba3b5fb6992c.jpg" уже существует.'. Файл: shutterstock_160784795.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 51: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\35b8f12f-1989-4ffa-ac3d-f1201c3fe4d4.jpg" уже существует.'. Файл: shutterstock_215968999.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 52: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\c8e6e15d-ba27-41cc-8497-eb54856caeb2.jpg" уже существует.'. Файл: shutterstock_231091645.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 53: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\08781bbe-3a0d-4b2f-b983-2a08125bee25.jpg" уже существует.'. Файл: shutterstock_233495782.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 54: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\9fc8a818-7f88-4cc4-b684-dd2b68202c52.jpg" уже существует.'. Файл: shutterstock_233942890.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 55: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\c7749f98-6a5b-48b4-8ff8-0b18d6ac9920.jpg" уже существует.'. Файл: shutterstock_233942956.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 56: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\98bab0f8-52ed-40ac-8b60-7ca528cb24ee.jpg" уже существует.'. Файл: shutterstock_235946896.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 57: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\894358d0-81a3-4e42-8ffe-ebce5fbaac2b.jpg" уже существует.'. Файл: shutterstock_235946914.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 58: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\e001ffb0-ac26-401c-badc-6c82c8056391.jpg" уже существует.'. Файл: shutterstock_236006170.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 59: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\d9ae2445-6ea3-4459-a1eb-6624a0b75841.jpg" уже существует.'. Файл: shutterstock_237772522.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 60: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\654e675b-6bad-4a2d-86bd-2e88f8b56a8b.jpg" уже существует.'. Файл: shutterstock_261812411.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 61: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\d9cc375b-b30b-45f0-afae-238b01575caa.jpg" уже существует.'. Файл: shutterstock_261812420.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 62: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\ff9f3dd4-bbd8-4dd7-9d0a-4c3189a8ff0d.jpg" уже существует.'. Файл: shutterstock_261812429.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 63: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\c53a99b8-01f8-47d0-aab0-36ca2de4bbe1.jpg" уже существует.'. Файл: shutterstock_261812432.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 64: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\db10619b-12d5-4dba-86a2-607e5f7c7edd.jpg" уже существует.'. Файл: shutterstock_283825943.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 65: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\f3d329e8-b63a-4065-9de0-9bcec99746f0.jpg" уже существует.'. Файл: shutterstock_283825949.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 66: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\95ee7aac-5559-4241-8f81-bb30dc17f21c.jpg" уже существует.'. Файл: shutterstock_313134305.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 67: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\d6fa8dfc-300d-4d51-9c5a-c48e5efd7fed.jpg" уже существует.'. Файл: shutterstock_313134308.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 68: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\6bbbcbe7-54a0-4cc5-9486-a61c1fbacdb8.jpg" уже существует.'. Файл: shutterstock_313134317.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 69: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\ffdc9403-7fea-48ef-8143-452d64e3c4e5.jpg" уже существует.'. Файл: shutterstock_313134320.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 70: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\52fd8c35-fa3a-49a3-8f3c-fbcd3707c234.jpg" уже существует.'. Файл: shutterstock_340597160.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 71: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\970196e4-c7cb-4f74-83ec-dd9c05b9d8a6.jpg" уже существует.'. Файл: shutterstock_341199383.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 72: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\cb40efeb-e020-4290-8299-15cef23dc1f4.jpg" уже существует.'. Файл: shutterstock_345344879.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 73: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\9d79f7f5-51a1-44f5-8fbb-9e22d24229ac.jpg" уже существует.'. Файл: shutterstock_348175364.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 74: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\1831cbca-fa29-4c47-9054-ca168a0deb69.jpg" уже существует.'. Файл: shutterstock_351119852.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 75: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\4b823a6f-9d0e-479f-8acc-3eff4ca74ea0.jpg" уже существует.'. Файл: shutterstock_354321143.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 76: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\21a9f3f1-53f3-4f65-85bd-ccd1ddfee93f.jpg" уже существует.'. Файл: shutterstock_356248274.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 77: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\c1f70a22-8ed3-43b0-9ad9-3d9a0393aea8.jpg" уже существует.'. Файл: shutterstock_378289693.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 78: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\828f77d4-b090-4a33-bf00-689c8988117b.jpg" уже существует.'. Файл: shutterstock_412463701.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 79: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\c5254435-03c1-47a8-ba6b-76fd921a37c5.jpg" уже существует.'. Файл: shutterstock_60390211.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 80: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\d30c4dbb-5d35-49b7-b5c9-9215c33736e5.jpg" уже существует.'. Файл: shutterstock_62052523.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 81: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\c30deae9-db75-4134-95a0-4f9d02cd1c73.jpg" уже существует.'. Файл: shutterstock_62208367.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 21) => ID 82: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\7d073e44-65a6-4f7c-b8a1-7281ef39d7a3.jpg" уже существует.'. Файл: shutterstock_93199567.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 33) => ID 13: Использован входной профиль RgbData: Ver = 4,2; '[199 114 178 210 106 143 36 80 206 13 167 172 44 81 31 76] [image P3]'. Файл: 2.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 33) => ID 13: Трансформация выполнена: RGB:Format24bppRgb -> RGB. Файл: 2.jpg -> c6b43d96-ec92-43ff-95ae-5194bbef192d.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 33) => ID 16: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3328.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 33) => ID 16: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3328.jpg -> c2999f21-bba9-4657-8d95-773b8695ea54.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 33) => ID 21: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Gen, CMYK EPP LtGCR 320UCR]'. Файл: foto.3885.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 33) => ID 21: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3885.jpg -> 906d64b9-fcc5-4697-abf9-03e2f1d0ad19.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 33) => ID 30: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3321.jpg
+14.05.2024 14:15:36: Message; Нормализация (Поток 33) => ID 30: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3321.jpg -> ba464c36-98eb-4a46-804b-6ba614d962a3.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 33) => ID 3: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\90600262-36aa-4184-af31-39b20e8307d7.jpg" уже существует.'. Файл: shutterstock_416402569.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 33) => ID 6: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\cd64edd5-c8f0-48bc-8656-856454fa0ba7.jpg" уже существует.'. Файл: shutterstock_423917704.jpg
+14.05.2024 14:15:36: Error; Нормализация (Поток 33) => ID 9: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\9582d950-1c97-4097-a390-06d76d84a876.jpg" уже существует.'. Файл: shutterstock_468938591.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 31) => ID 14: Использован входной профиль RgbData: Ver = 4,2; '[199 114 178 210 106 143 36 80 206 13 167 172 44 81 31 76] [image P3]'. Файл: 3.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 31) => ID 14: Трансформация выполнена: RGB:Format24bppRgb -> RGB. Файл: 3.jpg -> d2b5e0eb-8e4b-42c0-9f0b-badbe974cae7.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 31) => ID 17: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3330.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 31) => ID 17: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3330.jpg -> 5e125e8a-6a59-4e2e-b86f-8d8250f93dd8.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 31) => ID 22: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [OffsetEuro U340 K95 V25PO4]'. Файл: foto.3928.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 31) => ID 22: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3928.jpg -> af48e597-87c2-4ed8-804a-3c6056bbd7d3.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 31) => ID 23: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [OffsetEuro U340 K95 V25PO4]'. Файл: foto.3929.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 31) => ID 23: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3929.jpg -> 82a47062-8574-47cd-9995-394d1f2756ac.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 31) => ID 31: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3322.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 31) => ID 31: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3322.jpg -> 4e819a68-1e81-4348-804d-6ee4b59145bc.jpg
+14.05.2024 14:15:38: Error; Нормализация (Поток 31) => ID 1: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\adea3e4b-e4d6-4eaa-bd33-2ce0ce0bc24d.jpg" уже существует.'. Файл: original (5).jpg
+14.05.2024 14:15:38: Error; Нормализация (Поток 31) => ID 4: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\9208cf45-c427-42f1-98d0-5dd5939439c2.jpg" уже существует.'. Файл: shutterstock_423917653.jpg
+14.05.2024 14:15:38: Error; Нормализация (Поток 31) => ID 10: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\b659dd81-7bd8-418e-92b7-ca49e9a928e5.jpg" уже существует.'. Файл: shutterstock_468938600.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 32) => ID 15: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3325.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 32) => ID 15: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3325.jpg -> 73c03730-d3be-48a2-b17c-96ceca9d546d.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 32) => ID 19: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Gen, CMYK EPP LtGCR 320UCR]'. Файл: foto.3883.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 32) => ID 19: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3883.jpg -> 524c6247-afa6-4889-8932-ff2ddead8097.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 32) => ID 28: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3086™.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 32) => ID 28: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3086™.jpg -> 52bef8ce-7a31-49a8-ac93-8cc94b46de97.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 32) => ID 32: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3324.jpg
+14.05.2024 14:15:38: Message; Нормализация (Поток 32) => ID 32: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3324.jpg -> 95e0f3ff-36d9-4b85-aa69-521eb178525f.jpg
+14.05.2024 14:15:38: Error; Нормализация (Поток 32) => ID 2: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\c0317774-2e6d-461f-a286-fe004541e220.jpg" уже существует.'. Файл: shutterstock_415929772.jpg
+14.05.2024 14:15:38: Error; Нормализация (Поток 32) => ID 7: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\aa19aef6-0d5a-480c-b873-682b83e198b3.jpg" уже существует.'. Файл: shutterstock_438629968.jpg
+14.05.2024 14:15:38: Error; Нормализация (Поток 32) => ID 11: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\b9ed17ef-b3ac-468e-9a29-005471d2f512.jpg" уже существует.'. Файл: shutterstock_471595004.jpg
+14.05.2024 14:15:38: Error; Нормализация (Поток 32) => ID 24: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\c9f79cf9-6e98-4a02-b9aa-50d404235751.jpg" уже существует.'. Файл: IMG_20240111_181247.jpg
+14.05.2024 14:15:38: Error; Нормализация (Поток 32) => ID 25: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\e010a64f-6375-4512-899d-875a4ddf7132.jpg" уже существует.'. Файл: IMG_20240111_182300.jpg
+14.05.2024 14:15:38: Error; Нормализация (Поток 32) => ID 26: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\32708f04-8cb8-4f9f-8262-69b9d4f08bb2.jpg" уже существует.'. Файл: shutterstock_37454374(-).jpg
+14.05.2024 14:15:38: Error; Нормализация (Поток 32) => ID 27: ИСКЛЮЧЕНИЕ #1 'Файл "C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\8f9c8062-378d-41f0-b078-f09d47aa6370\~Files\8b1a543a-988d-4822-90dd-9323b3c3095a.jpg" уже существует.'. Файл: shutterstock_59977081.jpg
+14.05.2024 14:15:38: Message; Нормализация => sRGB Color Space Profile.icm: Использован RGB профиль по умолчанию: Ver = 2,1;  '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [sRGB IEC61966-2.1]'
+14.05.2024 14:15:38: Message; Нормализация => ID ISOcoated_v2_eci.icc: Использован CMYK профиль по умолчанию: Ver = 2,4;  '[231 152 204 29 159 101 154 97 85 172 53 173 154 195 131 187] [ISO Coated v2 (ECI)]'
+14.05.2024 14:15:38: Message; Нормализация => ID Generic Gray Gamma 2.2 Profile.icc: Использован Grayscale профиль по умолчанию: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'
+14.05.2024 14:15:38: Message; Нормализация => Общее время обработки = 19 сек
+14.05.2024 14:15:38: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер завершил работу с процессом '8f9c8062-378d-41f0-b078-f09d47aa6370'
+14.05.2024 14:15:38: Message; ObjectDetectorController.Start => VRU: 'ObjectDetectorController' => Контроллер начал начал работу с процессом '8f9c8062-378d-41f0-b078-f09d47aa6370'
+14.05.2024 14:18:52: Message; Распознавание лиц => File = 2.jpg; Face rect: 157,200; 172x172
+14.05.2024 14:18:52: Message; Распознавание лиц => Общее время обработки = 193 сек
+14.05.2024 14:18:52: Message; ObjectDetectorController.Start => VRU: 'ObjectDetectorController' => Контроллер завершил работу с процессом '8f9c8062-378d-41f0-b078-f09d47aa6370'
+14.05.2024 14:18:52: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Выполнение процесса '8f9c8062-378d-41f0-b078-f09d47aa6370' успешно завершено
