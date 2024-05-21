@@ -1,5 +1,12 @@
 <root>
   <Data TypeId="1062216552">
+    <Adapters TypeId="-1637636998">
+      <item TypeId="1367118783">
+        <MetadataType TypeId="-1313572491">XML</MetadataType>
+        <FileDataFilter TypeId="953668548">JPEG</FileDataFilter>
+        <UID TypeId="-1913220081">a4674aa6-06b7-4b2d-8864-d61315899100</UID>
+      </item>
+    </Adapters>
     <ApplicationFonts TypeId="-304816164">
       <item TypeId="-1925994758">
         <Id TypeId="1727199146">-1336522434</Id>
@@ -14,8 +21,31 @@
         <Enabled TypeId="-491435614">True</Enabled>
         <UID TypeId="-1913220081">744d36a9-d7ee-43ee-9f5f-38f725164d2f</UID>
         <ProjectId TypeId="1642033309">VRU</ProjectId>
+        <UsingTemplateAliases TypeId="-1201313210">
+          <item TypeId="-1590715631">
+            <Name TypeId="1642033309">04F</Name>
+            <UID TypeId="-1913220081">5244dbef-e87e-4f80-aac1-3a8fc9b075a8</UID>
+          </item>
+          <item TypeId="-1590715631">
+            <Name TypeId="1642033309">08F</Name>
+            <UID TypeId="-1913220081">3fe7328c-5c88-412f-a530-c14313ea4941</UID>
+          </item>
+          <item TypeId="-1590715631">
+            <Name TypeId="1642033309">09F</Name>
+            <UID TypeId="-1913220081">380cfb65-9614-4abe-9430-46f8ef0cfcae</UID>
+          </item>
+          <item TypeId="-1590715631">
+            <Name TypeId="1642033309">10F</Name>
+            <UID TypeId="-1913220081">2066b204-9de7-46ae-9107-720bf1478d81</UID>
+          </item>
+          <item TypeId="-1590715631">
+            <Name TypeId="1642033309">13F</Name>
+            <UID TypeId="-1913220081">b22006cd-5464-44a0-a9bc-5897797c45f4</UID>
+          </item>
+        </UsingTemplateAliases>
         <InputProviders TypeId="1481613391">
           <item TypeId="-1782858820">
+            <AdapterId TypeId="-1913220081">a4674aa6-06b7-4b2d-8864-d61315899100</AdapterId>
             <Source TypeId="1642033309">C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\_Input</Source>
             <DefaultOutput TypeId="1481613391">
               <item TypeId="1501519237">
@@ -26,10 +56,6 @@
                 <Enabled TypeId="-491435614">False</Enabled>
               </item>
             </DefaultOutput>
-            <Adapter TypeId="1367118783">
-              <MetadataType TypeId="-1313572491">XML</MetadataType>
-              <FileDataFilter TypeId="953668548">JPEG</FileDataFilter>
-            </Adapter>
             <Label TypeId="1642033309">Запуск процесса обработки изображений из горячей папки</Label>
             <UID TypeId="-1913220081">e0ded6f2-9449-4d28-a6bb-e4358081788d</UID>
             <Priority TypeId="1727199146">0</Priority>
@@ -41,17 +67,20 @@
   </Data>
   <Types>
     <WorkSpace Id="1062216552" Guid="(4a08d5b0-6cff-396f-b806-58432a54fa85)">Smartproj.WorkSpace, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</WorkSpace>
+    <List-1 Id="-1637636998" Guid="(5af00c2e-048b-3ab3-8ccd-548134771d38)">System.Collections.Generic.List`1[[Smartproj.IAdapter, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</List-1>
+    <VruAdapter Id="1367118783" Guid="(51d743e0-d880-302f-8f47-f571d9a9f1ec)">Smartproj.VruAdapter, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</VruAdapter>
     <FontCollection Id="-304816164" Guid="(a03cd6cc-e622-3d06-b43a-29abe137d6d5)">Smartproj.FontCollection, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</FontCollection>
     <FontClass Id="-1925994758" Guid="(b0a656d7-d006-3aa2-b848-6f8dd6583a8a)">Smartproj.FontClass, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</FontClass>
     <ProjectCollection Id="1009763160" Guid="(107b614c-4179-347b-a1f2-ae0d8d4c1271)">Smartproj.ProjectCollection, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</ProjectCollection>
     <Project Id="-1293740184" Guid="(c59a4bdb-69f0-3b83-b071-ea3baf984c55)">Smartproj.Project, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Project>
+    <List-1 Id="-1201313210" Guid="(5af00c2e-048b-3ab3-8ccd-548134771d38)">System.Collections.Generic.List`1[[Smartproj.UsingTemplateAlias, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</List-1>
+    <UsingTemplateAlias Id="-1590715631" Guid="(266b0062-b3ad-33a8-934b-f5acece515aa)">Smartproj.UsingTemplateAlias, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</UsingTemplateAlias>
     <ControllerCollection Id="1481613391" Guid="(f038ac85-352a-3936-a4cd-14e25c913334)">Smartproj.ControllerCollection, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</ControllerCollection>
     <HotFolderImagesPackInputProvider Id="-1782858820" Guid="(7057daed-0ffc-3ab2-8d78-04add50f4f50)">Smartproj.HotFolderImagesPackInputProvider, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</HotFolderImagesPackInputProvider>
     <PdfOutputProvider Id="1501519237" Guid="(ca865d4a-4248-3155-abe9-4c8edee9acfe)">Smartproj.PdfOutputProvider, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</PdfOutputProvider>
-    <VruAdapter Id="1367118783" Guid="(51d743e0-d880-302f-8f47-f571d9a9f1ec)">Smartproj.VruAdapter, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</VruAdapter>
-    <SourceParametersTypeEnum Id="-1313572491" Guid="(024f463e-2171-3386-b09f-2a807a7fd3e5)">Smartproj.SourceParametersTypeEnum, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</SourceParametersTypeEnum>
-    <TagFileTypeEnum Id="953668548" Guid="(96349ed6-952d-3ccc-8cde-c89e6a375f79)">Smartproj.Utils.TagFileTypeEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</TagFileTypeEnum>
     <DetailTypeEnum Id="217811671" Guid="(4db8054a-9b81-3a86-9c2d-d035d372b265)">Smartproj.Utils.DetailTypeEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</DetailTypeEnum>
     <FontStyle Id="989716858" Guid="(e31d55f8-7c58-36fa-b7d6-b42857df44b7)">System.Drawing.FontStyle, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</FontStyle>
+    <SourceParametersTypeEnum Id="-1313572491" Guid="(024f463e-2171-3386-b09f-2a807a7fd3e5)">Smartproj.SourceParametersTypeEnum, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</SourceParametersTypeEnum>
+    <TagFileTypeEnum Id="953668548" Guid="(96349ed6-952d-3ccc-8cde-c89e6a375f79)">Smartproj.Utils.TagFileTypeEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</TagFileTypeEnum>
   </Types>
 </root>

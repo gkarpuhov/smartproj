@@ -1,6 +1,7 @@
 ﻿using Emgu.CV.Linemod;
 using Smartproj.Utils;
 using System;
+using System.Linq;
 
 namespace Smartproj
 {
@@ -18,11 +19,17 @@ namespace Smartproj
 
                 Log?.WriteInfo("ImageConverterController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер начал работу с процессом '{job.UID}'");
 
+                Log?.WriteInfo("ImageConverterController.Start", $"/// 2");
+                foreach (var data in job.DataContainer.OrderBy(x => x.OrderBy))
+                {
+                    Log?.WriteInfo("ImageConverterController.Start", $"Path = {data.FilePath}; Name = {data.FileName}");
+                }
+                Log?.WriteInfo("ImageConverterController.Start", $"///");
+
                 ColorImagesConverter converter = new ColorImagesConverter();
                 converter.ConverterLog = Log;
                 converter.OutPath = job.JobPath;
                 converter.ProfilesPath = ws.Profiles;
-                converter.Process(job.DataContainer);
                 try
                 {
                     converter.Process(job.DataContainer);

@@ -7,11 +7,19 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading;
 using System.Xml.Serialization;
 
 namespace Smartproj
 {
+    public class UsingTemplateAlias
+    {
+        [XmlElement]
+        public string Name { get; set; }
+        [XmlElement]
+        public Guid UID { get; set; }
+    }
     /// <summary>
     /// Коллекция для объектов <see cref="Project"/>
     /// </summary>
@@ -107,6 +115,11 @@ namespace Smartproj
             }
         }
         /// <summary>
+        /// Таблица псевдонимов на шаблоны для использования в данном проекта
+        /// </summary>
+        [XmlCollection(true, false, typeof(UsingTemplateAlias))] 
+        public List<UsingTemplateAlias> UsingTemplateAliases { get; }
+        /// <summary>
         /// Коллекция контроллеров <see cref="AbstractInputProvider"/>, определяющих механизм инициализации рабочего процесса, реализованного классом <see cref="Job"/>, и выполняющий работу в соответствии со структурой данных и контроллеров, связанного объекта <see cref="Product"/>
         /// Объекты данной коллекции инициализируются (асинхронно) исключительно при старте службы, и деактивируются, соответсвенно, при остановке выполнения сервиса
         /// </summary>
@@ -170,9 +183,8 @@ namespace Smartproj
             ProjectId = _cid;
             Enabled = true;
             UID = Guid.NewGuid();
+            UsingTemplateAliases = new List<UsingTemplateAlias>();
             InputProviders = new ControllerCollection(this, null);
-            //Directory.CreateDirectory(Path.Combine(ProjectPath, "~Files"));
-            //Directory.CreateDirectory(Path.Combine(ProjectPath, "~Cms"));
         }
         /*
         public void ExtractData(List<KeyValuePair<string, List<string>>> _filesTree)

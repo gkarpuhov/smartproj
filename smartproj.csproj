@@ -245,13 +245,14 @@
   <ItemGroup>
     <Compile Include="Adapters\Interface.cs" />
     <Compile Include="Adapters\VruAdapter.cs" />
-    <Compile Include="Controllers\AbstractInputProvider.cs" />
-    <Compile Include="Controllers\AbstractOutputProvider.cs" />
+    <Compile Include="Controllers\Imposing\DirectFileToTemplateImposeController.cs" />
+    <Compile Include="Controllers\Providers\AbstractInputProvider.cs" />
+    <Compile Include="Controllers\Providers\AbstractOutputProvider.cs" />
     <Compile Include="Controllers\ControllerColelctions.cs" />
-    <Compile Include="Controllers\HotFolderImagesPackInputProvider.cs" />
-    <Compile Include="Controllers\ImageConverterController.cs" />
-    <Compile Include="Controllers\ObjectDetectorController.cs" />
-    <Compile Include="Controllers\PdfOutputProvider.cs" />
+    <Compile Include="Controllers\Providers\HotFolderImagesPackInputProvider.cs" />
+    <Compile Include="Controllers\Processing\ImageConverterController.cs" />
+    <Compile Include="Controllers\Processing\ObjectDetectorController.cs" />
+    <Compile Include="Controllers\Providers\PdfOutputProvider.cs" />
     <Compile Include="Detail\Detail.cs" />
     <Compile Include="DistanceStructs.cs" />
     <Compile Include="Job\Job.cs" />
@@ -308,6 +309,7 @@
       <Name>Smartproj.Utils</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -25,6 +25,8 @@ namespace Smartproj
         public ProcessStatusEnum Status { get { lock (mSyncRoot) { return mStatus; } } set { lock (mSyncRoot) { mStatus = value; } } }
         public Logger Log => Owner?.Log; 
         public Project Owner { get; }
+        public string OrderNumber { get; set; }
+        public string ItemId { get; set; }
         public string JobPath { get; private set; }
         public List<ExifTaggedFile> DataContainer { get; }
         public Segment Clusters { get; }
@@ -33,14 +35,16 @@ namespace Smartproj
         public SourceParametersTypeEnum MetadataType { get; private set; }
         public TagFileTypeEnum FileDataFilter { get; private set; }
         public string Metadata { get; private set; }
+        public Size ProductSize { get; private set; }
         public virtual void Create(Product _product, Size _productSize, string _metadata, SourceParametersTypeEnum _metadataType, TagFileTypeEnum _fileDataFilter)
         {
             MetadataType = _metadataType;
             FileDataFilter = _fileDataFilter;
             Metadata = _metadata;
+            ProductSize = _productSize;
             Product = _product;
             Product.Owner = this;
-            Product.CreateLayoutSpace(_productSize);
+            Product.CreateLayoutSpace(ProductSize);
         }
         protected void Dispose(bool _disposing)
         {

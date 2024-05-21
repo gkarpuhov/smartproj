@@ -18,6 +18,8 @@ namespace Smartproj
             if (CurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
             if (Enabled)
             {
+                return true;
+
                 StartParameters = _settings;
                 Job job = (Job)StartParameters[0];
                 WorkSpace ws = job.Owner.Owner.Owner;

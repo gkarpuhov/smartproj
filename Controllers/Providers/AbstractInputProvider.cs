@@ -18,6 +18,8 @@ namespace Smartproj
         protected object mSyncRoot = new object();
         private ProcessStatusEnum mCurrentStatus;
         delegate void StopAsyncMethodCaller();
+        [XmlElement]
+        public Guid AdapterId { get; set; }
         /// <summary>
         /// Строка, определеющая путь источника получения данных
         /// </summary>
@@ -51,8 +53,6 @@ namespace Smartproj
                 }
             }
         }
-        [XmlContainer(typeof(AbstractInputProvider))]
-        public IAdapter Adapter { get; set; }
         /// <summary>
         /// После завершения работы метода Stop, внутренний объект Timer провайдера начнет процедуру остановки с последующим освобождением внутренних ресурсов объекта
         /// Это произойдет после завершения работы обработчика TimerCallback. Метод Stop возвращает соответствующий IAsyncResult состояния завершения всех процессов

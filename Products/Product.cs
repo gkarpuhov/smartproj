@@ -82,10 +82,11 @@ namespace Smartproj
     */
     public abstract class Product : Tree
     {
-        public virtual string ProductCode { get; set; }
         public string ProductKeyCode => (ProductCode != null && ProductCode != "") ? ProductCode.Split('_')[0] : ProductCode;
         public override Logger Log => Owner?.Log;
         public Job Owner { get; set; }
+        public IEnumerable<Detail> Parts => TreeNodeItems.Cast<Detail>();
+        public virtual string ProductCode { get; set; }
         [XmlElement]
         public bool TempletesAutoUpdate { get; set; }
         public LayoutCollection LayoutSpace { get; set; }

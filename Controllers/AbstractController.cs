@@ -63,6 +63,7 @@ namespace Smartproj
     /// </summary>
     public interface IInputProvider
     {
+        Guid AdapterId { get; }
         /// <summary>
         /// Строка, определеющая путь источника получения данных
         /// </summary>

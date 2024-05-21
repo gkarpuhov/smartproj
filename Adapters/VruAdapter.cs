@@ -10,21 +10,22 @@ namespace Smartproj
 {
     public class VruAdapter : IAdapter
     {
-        public AbstractInputProvider Owner { get; }
         [XmlElement]
         public SourceParametersTypeEnum MetadataType { get; set; }
         [XmlElement]
         public TagFileTypeEnum FileDataFilter { get; set; }
-        public bool GetNext(Project _project, out Job _job)
+        [XmlElement]
+        public Guid UID { get; set; }
+        public bool GetNext(Project _project, AbstractInputProvider _provider, out Job _job)
         {
             _job = null;
-            if (Owner?.Source == null || Owner.Source == "" || !Directory.Exists(Owner.Source))
+            if (_provider.Source == null || _provider.Source == "" || !Directory.Exists(_provider.Source))
             {
-                Owner.Log?.WriteError("VruAdapter.GetNext", $"{_project.ProjectId} => Входная директория не определена или не существует '{Owner.Source}'");
+                _project.Log?.WriteError("VruAdapter.GetNext", $"{_project.ProjectId} => Входная директория не определена или не существует '{_provider.Source}'");
                 return false;
             }
 
-            var inputFiles = Directory.GetFiles(Owner.Source, "*.zip").OrderBy(x => (new FileInfo(x)).LastWriteTime);
+            var inputFiles = Directory.GetFiles(_provider.Source, "*.zip").OrderBy(x => (new FileInfo(x)).LastWriteTime);
 
             foreach (string file in inputFiles)
             {
@@ -41,12 +42,12 @@ namespace Smartproj
                         System.IO.File.Move(file, tempZip);
                         ZipFile.ExtractToDirectory(tempZip, origPath);
                         File.Delete(tempZip);
-                 
-                        Owner.Log?.WriteInfo("VruAdapter.GetNext", $"Процесс {_project.ProjectId} => {_job.UID}: файлы для работы получены");
+
+                        _project.Log?.WriteInfo("VruAdapter.GetNext", $"Процесс {_project.ProjectId} => {_job.UID}: файлы для работы получены");
                     }
                     catch (Exception ex)
                     {
-                        Owner.Log?.WriteError("VruAdapter.GetNext", $"Процесс {_project.ProjectId} => {_job.UID}: ошибка при извлечении файлов ({ex.Message})");
+                        _project.Log?.WriteError("VruAdapter.GetNext", $"Процесс {_project.ProjectId} => {_job.UID}: ошибка при извлечении файлов ({ex.Message})");
                         _job.Dispose();
                         _job = null;
                         return false;
@@ -60,24 +61,25 @@ namespace Smartproj
                     // Тут надо определить из исходных данных формат продукта
                     Size productSize = new Size(200, 280);  // Например
                     //
-                    Owner.Log?.WriteInfo("VruAdapter.GetNext", $"Продукт  {_project.ProjectId} => {productId} ({productSize}) передан процессу {_job.UID} для инициализации");
+                    _project.Log?.WriteInfo("VruAdapter.GetNext", $"Продукт  {_project.ProjectId} => {productId} ({productSize}) передан процессу {_job.UID} для инициализации");
 
                     if (productFile != null && productFile != "")
                     {
                         try
                         {
                             _job.Create((Product)Serializer.LoadXml(productFile), productSize, metadata, MetadataType, FileDataFilter);
-                            Owner.Log?.WriteInfo("VruAdapter.GetNext", $"Продукт  {_project.ProjectId} => {productId} ({productSize}) успешно иницализирован процессом {_job.UID}");
+                            _project.Log?.WriteInfo("VruAdapter.GetNext", $"Продукт  {_project.ProjectId} => {productId} ({productSize}) успешно иницализирован процессом {_job.UID}");
+
                             return true;
                         }
                         catch (Exception ex)
                         {
-                            Owner.Log?.WriteError("VruAdapter.GetNext", $"Ошибка при загрузке продукта '{productFile}: {ex.Message}");
-                            Owner.Log?.WriteError("VruAdapter.GetNext", $"Ошибка при загрузке продукта '{productFile}: {ex.StackTrace}");
+                            _project.Log?.WriteError("VruAdapter.GetNext", $"Ошибка при загрузке продукта '{productFile}: {ex.Message}");
+                            _project.Log?.WriteError("VruAdapter.GetNext", $"Ошибка при загрузке продукта '{productFile}: {ex.StackTrace}");
                         }
                     }
 
-                    Owner.Log?.WriteError("VruAdapter.GetNext", $"Процесс {_project.ProjectId} => {_job.UID}: ошибка загрузки продукта {_project.ProjectId} => {productId}");
+                    _project.Log?.WriteError("VruAdapter.GetNext", $"Процесс {_project.ProjectId} => {_job.UID}: ошибка загрузки продукта {_project.ProjectId} => {productId}");
                     _job.Dispose();
                     _job = null;
                 }
@@ -85,11 +87,11 @@ namespace Smartproj
 
             return false;
         }
-        public VruAdapter(AbstractInputProvider _owner) 
+        public VruAdapter() 
         {
-            Owner = _owner;
             MetadataType = SourceParametersTypeEnum.XML;
             FileDataFilter = TagFileTypeEnum.JPEG;
+            UID = Guid.NewGuid();
         }
     }
 }

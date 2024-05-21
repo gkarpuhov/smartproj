@@ -44,6 +44,14 @@ namespace Smartproj
         }
         protected override void ProcessHandler(object _obj)
         {
+            Project project = Owner.Project;
+            IAdapter adapter = project.Owner?.Owner?.Adapters.Find(x => x.UID == AdapterId);
+
+            if (adapter == null) 
+            {
+                Log?.WriteError("HotFolderImagesInputProvider.ProcessHandler", $"{project.ProjectId} => Не определен адаптер входных данных");
+                return;
+            }
             Job job = null;
             bool nextprocess = false;
 
@@ -51,7 +59,7 @@ namespace Smartproj
             {
                 try
                 {
-                    nextprocess = Adapter.GetNext(Owner.Project, out job);
+                    nextprocess = adapter.GetNext(project, this, out job);
                 }
                 finally
                 {
@@ -61,14 +69,14 @@ namespace Smartproj
             if (!nextprocess) return;
 
             List<KeyValuePair<string, List<string>>> extractData = new List<KeyValuePair<string, List<string>>>();
-            FileProcess.ExtractFiles(Path.Combine(job.JobPath, "~Original"), extractData, Adapter.FileDataFilter, true, true);
+            FileProcess.ExtractFiles(Path.Combine(job.JobPath, "~Original"), extractData, adapter.FileDataFilter, true, true);
 
             ExifTaggedFileSegments topSegment = (ExifTaggedFileSegments)job.Clusters;
             ExifTaggedFileSegments fsSegment = (ExifTaggedFileSegments)topSegment.Add(SegmentTypeEnum.FileStructure, "0");
 
             int count = extractData.Sum(x => x.Value.Count);
 
-            Log?.WriteInfo("HotFolderImagesInputProvider.ProcessHandler", $"{Owner.Project.ProjectId} => Файловая структура для выполнения процесса '{job.UID}' загружена: {count} файлов");
+            Log?.WriteInfo("HotFolderImagesInputProvider.ProcessHandler", $"{project.ProjectId} => Файловая структура для выполнения процесса '{job.UID}' загружена: {count} файлов");
 
             int index = 0;
 
@@ -77,7 +85,7 @@ namespace Smartproj
                 List<ExifTaggedFile> parsed = null;
                 if (AutoExifParse)
                 {
-                    parsed = ExifParser(extractData[i].Key, extractData[i].Value, index);
+                    parsed = ExifParser(extractData[i].Key, extractData[i].Value, index, adapter.FileDataFilter);
                     job.DataContainer.AddRange(parsed);
                 }
                 else
@@ -121,7 +129,7 @@ namespace Smartproj
                     }
                 }
 
-                Log?.WriteInfo("HotFolderImagesInputProvider.ProcessHandler", $"{Owner.Project.ProjectId} => Процесс формирование данных для обработки завершен. Процесс '{job.UID}'");
+                Log?.WriteInfo("HotFolderImagesInputProvider.ProcessHandler", $"{project.ProjectId} => Процесс формирование данных для обработки завершен. Процесс '{job.UID}'");
                 job.Status = ProcessStatusEnum.Processing;
                 
                 if (job.Product.Controllers != null)
@@ -154,7 +162,7 @@ namespace Smartproj
 
             job.Dispose();
         }
-        private List<ExifTaggedFile> ExifParser(string _dirNameKey, List<string> _files, int _firstIndex)
+        private List<ExifTaggedFile> ExifParser(string _dirNameKey, List<string> _files, int _firstIndex, TagFileTypeEnum _filter)
         {
             List<ExifTaggedFile> data = new List<ExifTaggedFile>();
             var extractor = new ExifTool(new ExifToolOptions() { EscapeTagValues = false, ExtractICCProfile = true });
@@ -416,7 +424,7 @@ namespace Smartproj
                         }
                     }
 
-                    if ((Adapter.FileDataFilter & fileNameType) != fileNameType)
+                    if ((_filter & fileNameType) != fileNameType)
                     {
                         //errors.Add($"{filesTree[i].Value[j]}: Не определен формат файла");
                         continue;

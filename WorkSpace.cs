@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using static Emgu.CV.OCR.Tesseract;
 
 namespace Smartproj
 {
@@ -26,16 +27,21 @@ namespace Smartproj
         public readonly string Config;
         public readonly string Profiles;
         /// <summary>
+        /// 
+        /// </summary>
+        [XmlCollection(true, false, typeof(IAdapter))]
+        public List<IAdapter> Adapters { get; }
+        /// <summary>
         /// Сериализованный глобальный список доступных шрифтов <see cref="FontClass"/>
         /// По смыслу данный список имеет статус "статического", но для сериализации необходимо поместить его в экземпляр класса
         /// </summary>
-        [XmlCollection(true, false, typeof(FontClass), typeof(WorkSpace))]
-        public FontCollection ApplicationFonts { get; set; }
+        [XmlCollection(true, false, typeof(FontClass))]
+        public FontCollection ApplicationFonts { get; }
         /// <summary>
         /// Список определенных проектов <see cref="Project"/>
         /// </summary>
-        [XmlCollection(true, false, typeof(Project), typeof(WorkSpace))]
-        public ProjectCollection Projects { get; set; }
+        [XmlCollection(true, false, typeof(Project))]
+        public ProjectCollection Projects { get; }
         /// <summary>
         /// Статический обработчик внутренних ошибок во внешнем модуле процессов цветоделения изображений
         /// </summary>
@@ -83,6 +89,10 @@ namespace Smartproj
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             }
             mIsDisposed = false;
+
+            Adapters = new List<IAdapter>();
+            ApplicationFonts = new FontCollection(this);
+            Projects = new ProjectCollection(this);
         }
         /// <summary>
         /// Инициирует работу запускающих контроллеров для доступных проектов <see cref="Project"/>
@@ -104,8 +114,8 @@ namespace Smartproj
                         }
                     }
                 }
-                
             }
+            //this.SaveXml(Path.Combine(ApplicationPath, "config.xml"));
         }
         /// <summary>
         /// Инициирует остановку всех запускающих контроллеров, и ожидает завершения всех связанных синхронных и асинхронных процессов

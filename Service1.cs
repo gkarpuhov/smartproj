@@ -127,7 +127,7 @@ namespace Smartproj
 
                         return;
                         */
-                        var fonts = vru.Owner.Owner.ApplicationFonts = new FontCollection(Work);
+                        var fonts = vru.Owner.Owner.ApplicationFonts;
                         fonts.Add(new FontClass("Arial", FontStyle.Bold, ""));
 
                         TextParameters textParameter = new TextParameters() { FillColor = Color.Black, StrokeColor = Color.Transparent, Size = 35, StrokeWeight = 0, Font = new FontClass("Arial", FontStyle.Bold, "") };

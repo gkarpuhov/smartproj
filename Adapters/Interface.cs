@@ -1,4 +1,5 @@
 ﻿using Smartproj.Utils;
+using System;
 
 namespace Smartproj
 {
@@ -11,9 +12,9 @@ namespace Smartproj
     }
     public interface IAdapter
     {
-        AbstractInputProvider Owner { get; }
         SourceParametersTypeEnum MetadataType { get; }
         TagFileTypeEnum FileDataFilter { get; }
-        bool GetNext(Project _project, out Job _job);
+        Guid UID { get; }
+        bool GetNext(Project _project, AbstractInputProvider _provider, out Job _job);
     }
 }
