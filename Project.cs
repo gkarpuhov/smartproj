@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
-using System.Linq;
-using System.Security.Policy;
 using System.Threading;
 using System.Xml.Serialization;
 
@@ -1407,81 +1405,8 @@ namespace Smartproj
             doc.Dispose();
         }
         */
-        /*
-        private void PdfCombainer(IEnumerable<ProjectContainer> _data, string _filename)
-        {
-            if (_data == null || _data.Count() == 0) return;
 
-            GdPicturePDF doc = new GdPicturePDF();
-
-            doc.NewPDF(PdfConformance.PDF1_7);
-            doc.SetMeasurementUnit(PdfMeasurementUnit.PdfMeasurementUnitMillimeter);
-            doc.SetCompressionForColorImage(PdfCompression.PdfCompressionJPEG);
-            doc.SetJpegQuality(100);
-            doc.EnableCompression(true);
-            doc.SetOrigin(PdfOrigin.PdfOriginBottomLeft);
-
-            int pageId = 0;
-            var extraframes = new List<ValueTuple<Fill, string, Point>>();
-
-            using (GdPictureImaging oImage = new GdPictureImaging())
-            {
-                foreach (var item in _data)
-                {
-                    Template template = item.Templ;
-
-                    for (int i = 0; i < item.TreeNodeItems.Count; i++)
-                    {
-                        var side = item.TreeNodeItems[i];
-                        bool pageadded = false;
-                        extraframes.Clear();
-
-                        for (int k = 0; k < side.GetLength(0); k++)
-                        {
-                            for (int m = 0; m < side.GetLength(1); m++)
-                            {
-                                if (item.TreeNodeItems[i][k, m].FileId == -1) continue;
-
-                                if (!pageadded)
-                                {
-                                    doc.NewPage(Product.Trim.Width, Product.Trim.Height);
-                                    doc.SelectPage(++pageId);
-                                    pageadded = true;
-                                }
-
-                                int xShift = i == 0 ? 0 : Product.Trim.Width;
-                                //string filename = Path.Combine(InputData[item.TreeNodeItems[i][k, m].FileId].FilePath, InputData[item.TreeNodeItems[i][k, m].FileId].FileName);
-                                string filename = Path.Combine(ProjectPath, "~Files", InputData[item.TreeNodeItems[i][k, m].FileId].GUID + ".jpg");
-                                var rect = template.Frames[i][k, m].ToRectangle();
-
-                                if (i == 0 && rect.X + rect.Width > Product.Trim.Width)
-                                {
-                                    extraframes.Add(new ValueTuple<Fill, string, Point>(rect, filename, item.TreeNodeItems[i][k, m].Shift));
-                                }
-
-                                FileToFrame(doc, oImage, rect, xShift, filename, item.TreeNodeItems[i][k, m].Shift);
-                            }
-                        }
-
-                        if (extraframes.Count > 0)
-                        {
-                            doc.NewPage(Product.Trim.Width, Product.Trim.Height);
-                            doc.SelectPage(++pageId);
-
-                            foreach (var frame in extraframes) 
-                            {
-                                FileToFrame(doc, oImage, frame.Item1, Product.Trim.Width, frame.Item2, frame.Item3);
-                            }
-                        }
-                    }
-                }
-            }
-
-            doc.SaveToFile(_filename);
-            doc.CloseDocument();
-            doc.Dispose();
-        }
-        */
+      
         private float FileToFrame(GdPicturePDF _doc, GdPictureImaging _obj, Rectangle _frame, int _shift, string _file, Point _correction)
         {
             int id = _obj.CreateGdPictureImageFromFile(_file);
@@ -1505,12 +1430,12 @@ namespace Smartproj
                 
                 if (res != GdPictureStatus.OK)
                 {
-                    Log.WriteError("FileToFrame", $"Ошибка отрисовки изображения во фрейм. Status = {res}");
+                    Log?.WriteError("FileToFrame", $"Ошибка отрисовки изображения во фрейм. Status = {res}");
                 }
             }
             catch (Exception ex)
             {
-                Log.WriteError("FileToFrame", $"Исключение при отрисовке изображения во фрейм '{ex.Message}'");
+                Log?.WriteError("FileToFrame", $"Исключение при отрисовке изображения во фрейм '{ex.Message}'");
             }
 
             _doc.RestoreGraphicsState();

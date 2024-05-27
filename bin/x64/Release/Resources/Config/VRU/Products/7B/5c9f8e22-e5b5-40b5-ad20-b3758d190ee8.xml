@@ -16,18 +16,25 @@
       <item TypeId="849896578">
         <Label TypeId="1642033309">Конвертация всех изображение в sRGB (JPEG)</Label>
         <UID TypeId="-1913220081">4859926c-b057-4178-94b9-83dc07cf6e12</UID>
-        <Priority TypeId="1727199146">2</Priority>
+        <Priority TypeId="1727199146">3</Priority>
         <Enabled TypeId="-491435614">True</Enabled>
       </item>
       <item TypeId="1684027808">
         <Label TypeId="1642033309">Распознование лиц на изображениях</Label>
         <UID TypeId="-1913220081">53a73f9f-bc6b-4a55-9c5c-0e4ec4e7c6de</UID>
-        <Priority TypeId="1727199146">1</Priority>
+        <Priority TypeId="1727199146">2</Priority>
         <Enabled TypeId="-491435614">True</Enabled>
       </item>
       <item TypeId="-390503294">
         <Label TypeId="1642033309">Контроллер осуществляет сборку макета только на основании содержимого исходных папок</Label>
         <UID TypeId="-1913220081">83fbc4c5-1fd6-4529-8fe7-b5a5be2d590c</UID>
+        <Priority TypeId="1727199146">1</Priority>
+        <Enabled TypeId="-491435614">True</Enabled>
+      </item>
+      <item TypeId="1501519237">
+        <Destination TypeId="1642033309">C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\_Output</Destination>
+        <Label TypeId="1642033309">Генерация макета в PDF формате</Label>
+        <UID TypeId="-1913220081">a7e882a8-52a1-4473-8bc9-721dc372e75f</UID>
         <Priority TypeId="1727199146">0</Priority>
         <Enabled TypeId="-491435614">True</Enabled>
       </item>
@@ -56,6 +63,7 @@
     <ImageConverterController Id="849896578" Guid="(9e0ddda7-66f4-3583-bf54-7e15035fb70e)">Smartproj.ImageConverterController, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</ImageConverterController>
     <ObjectDetectorController Id="1684027808" Guid="(680c6298-7071-3eac-b4be-f72abc7f8537)">Smartproj.ObjectDetectorController, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</ObjectDetectorController>
     <DirectFileToTemplateImposeController Id="-390503294" Guid="(647848b9-eb7a-3625-8eb7-dce31d7a879f)">Smartproj.DirectFileToTemplateImposeController, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</DirectFileToTemplateImposeController>
+    <PdfOutputProvider Id="1501519237" Guid="(ca865d4a-4248-3155-abe9-4c8edee9acfe)">Smartproj.PdfOutputProvider, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</PdfOutputProvider>
     <List-1 Id="2018040348" Guid="(5af00c2e-048b-3ab3-8ccd-548134771d38)">System.Collections.Generic.List`1[[Smartproj.Utils.Tree, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</List-1>
     <CoverDetail Id="2136525265" Guid="(a0c8452a-0a52-3ada-8642-b1c377f22dc3)">Smartproj.CoverDetail, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</CoverDetail>
     <BlockDetail Id="325654921" Guid="(a7f7ad64-204f-3ad7-a959-3ac857e70990)">Smartproj.BlockDetail, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</BlockDetail>

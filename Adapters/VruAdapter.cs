@@ -67,7 +67,11 @@ namespace Smartproj
                     {
                         try
                         {
+                            _job.OrderNumber = "1000";
+                            _job.ItemId = "0000";
+                            _job.ProductionQty = 1;
                             _job.Create((Product)Serializer.LoadXml(productFile), productSize, metadata, MetadataType, FileDataFilter);
+
                             _project.Log?.WriteInfo("VruAdapter.GetNext", $"Продукт  {_project.ProjectId} => {productId} ({productSize}) успешно иницализирован процессом {_job.UID}");
 
                             return true;

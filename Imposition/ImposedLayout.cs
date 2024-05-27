@@ -8,40 +8,79 @@ using System.Linq;
 
 namespace Smartproj
 {
-   /*
-    public struct ImposedImageData : IEqualityComparer<ImposedImageData>
+    public class ImposedDataContainer : IEnumerable<ImposedLayout>
+    {
+        private List<ImposedLayout> mItems;
+        public Job Owner { get; }
+        public int Count => mItems.Count;
+        public ImposedLayout this[int _index] => mItems[_index];
+        public ImposedDataContainer(Job _owner) 
+        {
+            Owner = _owner;
+            mItems = new List<ImposedLayout>();
+        }
+        public ImposedLayout Add(ImposedLayout _item)
+        {
+            if (_item != null)
+            {
+                _item.Owner = this;
+                mItems.Add(_item);
+            }
+            return _item;
+        }
+        public void Sort(Comparison<ImposedLayout> _comparison)
+        {
+            if (_comparison != null)
+            {
+                mItems.Sort(_comparison);
+            }
+        }
+        public IEnumerator<ImposedLayout> GetEnumerator()
+        {
+            return mItems.GetEnumerator();  
+        }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return mItems.GetEnumerator();
+        }
+    }
+    public class ImposedImageData : IEqualityComparer<ImposedImageData>
     {
         public int FileId { get; set; }
         public Point Shift { get; set; }
-
+        public float Scale { get; set; }
+        public int OrderBy { get; set; }
         public bool Equals(ImposedImageData x, ImposedImageData y)
         {
             return x.FileId  != -1 && y.FileId != -1 && x.FileId == y.FileId;
         }
-
         public int GetHashCode(ImposedImageData obj)
         {
             return FileId.GetHashCode();
         }
     }
-
-    public class ProjectContainer : IEnumerable<ImposedImageData>
+    public class ImposedLayout : IEnumerable<ImposedImageData>
     {
-        public readonly Project Project;
-        public readonly int PageCount;
-        public readonly Template Templ;
-        public readonly List<ImposedImageData[,]> TreeNodeItems;
-        public readonly List<Segment> Segments;
-        private int mItemsCount;
-        public int Available => Templ.Frames.FramesCount - mItemsCount;
+        public Template Templ { get; }
+        public List<ImposedImageData[,]> Imposed { get; }
+        public List<Segment> Segments { get; }
+        public ImposedDataContainer Owner { get; set; }
+        //public int PageCount { get; }
         private int Safezone_F { get; set; } = 10;
         private int Safezone_C { get; set; } = 10;
         public double MinFileIdS { get; set; } = 1.0d;
-        private bool LayoutCorrect(IEnumerable<Fill> _safeAreas, Fill _frame, int _maxshift_X, int _maxshift_Y, int _bleed, out Point _shift)
+        public int Available => Templ.Frames.FramesCount - this.Count();
+        /*
+
+        private int mItemsCount;
+
+
+
+        private bool LayoutCorrect(IEnumerable<Rectangle> _safeAreas, Rectangle _frame, int _maxshift_X, int _maxshift_Y, int _bleed, out Point _shift)
         {
             return LayoutCorrect(new Size(Templ.Trim.Width.ToInt() / 2, Templ.Trim.Height.ToInt()), new ValueTuple<int, int>(Safezone_F, Safezone_C), _safeAreas, _frame, _maxshift_X, _maxshift_Y, _bleed, out _shift);
         }
-        public static bool LayoutCorrect(Size _size, ValueTuple<int, int> _safezone, IEnumerable<Fill> _safeAreas, Fill _frame, int _maxshift_X, int _maxshift_Y, int _bleed, out Point _shift)
+        public static bool LayoutCorrect(Size _size, ValueTuple<int, int> _safezone, IEnumerable<Rectangle> _safeAreas, Rectangle _frame, int _maxshift_X, int _maxshift_Y, int _bleed, out Point _shift)
         {
             _shift = new Point(0, 0);
 
@@ -177,51 +216,11 @@ namespace Smartproj
                 return false;
             }
         }
-        public ProjectContainer(Project _proj, Template _templ, int _pages = 2, params Segment[] _seg)
-        {
-            Templ = _templ;
-            TreeNodeItems = new List<ImposedImageData[,]>();
-            for (int i = 0; i < _templ.Frames.SidesCount; i++)
-            {
-                int w = _templ.Frames[i].GetLength(0);
-                int h = _templ.Frames[i].GetLength(1);
-                var frames = new ImposedImageData[w, h];
 
-                for (int k = 0; k < w; k++)
-                {
-                    for (int m = 0; m < h; m++)
-                    {
-                        frames[k, m] = new ImposedImageData() { FileId = -1, Shift = new Point(0, 0) };
-                    }
-                }
-                TreeNodeItems.Add(frames);
-            }
-            PageCount = _pages;
-            mItemsCount = 0;
-            Segments = new List<Segment>();
-            if (_seg != null)
-            {
-                Segments.AddRange(_seg);
-            }
-            Project = _proj;
-        }
-        private bool CheckDiatanceId(int _id)
-        {
-            List<double> ids = new List<double>() { _id };
-
-            foreach (var id in this)
-            {
-                ids.Add(Project.InputData[id.FileId].OrderBy);
-            }
-
-            if (ids.Count <= 1) return true;
-
-            return (ids.S1() / (double)ids.Count) <= MinFileIdS;
-        }
 
         public bool TryImageImpose(Size _frame, PageSide _pageside, int _value)
         {
-            ExifTaggedFile file = Project.InputData[_value];
+            ExifTaggedFile file = Owner.Owner.DataContainer[_value];
 
             if (Available == 0) return false;
             if (!CheckDiatanceId(file.OrderBy)) return false;
@@ -234,15 +233,15 @@ namespace Smartproj
                     for (int m = 0; m < frames.GetLength(1); m++)
                     {
                         // Размеры в миллиметрах
-                        Fill frame = new Fill((int)Math.Round(frames[k, m].X), (int)Math.Round(frames[k, m].Y), (int)Math.Round(frames[k, m].Width), (int)Math.Round(frames[k, m].Height));
+                        Rectangle frame = new Rectangle((int)Math.Round(frames[k, m].X), (int)Math.Round(frames[k, m].Y), (int)Math.Round(frames[k, m].Width), (int)Math.Round(frames[k, m].Height));
                         Size size = new Size(frame.Width, frame.Height);
                         if (size.Width == 0 && size.Height == 0) continue;
                         // Смещение не определяем так как нам не требуется разбивать развороты на страницы
                         var fitdata = frame.FitToFrame(file.ImageSize, 0);
-
+                        float minResolution = 200f;
                         // Фреймы одинаковых размеров
                         // Проверяем на минимальное разрешение
-                        if (size == _frame && TreeNodeItems[i][k, m].FileId == -1 && fitdata.Item2 >= Project.MinResolution / 25.4f)
+                        if (size == _frame && Imposed[i][k, m].FileId == -1 && fitdata.Item2 >= minResolution / 25.4f)
                         {
                             // Анализ типа шаблона
                             if (Templ.Frames.IsSingle || _pageside == PageSide.Single || ((i == 0 && _pageside == PageSide.Left) || (i == 1 && _pageside == PageSide.Right)))
@@ -256,7 +255,7 @@ namespace Smartproj
                                 {
                                     // Области лиц в коллекции file.ObjectDetect имеют единицы пикселей и точки начала координат - левый верхний угол
                                     // Для анализа области нужно трансформировать в миллиметры и рабочую систему координат (левый нижний угол)
-                                    IEnumerable<Fill> faceAreas = file.ObjectDetect.Select(face =>
+                                    IEnumerable<Rectangle> faceAreas = file.ObjectDetect.Select(face =>
                                     {
                                         // Трансформация масштабирования не требуется, так как размер в пикселях не изменился. Меняем точку отсчета Y
                                         // Единицы разрешения fitdata.Item2 - точки/мм (внутри области fitdata)
@@ -266,7 +265,7 @@ namespace Smartproj
                                         int W_ABS = (int)Math.Abs(((float)face.Width / fitdata.Item2));
                                         int H_ABS = (int)Math.Abs(((float)face.Height / fitdata.Item2));
 
-                                        return new Fill(X_ABS, Y_ABS, W_ABS, H_ABS);
+                                        return new Rectangle(X_ABS, Y_ABS, W_ABS, H_ABS);
                                     });
 
                                     int maxShiftX = (fitdata.Item1.Width - frame.Width) / 2;
@@ -283,8 +282,8 @@ namespace Smartproj
 
                                 if (!facesOutOfRange)
                                 {
-                                    TreeNodeItems[i][k, m].FileId = _value;
-                                    TreeNodeItems[i][k, m].Shift = shift;
+                                    Imposed[i][k, m].FileId = _value;
+                                    Imposed[i][k, m].Shift = shift;
                                     mItemsCount++;
 
                                     return true;
@@ -297,11 +296,52 @@ namespace Smartproj
 
             return false;
         }
+        */
+        public ImposedLayout(Template _templ, params Segment[] _seg)
+        {
+            Templ = _templ;
+            Imposed = new List<ImposedImageData[,]>();
+            for (int i = 0; i < _templ.Frames.SidesCount; i++)
+            {
+                int w = _templ.Frames[i].GetLength(0);
+                int h = _templ.Frames[i].GetLength(1);
+                var frames = new ImposedImageData[w, h];
+
+                for (int k = 0; k < w; k++)
+                {
+                    for (int m = 0; m < h; m++)
+                    {
+                        frames[k, m] = new ImposedImageData() { FileId = -1, Shift = new Point(0, 0), Scale = 1.0f, OrderBy = 0 };
+                    }
+                }
+                Imposed.Add(frames);
+            }
+            //PageCount = _pages;
+            //mItemsCount = 0;
+            Segments = new List<Segment>();
+            if (_seg != null)
+            {
+                Segments.AddRange(_seg);
+            }
+        }
+        private bool CheckDiatanceId(int _id)
+        {
+            List<double> ids = new List<double>() { _id };
+
+            foreach (var id in this)
+            {
+                ids.Add(Owner.Owner.DataContainer[id.FileId].OrderBy);
+            }
+
+            if (ids.Count <= 1) return true;
+
+            return (ids.S1() / (double)ids.Count) <= MinFileIdS;
+        }
         public IEnumerator<ImposedImageData> GetEnumerator()
         {
-            for (int i = 0; i < TreeNodeItems.Count; i++)
+            for (int i = 0; i < Imposed.Count; i++)
             {
-                foreach (ImposedImageData item in TreeNodeItems[i])
+                foreach (ImposedImageData item in Imposed[i])
                 {
                     if (item.FileId != -1) yield return item;
                 }
@@ -312,5 +352,4 @@ namespace Smartproj
             return GetEnumerator();
         }
     }
-   */
 }

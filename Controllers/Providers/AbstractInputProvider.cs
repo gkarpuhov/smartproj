@@ -114,10 +114,11 @@ namespace Smartproj
             {
                 if (Enabled)
                 {
+                    Log?.WriteInfo("AbstractInputProvider.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Запускающий контроллер начал работу");
+
                     StartParameters = _settings;
                     mTimer = new Timer(ProcessHandler, _settings, 0, 5000);
                     mCurrentStatus = ProcessStatusEnum.Processing;
-                    Log?.WriteInfo("AbstractInputProvider.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Запускающий контроллер начал работу");
                     return true;
                 }
             }

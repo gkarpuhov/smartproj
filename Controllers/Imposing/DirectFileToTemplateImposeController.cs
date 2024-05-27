@@ -1,6 +1,10 @@
-﻿using Smartproj.Utils;
+﻿using Emgu.CV.Features2D;
+using Newtonsoft.Json.Linq;
+using ProjectPage;
+using Smartproj.Utils;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -30,72 +34,146 @@ namespace Smartproj
                 StartParameters = _settings;
                 Job job = (Job)StartParameters[0];
                 WorkSpace ws = job.Owner.Owner.Owner;
+
                 Log?.WriteInfo("DirectFileToTemplateImposeController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер начал сборку макета... '{job.UID}'");
 
-                string jobFiles = Path.Combine(job.JobPath, "~Original");
-                Dictionary<string, List<ValueTuple<int, Template, IEnumerable<ExifTaggedFile>, string[]>>> datacache = new Dictionary<string, List<(int, Template, IEnumerable<ExifTaggedFile>, string[])>>();
-                
-                foreach (var detail in job.Product.Parts)
+                ExifTaggedFileSegments fsSegment = (ExifTaggedFileSegments)job.Clusters[SegmentTypeEnum.FileStructure];
+
+                for (int i = 0; i < fsSegment.ChildNodes.Count; i++)
                 {
-                    if (datacache.ContainsKey(detail.KeyId)) continue;
+                    // Директории шаблонов
+                    Segment directory = fsSegment.ChildNodes[i];
 
-                    string part = Path.Combine(jobFiles, detail.KeyId);
+                    Match matchTempName = Regex.Match(directory.KeyId, @"\\(CVR|BLK|INS|FRZ)\\0*(\d+)[\.\s_]+([\w-]+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-                    if (Directory.Exists(part))
+                    if (matchTempName.Success && job.Product.Parts.Any(x => String.Equals(x.KeyId, matchTempName.Groups[1].Value, StringComparison.OrdinalIgnoreCase)))
                     {
-                        List<ValueTuple<int, Template, IEnumerable<ExifTaggedFile>, string[]>> pagesdata = new List<(int, Template, IEnumerable<ExifTaggedFile>, string[])>();
-                        datacache.Add(detail.KeyId, pagesdata);
+                        // Берем директории у которых пути соответствуют шаблону: \[Код детали]\[Порядковый номер][Разделитель][Уникальный GUID существующего шаблона или ссылка на него]
 
-                        string[] pages = Directory.GetDirectories(part);
-                        for (int i = 0; i < pages.Length; i++)
+                        // 1. Логика работы данного контроллера: 1 сегмент соответствует 1 папке с файлами и 1 шаблону
+                        // 2. Правильный порядок страниц формируем что помощью свойства OrderBy сегмента папки шаблона
+                        // 3. Начальное значение данного свойства -1, автоматически порядок не выставляется. В свойство помещаем порядковый идентификатор из имени директории
+
+                        if (directory.OrderBy == -1)
                         {
-                            Match matchTempName = Regex.Match(Path.GetFileName(pages[i]), @"^0*(\d+)[\.\s_]+(.+)", RegexOptions.Compiled);
-                            if (matchTempName.Success) 
+                            directory.OrderBy = int.Parse(matchTempName.Groups[2].Value);
+                        }
+                        else
+                        {
+                            if (directory.OrderBy != int.Parse(matchTempName.Groups[2].Value))
                             {
-                                Guid templid = default;
-                                Template template = null;
-                                if (Guid.TryParse(matchTempName.Groups[2].Value, out templid))
+                                Log.WriteError("DirectFileToTemplateImposeController.Start", $"{Owner?.Project?.ProjectId}: Несколько директорий имеют один порядковый идентификатор {directory.OrderBy}; '{job.UID}'");
+                                job.Status = ProcessStatusEnum.Error;
+                                return false;
+                            }
+
+                        }
+                        ImposedDataContainer imposedlist = null;
+                        if (!job.OutData.TryGetValue(matchTempName.Groups[1].Value.ToUpper(), out imposedlist))
+                        {
+                            // Группировка по коду детали
+                            imposedlist = new ImposedDataContainer(job);
+                            job.OutData.Add(matchTempName.Groups[1].Value.ToUpper(), imposedlist);
+                        }
+
+                        Guid templid = default;
+                        Template template = null;
+                        if (Guid.TryParse(matchTempName.Groups[3].Value, out templid))
+                        {
+                            // Проверка что имя директории является правильным GUID
+                            template = job.Product.LayoutSpace[job.ProductSize].TemplateCollection[templid];
+                        }
+                        if (template == null)
+                        {
+                            // Если имя не директории не GUID, проверяем является ли оно ссылкой на GUID шаблона
+                            var alias = job.Owner.UsingTemplateAliases.Find(x => String.Equals(x.Name, matchTempName.Groups[3].Value, StringComparison.OrdinalIgnoreCase));
+                            if (alias != null)
+                            {
+                                template = job.Product.LayoutSpace[job.ProductSize].TemplateCollection[alias.UID];
+                            }
+                        }
+                        if (template != null)
+                        {
+                            // Нужный шаблон успешно найден. Попытка заполнить файлами из директории сегмента
+                            var toTryinmpse = imposedlist.Add(new ImposedLayout(template, directory));
+                            if (TryImageImpose(toTryinmpse, job))
+                            {
+                                
+                            }
+                            else
+                            {
+                                Log.WriteError("DirectFileToTemplateImposeController.Start", $"{Owner?.Project?.ProjectId}: Ошибка при заполнении шаблона '{template.UID}' источником '{directory.KeyId}'; '{job.UID}'");
+                                job.Status = ProcessStatusEnum.Error;
+                                return false;
+                            }
+                            //var texts = Directory.GetFiles(pages[i], "*.txt", SearchOption.TopDirectoryOnly);
+                        }
+                        else
+                        {
+                            Log.WriteError("DirectFileToTemplateImposeController.Start", $"{Owner?.Project?.ProjectId}: Не найден шаблон для источника '{directory.KeyId}'; '{job.UID}'");
+                            job.Status = ProcessStatusEnum.Error;
+                            return false;
+                        }
+                    }
+                }
+                foreach (var partpages in job.OutData)
+                {
+                    partpages.Value.Sort((x, y) => x.Segments[0].OrderBy.CompareTo(y.Segments[0].OrderBy));
+                }
+                //
+                foreach (var outpair in job.OutData)
+                {
+                    Log.WriteError("DirectFileToTemplateImposeController.Start", $"{Owner?.Project?.ProjectId}: Part ID '{outpair.Key}'; '{job.UID}'");
+                    foreach (var item in outpair.Value)
+                    {
+                        Log.WriteError("DirectFileToTemplateImposeController.Start", $"{Owner?.Project?.ProjectId}: OrderBy = '{item.Segments[0].OrderBy}'; KeyId = '{item.Segments[0].KeyId}'");
+                        for (int i = 0; i < item.Imposed.Count; i++)
+                        {
+                            var frames = item.Imposed[i];
+                            for (int k = 0; k < frames.GetLength(0); k++)
+                            {
+                                for (int m = 0; m < frames.GetLength(1); m++)
                                 {
-                                    template = job.Product.LayoutSpace[job.ProductSize].TemplateCollection[templid];
-                                }
-                                if (template == null)
-                                {
-                                    var alias = job.Owner.UsingTemplateAliases.Find(x => String.Equals(x.Name, matchTempName.Groups[2].Value, StringComparison.OrdinalIgnoreCase));
-                                    if (alias != null)
+                                    if (frames[k, m].FileId != -1)
                                     {
-                                        template = job.Product.LayoutSpace[job.ProductSize].TemplateCollection[alias.UID];
+                                        Log.WriteError("DirectFileToTemplateImposeController.Start", $"{Owner?.Project?.ProjectId}: FileId = '{frames[k, m].FileId}'; Name = '{job.DataContainer[frames[k, m].FileId].FileName}'");
                                     }
                                 }
-                                if (template != null)
-                                {
-                                    var images = job.DataContainer.Where(x => String.Equals(x.FilePath, pages[i], StringComparison.OrdinalIgnoreCase));
-                                    var texts = Directory.GetFiles(pages[i], "*.txt", SearchOption.TopDirectoryOnly);
-
-                                    pagesdata.Add(new ValueTuple<int, Template, IEnumerable<ExifTaggedFile>, string[]>(int.Parse(matchTempName.Groups[1].Value), template, images, texts));
-                                }
                             }
                         }
                     }
                 }
+                //
+                return true;
+            }
 
-                //if (datacache.Sum(x => x.Value.Sum(y => y.Item3.Count())) > 0) 
+            return false;
+        }
+        private bool TryImageImpose(ImposedLayout _toTryinmpse, Job _job)
+        {
+            List<int> data = new List<int>();
+            for (int j = 0; j < _toTryinmpse.Segments[0].ChildNodes.Count; j++)
+            {
+                data.AddRange(_toTryinmpse.Segments[0].ChildNodes[j].Data);
+            }
+
+            int current = 0;
+            for (int i = 0; i < _toTryinmpse.Templ.Frames.SidesCount; i++)
+            {
+                var frames = _toTryinmpse.Templ.Frames[i];
+                for (int k = 0; k < frames.GetLength(0); k++)
                 {
-                    foreach (var pair in datacache)
+                    for (int m = 0; m < frames.GetLength(1); m++)
                     {
-                        foreach (var item in pair.Value)
+                        if (frames[k, m] != default && current < data.Count)
                         {
-                            Log?.WriteInfo("DirectFileToTemplateImposeController.Start", $"Detail = {pair.Key}; Order = {item.Item1}; Template = {item.Item2.UID}");
-                            foreach (var file in item.Item3)
-                            {
-                                Log?.WriteInfo("DirectFileToTemplateImposeController.Start", $"File Name = {file.FileName}; File ID = {file.GUID}");
-                            }
+                            _toTryinmpse.Imposed[i][k, m].FileId = data[current++];
                         }
                     }
-
-                    return true;
                 }
             }
-            return false;
+
+            return _toTryinmpse.Available == 0;
         }
         protected override void Dispose(bool _disposing)
         {

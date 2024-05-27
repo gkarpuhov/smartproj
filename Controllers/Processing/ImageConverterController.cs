@@ -16,15 +16,7 @@ namespace Smartproj
                 StartParameters = _settings;
                 Job job = (Job)StartParameters[0];
                 WorkSpace ws = job.Owner.Owner.Owner;
-
                 Log?.WriteInfo("ImageConverterController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер начал работу с процессом '{job.UID}'");
-
-                Log?.WriteInfo("ImageConverterController.Start", $"/// 2");
-                foreach (var data in job.DataContainer.OrderBy(x => x.OrderBy))
-                {
-                    Log?.WriteInfo("ImageConverterController.Start", $"Path = {data.FilePath}; Name = {data.FileName}");
-                }
-                Log?.WriteInfo("ImageConverterController.Start", $"///");
 
                 ColorImagesConverter converter = new ColorImagesConverter();
                 converter.ConverterLog = Log;

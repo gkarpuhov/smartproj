@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Smartproj
 {
     public abstract class AbstractOutputProvider : AbstractController, IOutputProvider
     {
         public override ProcessStatusEnum CurrentStatus { get; protected set; }
+        [XmlElement]
         public string Destination { get; set; }
         public override bool Start(object[] _settings)
         {

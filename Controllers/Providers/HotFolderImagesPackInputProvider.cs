@@ -125,7 +125,7 @@ namespace Smartproj
                             job.DataContainer[d[k]].OrderBy = ordercounter++;
                         }
                         // Меняем список на хеш-контейнер для более быстрой обработки
-                        directory.ChildNodes[j].Data = new HashSet<int>(directory.ChildNodes[j].Data);
+                        //directory.ChildNodes[j].Data = new HashSet<int>(directory.ChildNodes[j].Data);
                     }
                 }
 

@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Smartproj.Utils
 {
+    /// <summary>
+    /// Сегмент для формирования древовидной структуры файлов, путем классификации и группировки на основании их расположения и информации метаданных
+    /// </summary>
     public class ExifTaggedFileSegments : Segment
     {
         public ExifTaggedFileSegments(Segment _owner, string _key, SegmentTypeEnum _type, ICollection<int> _items = null) : base(_owner, _key, _type, _items)
@@ -12,6 +15,14 @@ namespace Smartproj.Utils
         public ExifTaggedFileSegments() : base(null, "Root", SegmentTypeEnum.Root, null)
         {
         }
+        /// <summary>
+        /// Переопределение базового метода созданий сегмента. Определяет доступные типы сегментов <see cref="SegmentTypeEnum"/> для объекта <see cref="ExifTaggedFileSegments"/>
+        /// Инициализирует внутрении коллекции ссылочных идентификаторов <see cref="ICollection{int}"/>. По умолчанию - для данных сегментов файловой структуры - <see cref="List{int}"/>, для данных сегментов метаданных - <see cref="HashSet{int}"/>
+        /// </summary>
+        /// <param name="_owner"></param>
+        /// <param name="_type"></param>
+        /// <param name="_key"></param>
+        /// <returns></returns>
         protected override Segment CreateNew(Segment _owner, SegmentTypeEnum _type, string _key)
         {
             switch (_type)
@@ -36,6 +47,18 @@ namespace Smartproj.Utils
                     return null;
             }
         }
+        /// <summary>
+        /// Переопределение базоваго метода добавления нового сегмента в структуру.
+        /// Добавляет проверки и ограничения к базоваму методу соответстующие структуре <see cref="ExifTaggedFileSegments"/>
+        /// 1. Глобальный корневой сегмент всегда имеет тип <see cref="SegmentTypeEnum.Root"/>
+        /// 2. Корневой сегмент файловой структыры <see cref="SegmentTypeEnum.FileStructure"/> может распологаться только в сегменте <see cref="SegmentTypeEnum.Root"/>
+        /// 3. Сегмент типа <see cref="SegmentTypeEnum.Segment"/> не может иметь вложенных уровней. Предназначен для группировки данных нижнего уровня, содержит только коллекцию ссылочных идентификаторов <see cref="ICollection{int}"/>
+        /// 
+        /// </summary>
+        /// <param name="_type"></param>
+        /// <param name="_key"></param>
+        /// <param name="_items"></param>
+        /// <returns></returns>
         public override Segment Add(SegmentTypeEnum _type, string _key, IEnumerable<int> _items = null)
         {
             try

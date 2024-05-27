@@ -34,6 +34,7 @@ namespace Smartproj
         }
         public Product Owner { get; }
         public AbstractController this[Guid _uid] => mItems.Find(x => x.UID == _uid);
+        public AbstractController this[int _id] => mItems[_id];
         /// <summary>
         /// Конструктор по умолчанию
         /// </summary>

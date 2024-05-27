@@ -276,7 +276,7 @@
     <Compile Include="ProjectInstaller.Designer.cs">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProjectContainer.cs" />
+    <Compile Include="Imposition\ImposedLayout.cs" />
     <Compile Include="RIP\ImageProcessor.cs" />
     <Compile Include="RIP\Imposition\ArrangeInputData.cs" />
     <Compile Include="RIP\RIP.cs" />

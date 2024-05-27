@@ -24,6 +24,7 @@ namespace Smartproj.Utils
             set { mData = value; }
         }
         public string KeyId { get; }
+        public int OrderBy { get; set; }
         public int Index { get; private set; }
         public Segment Root => mRoot;
         public Segment Parent => mParent;
@@ -45,6 +46,7 @@ namespace Smartproj.Utils
         protected Segment(Segment _owner, string _key, SegmentTypeEnum _type, ICollection<int> _items = null)
         {
             KeyId = _key;
+            OrderBy = -1;
             SegmentType = _type;
             mIsRoot = true;
             mLevel = 0;
@@ -86,7 +88,6 @@ namespace Smartproj.Utils
         //
         ITree ITree.Parent => Parent;
         ITree ITree.Root => Root;
-        int IKeyd<string>.OrderBy { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         ITree ITree.GetChild(int _index)
         {
             return mSegments[_index];
@@ -169,7 +170,7 @@ namespace Smartproj.Utils
             {
                 segment.Add(SegmentTypeEnum.Segment, "Empty");
             }
-         }
+        }
         public IEnumerator<Segment> GetEnumerator()
         {
             return this.GetTreeEnumerator<Segment>();
