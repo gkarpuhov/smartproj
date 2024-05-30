@@ -120,7 +120,7 @@ namespace Smartproj
                 {
                     partpages.Value.Sort((x, y) => x.Segments[0].OrderBy.CompareTo(y.Segments[0].OrderBy));
                 }
-                //
+                /*
                 foreach (var outpair in job.OutData)
                 {
                     Log.WriteError("DirectFileToTemplateImposeController.Start", $"{Owner?.Project?.ProjectId}: Part ID '{outpair.Key}'; '{job.UID}'");
@@ -143,7 +143,7 @@ namespace Smartproj
                         }
                     }
                 }
-                //
+                */
                 return true;
             }
 

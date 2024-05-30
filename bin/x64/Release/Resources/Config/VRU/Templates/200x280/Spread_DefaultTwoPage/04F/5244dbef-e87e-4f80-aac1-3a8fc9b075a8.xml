@@ -97,6 +97,7 @@
         <Position TypeId="34379097">Center</Position>
         <Space TypeId="-1119076432">2</Space>
         <Layer TypeId="1727199146">3</Layer>
+        <FrameSide TypeId="-532340399">Left</FrameSide>		
         <Bounds TypeId="489541115">{X=19,Y=-19,Width=100,Height=50}</Bounds>
         <FillColor TypeId="-742668771">White</FillColor>
         <StrokeColor TypeId="-742668771">Transparent</StrokeColor>

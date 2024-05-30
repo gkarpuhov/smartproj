@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace Smartproj
@@ -23,6 +24,8 @@ namespace Smartproj
         public Logger Log => Owner?.Log;
         public GraphicItem this[int _index] => mItems[_index];
         public GraphicItem this[string _index] => mItems.Find(x => x.KeyId == _index);
+        public IEnumerable<IGrouping<int, GraphicItem>> Layers => mItems.GroupBy(x => x.Layer).OrderBy(y => y.Key);
+        public int Count => mItems.Count;
         /// <summary>
         /// Конструктор по умолчанию
         /// </summary>
@@ -74,6 +77,11 @@ namespace Smartproj
         /// </summary>
         public override Logger Log => Owner?.Log;
         /// <summary>
+        /// Аттрибут, определяющий что графический элемент попадает на корешок разворотного шаблона, и должен быть добавлен в макет дважды на разные страницы
+        /// Не определен изначально. Свойство используется контроллерами, которые логику могут определять по своему усмотрению
+        /// </summary>
+        public bool ExtraBounds { get; set; }
+        /// <summary>
         /// Возвращает 'Истина' если цвет заливки имеет отличную от нуля степеь прозрачности и объект имеет определенную область
         /// </summary>
         public bool HasFill => FillColor.A > 0 && Bounds != default;
@@ -92,6 +100,11 @@ namespace Smartproj
         /// </summary>
         [XmlElement]
         public int Layer { get; set; }
+        /// <summary>
+        /// Сторона расположения в шаблоне, содержащая данный объект. Доступен для сериализации <see cref="Serializer"/>
+        /// </summary>
+        [XmlElement]
+        public PageSide FrameSide { get; set; }
         /// <summary>
         /// Область рисования графического объекта. Доступно для сериализации <see cref="Serializer"/>
         /// </summary>
@@ -121,6 +134,7 @@ namespace Smartproj
         /// </summary>
         protected GraphicItem() : base()
         {
+            ExtraBounds = false;
         }
     }
     /// <summary>
@@ -231,11 +245,6 @@ namespace Smartproj
         /// </summary>
         [XmlElement]
         public Point FrameID { get; set; }
-        /// <summary>
-        /// Сторона расположения в шаблоне, содержащая данный объект. Доступен для сериализации <see cref="Serializer"/>
-        /// </summary>
-        [XmlElement]
-        public PageSide FrameSide { get; set; }
         /// <summary>
         /// Тип формы данного объекта фрейма. В соответствии с данным свойством на изображение будет наложены маска соответствующей формы. Доступен для сериализации <see cref="Serializer"/>
         /// </summary>

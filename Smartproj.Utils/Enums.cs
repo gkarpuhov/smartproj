@@ -137,7 +137,7 @@ namespace Smartproj.Utils
         Right = 4, // Применимо к правой полосе
         Front = 8, // Применимо к лицевой стороне листа
         Back = 16, // Применимо к оборотной стороне листа
-        LeftAndRight = 32, // Формат включает в себя, и левую, и правую стороны (layflat)
+        LeftAndRight = 32, // Формат включает в себя, и левую, и правую стороны (layflat, КШС)
         DefaultPage = Left | Right | Front | Back, // Классика, флекс
         DefaultPremium = Left | Right | Front, // Бабочки разрезные
         DefaultTwoPage = LeftAndRight | Front, // Бабочки
