@@ -38,7 +38,7 @@ namespace Smartproj.Utils
                 }
                 if (_type == typeof(RectangleF))
                 {
-                    Match match = Regex.Match(_value, @"(X=)?([\d\.]+)[\s,;]+(Y=)?([\d\.]+)[\s,;]+(Width=)?([\d\.]+)[\s,;]+(Height=)?([\d\.]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                    Match match = Regex.Match(_value, @"(X=)?(-?[\d\.]+)[\s,;]+(Y=)?(-?[\d\.]+)[\s,;]+(Width=)?(-?[\d\.]+)[\s,;]+(Height=)?(-?[\d\.]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
                     if (match.Success) 
                     {
                         float x = float.Parse(match.Groups[2].Value, NumberStyles.Float, new NumberFormatInfo() { NumberDecimalSeparator = "." });
@@ -50,7 +50,7 @@ namespace Smartproj.Utils
                 }
                 if (_type == typeof(Rectangle))
                 {
-                    Match match = Regex.Match(_value, @"(X=)?(\d+)[\s,;]+(Y=)?(\d+)[\s,;]+(Width=)?(\d+)[\s,;]+(Height=)?(\d+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                    Match match = Regex.Match(_value, @"(X=)?(-?\d+)[\s,;]+(Y=)?(-?\d+)[\s,;]+(Width=)?(-?\d+)[\s,;]+(Height=)?(-?\d+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
                     if (match.Success)
                     {
                         int x = int.Parse(match.Groups[2].Value);

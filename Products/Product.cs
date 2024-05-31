@@ -134,6 +134,7 @@ namespace Smartproj
                             try
                             {
                                 Template template = (Template)Serializer.LoadXml(file);
+
                                 template.Location = file;
                                 bool isValid = TreeNodeItems.Find(x => (((Detail)x).DetailType & template.DetailFilter) == ((Detail)x).DetailType) != null && (Binding & template.BindingFilter) == Binding;
                                 if (isValid && !TemplateKeys.Contains(template.UID))

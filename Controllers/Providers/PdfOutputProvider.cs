@@ -107,7 +107,7 @@ namespace Smartproj
             return true;
         }
         /// <summary>
-        /// Метдод сборки макета деталей типа "Блок" или "Персонализация блока"
+        /// Метод сборки макета деталей типа "Блок" или "Персонализация блока"
         /// </summary>
         /// <param name="_pdfObject"></param>
         /// <param name="_detaildata"></param>
@@ -130,128 +130,93 @@ namespace Smartproj
 
             int pageId = 0;
 
-            using (GdPictureImaging oImage = new GdPictureImaging())
+            foreach (var pdfpage in _detaildata)
             {
-                foreach (var pdfpage in _detaildata)
+                if (pdfpage.Templ.LayoutType == DetailLayoutTypeEnum.Spread && ((int)Math.Round(pdfpage.Templ.Trim.Width / 2) != _job.ProductSize.Width || (int)Math.Round(pdfpage.Templ.Trim.Height) != _job.ProductSize.Height))
                 {
-                    if (pdfpage.Templ.LayoutType == DetailLayoutTypeEnum.Spread && ((int)Math.Round(pdfpage.Templ.Trim.Width / 2) != _job.ProductSize.Width || (int)Math.Round(pdfpage.Templ.Trim.Height) != _job.ProductSize.Height))
-                    {
-                        Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Недопустимый формат разворотного шаблона {pdfpage.Templ.Trim.Width}x{pdfpage.Templ.Trim.Height} для продукта {_job.ProductSize.Width}x{_job.ProductSize.Height} (Job '{_job.UID}')");
-                        CurrentStatus = ProcessStatusEnum.Error;
-                        return false;
-                    }
-                    if ((pdfpage.Templ.LayoutType == DetailLayoutTypeEnum.Page || pdfpage.Templ.LayoutType == DetailLayoutTypeEnum.Single) && ((int)Math.Round(pdfpage.Templ.Trim.Width) != _job.ProductSize.Width || (int)Math.Round(pdfpage.Templ.Trim.Height) != _job.ProductSize.Height))
-                    {
-                        Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Недопустимый формат постраничного шаблона {pdfpage.Templ.Trim.Width}x{pdfpage.Templ.Trim.Height} для продукта {_job.ProductSize.Width}x{_job.ProductSize.Height} (Job '{_job.UID}')");
-                        CurrentStatus = ProcessStatusEnum.Error;
-                        return false;
-                    }
+                    Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Недопустимый формат разворотного шаблона {pdfpage.Templ.Trim.Width}x{pdfpage.Templ.Trim.Height} для продукта {_job.ProductSize.Width}x{_job.ProductSize.Height} (Job '{_job.UID}')");
+                    CurrentStatus = ProcessStatusEnum.Error;
+                    return false;
+                }
+                if ((pdfpage.Templ.LayoutType == DetailLayoutTypeEnum.Page || pdfpage.Templ.LayoutType == DetailLayoutTypeEnum.Single) && ((int)Math.Round(pdfpage.Templ.Trim.Width) != _job.ProductSize.Width || (int)Math.Round(pdfpage.Templ.Trim.Height) != _job.ProductSize.Height))
+                {
+                    Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Недопустимый формат постраничного шаблона {pdfpage.Templ.Trim.Width}x{pdfpage.Templ.Trim.Height} для продукта {_job.ProductSize.Width}x{_job.ProductSize.Height} (Job '{_job.UID}')");
+                    CurrentStatus = ProcessStatusEnum.Error;
+                    return false;
+                }
 
-                    if (bleedsize == -100)
-                    {
-                        bleedsize = pdfpage.Templ.Bleed;
-                    }
-                    if (bleedsize != pdfpage.Templ.Bleed)
-                    {
-                        Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Отступы навылет доступных шаблонов должны совпадать (Job '{_job.UID}')");
-                        CurrentStatus = ProcessStatusEnum.Error;
-                        return false;
-                    }
+                if (bleedsize == -100)
+                {
+                    bleedsize = pdfpage.Templ.Bleed;
+                }
+                if (bleedsize != pdfpage.Templ.Bleed)
+                {
+                    Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Отступы навылет доступных шаблонов должны совпадать (Job '{_job.UID}')");
+                    CurrentStatus = ProcessStatusEnum.Error;
+                    return false;
+                }
 
-                    for (int i = 0;  i < pdfpage.Imposed.Count; i++)
+                for (int i = 0; i < pdfpage.Imposed.Count; i++)
+                {
+                    // Делим шаблоны на страницы pdf
+                    if (i == 0 || (pdfpage.Templ.Side & PageSide.LeftAndRight) != PageSide.LeftAndRight)
                     {
-                        // Делим шаблоны на страницы pdf
-                        if (i == 0 || (pdfpage.Templ.Side & PageSide.LeftAndRight) != PageSide.LeftAndRight)
+                        // Для добавления новой страницы должны быть выполнены условия:
+                        // 1. Фреймы находятся на левой или единственной стороне шаблона (i == 0)
+                        // ИЛИ
+                        // 2. Фреймы находятся на правой стороне шаблона, но, при условии, что продукт не является бабочкой или КШС (PageSide имеет значение LeftAndRight). Макет в данном случае должен быть пополосным, и делить разворот на две страницы
+                        _pdfObject.NewPage(pagesize.Width + 2 * bleedsize, pagesize.Height + 2 * bleedsize);
+                        _pdfObject.SelectPage(++pageId);
+                        _pdfObject.SetPageBox(PdfPageBox.PdfPageBoxCropBox, 0, 0, pagesize.Width + 2 * bleedsize, pagesize.Height + 2 * bleedsize);
+                        _pdfObject.SetPageBox(PdfPageBox.PdfPageBoxTrimBox, bleedsize, bleedsize, pagesize.Width + bleedsize, pagesize.Height + bleedsize);
+                        // Если новая страница является правой (i == 1), то эта (правая) сторона должна быть вырезана, и вставлена на отдельную страницу
+                        // Исключение состовляет в случае продуктов типа бабочкой или КШС, но этот выриант исключается условным оператором данного блока кода
+
+                        // Смещение влево при рисовании для разделения разворотного шаблона на страницы
+                        // Так как координаты фреймов в разворотном шаблоне абсолютные и единые на весь разворот, мы определяем величину сдвига для правой полосы равную половине ширины шаблона
+                        float xShift = _job.ProductSize.Width * i;
+
+                        // После создания новой страницы начинаем заполнять ее элементами
+                        List<GraphicItem> graphics = new List<GraphicItem>();
+                        if (pdfpage.Templ.Graphics != null)
                         {
-                            // Для добавления новой страницы должны быть выполнены условия:
-                            // 1. Фреймы находятся на левой или единственной стороне шаблона (i == 0)
-                            // ИЛИ
-                            // 2. Фреймы находятся на правой стороне шаблона, но, при условии, что продукт не является бабочкой или КШС (PageSide имеет значение LeftAndRight). Макет в данном случае должен быть пополосным, и делить разворот на две страницы
-                            _pdfObject.NewPage(pagesize.Width + 2 * bleedsize, pagesize.Height + 2 * bleedsize);
-                            _pdfObject.SelectPage(++pageId);
-                            _pdfObject.SetPageBox(PdfPageBox.PdfPageBoxCropBox, 0, 0, pagesize.Width + 2 * bleedsize, pagesize.Height + 2 * bleedsize);
-                            _pdfObject.SetPageBox(PdfPageBox.PdfPageBoxTrimBox, bleedsize, bleedsize, pagesize.Width + bleedsize, pagesize.Height + bleedsize);
-                            // Если новая страница является правой (i == 1), то эта (правая) сторона должна быть вырезана, и вставлена на отдельную страницу
-                            // Исключение состовляет в случае продуктов типа бабочкой или КШС, но этот выриант исключается условным оператором данного блока кода
+                            graphics.AddRange(pdfpage.Templ.Graphics);
+                        }
+                        if (pdfpage.Templ.Texts != null)
+                        {
+                            graphics.AddRange(pdfpage.Templ.Texts);
+                        }
 
-                            // Смещение влево при рисовании для разделения разворотного шаблона на страницы
-                            // Так как координаты фреймов в разворотном шаблоне абсолютные и единые на весь разворот, мы определяем величину сдвига для правой полосы равную половине ширины шаблона
-                            float xShift = _job.ProductSize.Width * i;
-
-                            // После создания новой страницы начинаем заполнять ее элементами
-                            foreach (var layer in pdfpage.Templ.Graphics.Layers)
+                        foreach (var layer in graphics.GroupBy(x => x.Layer).OrderBy(y => y.Key))
+                        {
+                            if (layer.Count() == 0) continue;
+                            GraphicTypeEnum currentLayerType = layer.First().GraphicType;
+                            // Начинаем перебирать графические элементы шаблона отсортированные по слоям в порядке приоритета
+                            // Нужно учитывать, что если шаблон разворотный, то графический элемент может попадать на корешок, и присутствовать сразу на двух сторонах
+                            // В таком случае, если разворот физически делится на две страницы, данный элемент нужно добавить два раза (на обе страницы)
+                            if (i == 1)
                             {
-                                // Начинаем перебирать графические элементы шаблона отсортированные по слоям в порядке приоритета
-                                // Нужно учитывать, что если шаблон разворотный, то графический элемент может попадать на корешок, и присутствовать сразу на двух сторонах
-                                // В таком случае, если разворот физически делится на две страницы, данный элемент нужно добавить два раза (на обе страницы)
-                                if (i == 1)
-                                {
-                                    // Сначала пробуем нарисовать элементы правой стороны (если она есть в отдельной файле) которые переходят через корешок с левой
-                                    // Только для правой стороны
-                                    foreach (var item in layer)
-                                    {
-                                        if (item.ExtraBounds)
-                                        {
-                                            var rect = item.Bounds;
-                                            // Обработка по типу слоя
-                                            if (layer.Key == 1)
-                                            {
-                                                // Слой 1 соответсвует объектам - фреймы с автоматичеки собранными изображениями
-                                                if (item.GraphicType != GraphicTypeEnum.ImageFrame)
-                                                {
-                                                    Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Объект типа {item.GraphicType} не может быть расположен на {layer.Key} уровне (Job '{_job.UID}')");
-                                                    CurrentStatus = ProcessStatusEnum.Error;
-                                                    return false;
-                                                }
-
-                                                ImageFrame frame = (ImageFrame)item;
-                                                // Если выставлен флаг item.ExtraBounds, элемент может быть только на левой стороне - 0
-                                                ImposedImageData framedata = pdfpage.Imposed[0][frame.FrameID.X, frame.FrameID.Y];
-
-                                                string filename = Path.Combine(_job.JobPath, "~Files", _job.DataContainer[framedata.FileId].GUID + ".jpg");
-                                                // Координаты фреймов имеют ноль в обрезном формате. Вылет идет в минус. Поэтому сдвигаем на величину вылета (отнимая от общего смещения влево)
-                                                FileToFrame(_pdfObject, oImage, rect, xShift - bleedsize, filename, framedata.Shift, framedata.Scale);
-                                            }
-                                        }
-                                    }
-                                }
-
+                                // Сначала пробуем нарисовать элементы правой стороны (если она есть в отдельной файле) которые переходят через корешок с левой
+                                // Только для правой стороны
                                 foreach (var item in layer)
                                 {
-                                    // Перебор всех элементов шаблона на текущем слое
-                                    // По логике процесса понятно, что тут надо отфильтровать только те элементы, котореы нужно записать на новую страницу PDF, которую создали ранее
-                                    // Соответственно, фильтрация нужна, когда имеем разворотный шаблон, который физически делится на две страницы в файле.
-                                    var rect = item.Bounds;
-
-                                    int sideindex = -1;
-                                    if (pdfpage.Imposed.Count == 1)
+                                    if (item.ExtraBounds)
                                     {
-                                        sideindex = 0;
-                                    }
-                                    if (sideindex == -1 && (pdfpage.Templ.Side & PageSide.LeftAndRight) == PageSide.LeftAndRight)
-                                    {
-                                        sideindex = item.FrameSide == PageSide.Left ? 0 : 1;
-                                    }
-                                    if (sideindex == -1 && pdfpage.Imposed.Count == 2)
-                                    {
-                                        if ((i == 0 && item.FrameSide == PageSide.Left) || (i == 1 && item.FrameSide == PageSide.Right)) sideindex = i;
-                                    }
-
-                                    if (sideindex != -1)
-                                    {
-                                        // 1. pdfpage.Imposed.Count == 1:                                               один односторонний шаблон соответствует одной страницы pdf - любой листовой продукт, и пополосный шаблон фотокниг
-                                        // 2. (pdfpage.Templ.Side & PageSide.LeftAndRight) == PageSide.LeftAndRight:    весь шаблон целиком разворотом на одну pdf страницу, неважно что сторон две
-                                        // 3. При наличии двух сторон шаблона:
-                                        // а) i == 0 && item.FrameSide == PageSide.Left:                                пропускаем только левые страницы двухстороннего шаблона
-                                        // б) i == 1 && item.FrameSide == PageSide.Right:                               пропускаем только правые страницы двухстороннего шаблона
-
-                                        
+                                        var rect = item.Bounds;
                                         // Обработка по типу слоя
-                                        if (layer.Key == 1)
+                                        if (currentLayerType == GraphicTypeEnum.Fill)
                                         {
-                                            // Слой 1 соответсвует объектам - фреймы с автоматичеки собранными изображениями
-                                            // Начинаем перебирать элементы на текущем слое, в соответствии выбранной стороне шаблона
-
+                                            if (item.GraphicType != GraphicTypeEnum.Fill)
+                                            {
+                                                Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Объект типа {item.GraphicType} не может быть расположен на {layer.Key} уровне (Job '{_job.UID}')");
+                                                CurrentStatus = ProcessStatusEnum.Error;
+                                                return false;
+                                            }
+                                            _pdfObject.SetFillColor(item.FillColor);
+                                            _pdfObject.DrawRectangle(rect.X - xShift + bleedsize, rect.Y + bleedsize, rect.Width, rect.Height, true, false);
+                                        }
+                                        if (currentLayerType == GraphicTypeEnum.ImageFrame)
+                                        {
                                             if (item.GraphicType != GraphicTypeEnum.ImageFrame)
                                             {
                                                 Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Объект типа {item.GraphicType} не может быть расположен на {layer.Key} уровне (Job '{_job.UID}')");
@@ -260,109 +225,160 @@ namespace Smartproj
                                             }
 
                                             ImageFrame frame = (ImageFrame)item;
-                                            ImposedImageData framedata = pdfpage.Imposed[sideindex][frame.FrameID.X, frame.FrameID.Y];
+                                            // Если выставлен флаг item.ExtraBounds, элемент может быть только на левой стороне - 0
+                                            ImposedImageData framedata = pdfpage.Imposed[0][frame.FrameID.X, frame.FrameID.Y];
 
                                             string filename = Path.Combine(_job.JobPath, "~Files", _job.DataContainer[framedata.FileId].GUID + ".jpg");
                                             // Координаты фреймов имеют ноль в обрезном формате. Вылет идет в минус. Поэтому сдвигаем на величину вылета (отнимая от общего смещения влево)
-                                            FileToFrame(_pdfObject, oImage, rect, xShift - bleedsize, filename, framedata.Shift, framedata.Scale);
+                                            FileToFrame(_pdfObject, rect, xShift, bleedsize, filename, framedata.Shift, framedata.Scale);
                                         }
-                                    }
-
-                                    // Только для варианта когда разворот режется на две страницы. Подходит для классических, флексов и псевдофлексов:
-                                    // Исключаем бабочки и КШС (PageSide имеет значение LeftAndRight)
-                                    // Исключаем неразворотные шаблоны - они могут быть как в листовой продукции, так и в книгах (в данном случае их тоже надо исключить)
-                                    if (i == 0 && (pdfpage.Templ.Side & PageSide.LeftAndRight) != PageSide.LeftAndRight && pdfpage.Imposed.Count == 2)
-                                    {
-                                        // Сохраняем информация для элементов, переходящих черех корешок разворота
-                                        item.ExtraBounds = rect.X + rect.Width > _job.ProductSize.Width;
                                     }
                                 }
                             }
+
+                            foreach (var item in layer)
+                            {
+                                // Перебор всех элементов шаблона на текущем слое
+                                // По логике процесса понятно, что тут надо отфильтровать только те элементы, котореы нужно записать на новую страницу PDF, которую создали ранее
+                                // Соответственно, фильтрация нужна, когда имеем разворотный шаблон, который физически делится на две страницы в файле.
+                                var rect = item.Bounds;
+
+                                int sideindex = -1;
+                                if (pdfpage.Imposed.Count == 1)
+                                {
+                                    sideindex = 0;
+                                }
+                                if (sideindex == -1 && (pdfpage.Templ.Side & PageSide.LeftAndRight) == PageSide.LeftAndRight)
+                                {
+                                    sideindex = item.FrameSide == PageSide.Left ? 0 : 1;
+                                }
+                                if (sideindex == -1 && pdfpage.Imposed.Count == 2)
+                                {
+                                    if ((i == 0 && item.FrameSide == PageSide.Left) || (i == 1 && item.FrameSide == PageSide.Right)) sideindex = i;
+                                }
+
+                                if (sideindex != -1)
+                                {
+                                    // 1. pdfpage.Imposed.Count == 1:                                               один односторонний шаблон соответствует одной страницы pdf - любой листовой продукт, и пополосный шаблон фотокниг
+                                    // 2. (pdfpage.Templ.Side & PageSide.LeftAndRight) == PageSide.LeftAndRight:    весь шаблон целиком разворотом на одну pdf страницу, неважно что сторон две
+                                    // 3. При наличии двух сторон шаблона:
+                                    // а) i == 0 && item.FrameSide == PageSide.Left:                                пропускаем только левые страницы двухстороннего шаблона
+                                    // б) i == 1 && item.FrameSide == PageSide.Right:                               пропускаем только правые страницы двухстороннего шаблона
+
+                                    // Обработка по типу слоя
+                                    if (currentLayerType == GraphicTypeEnum.Fill)
+                                    {
+                                        if (item.GraphicType != GraphicTypeEnum.Fill)
+                                        {
+                                            Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Объект типа {item.GraphicType} не может быть расположен на {layer.Key} уровне (Job '{_job.UID}')");
+                                            CurrentStatus = ProcessStatusEnum.Error;
+                                            return false;
+                                        }
+                                        _pdfObject.SetFillColor(item.FillColor);
+                                        _pdfObject.DrawRectangle(rect.X - xShift + bleedsize, rect.Y + bleedsize, rect.Width, rect.Height, true, false);
+                                    }
+                                    if (currentLayerType == GraphicTypeEnum.ImageFrame)
+                                    {
+                                        if (item.GraphicType != GraphicTypeEnum.ImageFrame)
+                                        {
+                                            Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Объект типа {item.GraphicType} не может быть расположен на {layer.Key} уровне (Job '{_job.UID}')");
+                                            CurrentStatus = ProcessStatusEnum.Error;
+                                            return false;
+                                        }
+
+                                        ImageFrame frame = (ImageFrame)item;
+                                        ImposedImageData framedata = pdfpage.Imposed[sideindex][frame.FrameID.X, frame.FrameID.Y];
+
+                                        string filename = Path.Combine(_job.JobPath, "~Files", _job.DataContainer[framedata.FileId].GUID + ".jpg");
+                                        // Координаты фреймов имеют ноль в обрезном формате. Вылет идет в минус. Поэтому сдвигаем на величину вылета (отнимая от общего смещения влево)
+                                        FileToFrame(_pdfObject, rect, xShift, bleedsize, filename, framedata.Shift, framedata.Scale);
+                                    }
+                                    if (currentLayerType == GraphicTypeEnum.TextFrame)
+                                    {
+                                        if (item.GraphicType != GraphicTypeEnum.TextFrame)
+                                        {
+                                            Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Объект типа {item.GraphicType} не может быть расположен на {layer.Key} уровне (Job '{_job.UID}')");
+                                            CurrentStatus = ProcessStatusEnum.Error;
+                                            return false;
+                                        }
+
+                                        TextFrame texts = (TextFrame)item;
+                                        string fontName = _pdfObject.AddTrueTypeFontU("Montserrat", true, false, true);
+                                        _pdfObject.SetFillColor(Color.Red);
+                                        int c = 0;
+                                        _pdfObject.SetTextSize(37);
+                                        foreach (var text in texts.Lines)
+                                        {
+                                            _pdfObject.DrawText(fontName, 50, 100 - c * 10, text);
+                                            c++;
+                                        }
+                                        //float textWidth = doc.GetTextWidth(fontName, 35, value);
+                                        //float textHeight = doc.GetTextHeight(fontName, 35);
+                                    }
+                                }
+
+                                // Только для варианта когда разворот режется на две страницы. Подходит для классических, флексов и псевдофлексов:
+                                // Исключаем бабочки и КШС (PageSide имеет значение LeftAndRight)
+                                // Исключаем неразворотные шаблоны - они могут быть как в листовой продукции, так и в книгах (в данном случае их тоже надо исключить)
+                                if (i == 0 && (pdfpage.Templ.Side & PageSide.LeftAndRight) != PageSide.LeftAndRight && pdfpage.Imposed.Count == 2)
+                                {
+                                    // Сохраняем информация для элементов, переходящих черех корешок разворота
+                                    item.ExtraBounds = rect.X + rect.Width > _job.ProductSize.Width;
+                                }
+                            }
                         }
-                          /*
-                          if (extraframes.Count > 0)
-                          {
-                              // Если есть из предыдущей итерации цикла переходящие разворот фреймы, то сразу добавляем новую старницу
-                              foreach (var frame in extraframes)
-                              {
-                                  // Координаты фреймов имеют ноль в обрезном формате. Вылет идет в минус. Поэтому сдвигаем на величину вылета (отнимая от общего смещения влево)
-                                  FileToFrame(_pdfObject, oImage, frame.Item1, _job.ProductSize.Width - bleedsize, frame.Item2, frame.Item3, frame.Item4);
-                              }
-                              extraframes.Clear();
-                          }
-
-                          var side = pdfpage.Imposed[i];
-
-                          for (int k = 0; k < side.GetLength(0); k++)
-                          {
-                              for (int m = 0; m < side.GetLength(1); m++)
-                              {
-                                  if (pdfpage.Imposed[i][k, m].FileId == -1) continue;
-
-                                  string filename = Path.Combine(_job.JobPath, "~Files", _job.DataContainer[pdfpage.Imposed[i][k, m].FileId].GUID + ".jpg");
-
-                                  var rect = pdfpage.Templ.Frames[i][k, m];
-
-                                  // Только для варианта когда разворот режется на две страницы. Подходит для классических, флексов и псевдофлексов:
-                                  // Исключаем бабочки и КШС (PageSide имеет значение LeftAndRight)
-                                  // Исключаем неразворотные шаблоны - они могут быть как в листовой продукции, так и в книгах (в данном случае их тоже надо исключить)
-                                  if (i == 0 && (pdfpage.Templ.Side & PageSide.LeftAndRight) != PageSide.LeftAndRight && pdfpage.Templ.LayoutType == DetailLayoutTypeEnum.Spread)
-                                  {
-                                      // Сохраняем информация для фреймов, переходящих черех корешок разворота
-                                      if (rect.X + rect.Width > _job.ProductSize.Width)
-                                      {
-                                          extraframes.Add(new ValueTuple<RectangleF, string, Point, float>(rect, filename, pdfpage.Imposed[i][k, m].Shift, pdfpage.Imposed[i][k, m].Scale));
-                                      }
-                                  }
-
-                                  // Координаты фреймов имеют ноль в обрезном формате. Вылет идет в минус. Поэтому сдвигаем на величину вылета (отнимая от общего смещения влево)
-                                  FileToFrame(_pdfObject, oImage, rect, xShift - bleedsize, filename, pdfpage.Imposed[i][k, m].Shift, pdfpage.Imposed[i][k, m].Scale);
-                              }
-                          }
-                          */
                     }
                 }
             }
 
             return true;
         }
-        private float FileToFrame(GdPicturePDF _doc, GdPictureImaging _obj, RectangleF _frame, float _shift, string _file, Point _correction, float _scale)
+        private float FileToFrame(GdPicturePDF _doc, RectangleF _frame, float _shift, float _bleed, string _file, Point _correction, float _scale)
         {
-            int id = _obj.CreateGdPictureImageFromFile(_file);
-            float iWidth = _obj.GetWidth(id);
-            float iHeight = _obj.GetHeight(id);
-            string imagename = _doc.AddImageFromGdPictureImage(id, false, false);
-            float effectiveRes = 0f;
-
-            _doc.SaveGraphicsState();
-            try
+            using (GdPictureImaging oImage = new GdPictureImaging())
             {
-                GdPictureStatus res;
+                int id = oImage.CreateGdPictureImageFromFile(_file);
+                float iWidth = oImage.GetWidth(id);
+                float iHeight = oImage.GetHeight(id);
+                string imagename = _doc.AddImageFromGdPictureImage(id, false, false);
+                float effectiveRes = 0f;
 
-                PointF[] points = new PointF[4] { new PointF(_frame.X - _shift, _frame.Y), new PointF(_frame.X - _shift, _frame.Y + _frame.Height), new PointF(_frame.X - _shift + _frame.Width, _frame.Y + _frame.Height), new PointF(_frame.X - _shift + _frame.Width, _frame.Y) };
-                _doc.AddGraphicsToPath(new GraphicsPath(points, new byte[4] { (byte)(PathPointType.Start | PathPointType.Line), (byte)PathPointType.Line, (byte)PathPointType.Line, (byte)PathPointType.Line }));
-                _doc.ClipPath();
-
-                var fitedRect = _frame.FitToFrameF(iWidth, iHeight, _shift);
-                res = _doc.DrawImage(imagename, fitedRect.Item1.X + _correction.X, fitedRect.Item1.Y + _correction.Y, fitedRect.Item1.Width, fitedRect.Item1.Height);
-                effectiveRes = fitedRect.Item2;
-
-                if (res != GdPictureStatus.OK)
+                _doc.SaveGraphicsState();
+                try
                 {
-                    Log?.WriteError("FileToFrame", $"{Owner?.Project?.ProjectId}: Ошибка отрисовки изображения во фрейм. Status = {res}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log?.WriteError("FileToFrame", $"{Owner?.Project?.ProjectId}: Исключение при отрисовке изображения во фрейм '{ex.Message}'");
-            }
-            finally
-            {
-                _doc.RestoreGraphicsState();
-                _obj.ReleaseGdPictureImage(id);
-            }
+                    GdPictureStatus res;
 
-            return effectiveRes;
+                    PointF[] points = new PointF[4] 
+                    { 
+                        new PointF(_frame.X - _shift + _bleed, _frame.Y + _bleed), 
+                        new PointF(_frame.X - _shift + _bleed, _frame.Y + _bleed + _frame.Height), 
+                        new PointF(_frame.X - _shift + _bleed + _frame.Width, _frame.Y + _bleed + _frame.Height), 
+                        new PointF(_frame.X - _shift + _bleed + _frame.Width, _frame.Y + _bleed)
+                    };
+                    _doc.AddGraphicsToPath(new GraphicsPath(points, new byte[4] { (byte)(PathPointType.Start | PathPointType.Line), (byte)PathPointType.Line, (byte)PathPointType.Line, (byte)PathPointType.Line }));
+                    _doc.ClipPath();
+
+                    var fitedRect = _frame.FitToFrameF(iWidth, iHeight, _shift, _bleed);
+                    res = _doc.DrawImage(imagename, fitedRect.Item1.X + _correction.X, fitedRect.Item1.Y + _correction.Y, fitedRect.Item1.Width, fitedRect.Item1.Height);
+                    effectiveRes = fitedRect.Item2;
+
+                    if (res != GdPictureStatus.OK)
+                    {
+                        Log?.WriteError("FileToFrame", $"{Owner?.Project?.ProjectId}: Ошибка отрисовки изображения во фрейм. Status = {res}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log?.WriteError("FileToFrame", $"{Owner?.Project?.ProjectId}: Исключение при отрисовке изображения во фрейм '{ex.Message}'");
+                }
+                finally
+                {
+                    _doc.RestoreGraphicsState();
+                    oImage.ReleaseGdPictureImage(id);
+                }
+
+                return effectiveRes;
+            }
         }
     }
 }

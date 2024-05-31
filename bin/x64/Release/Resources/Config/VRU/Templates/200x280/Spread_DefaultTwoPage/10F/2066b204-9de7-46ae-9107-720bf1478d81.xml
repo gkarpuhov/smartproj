@@ -20,11 +20,11 @@
       <item TypeId="1364886211">
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">0; 0</FrameID>
-        <FrameSide TypeId="-532340399">Left</FrameSide>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
         <PinnedText TypeId="-2008165553">null</PinnedText>
         <FileName TypeId="1642033309">null</FileName>
         <Layer TypeId="1727199146">1</Layer>
+        <FrameSide TypeId="-532340399">Left</FrameSide>
         <Bounds TypeId="489541115">{X=12,Y=207,Width=87,Height=61}</Bounds>
         <FillColor TypeId="-742668771">
         </FillColor>
@@ -37,11 +37,11 @@
       <item TypeId="1364886211">
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">0; 1</FrameID>
-        <FrameSide TypeId="-532340399">Left</FrameSide>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
         <PinnedText TypeId="-2008165553">null</PinnedText>
         <FileName TypeId="1642033309">null</FileName>
         <Layer TypeId="1727199146">1</Layer>
+        <FrameSide TypeId="-532340399">Left</FrameSide>
         <Bounds TypeId="489541115">{X=102,Y=207,Width=85,Height=61}</Bounds>
         <FillColor TypeId="-742668771">
         </FillColor>
@@ -54,11 +54,11 @@
       <item TypeId="1364886211">
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">1; 0</FrameID>
-        <FrameSide TypeId="-532340399">Left</FrameSide>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
         <PinnedText TypeId="-2008165553">null</PinnedText>
         <FileName TypeId="1642033309">null</FileName>
         <Layer TypeId="1727199146">1</Layer>
+        <FrameSide TypeId="-532340399">Left</FrameSide>
         <Bounds TypeId="489541115">{X=12,Y=78,Width=175,Height=126}</Bounds>
         <FillColor TypeId="-742668771">
         </FillColor>
@@ -71,11 +71,11 @@
       <item TypeId="1364886211">
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">2; 0</FrameID>
-        <FrameSide TypeId="-532340399">Left</FrameSide>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
         <PinnedText TypeId="-2008165553">null</PinnedText>
         <FileName TypeId="1642033309">null</FileName>
         <Layer TypeId="1727199146">1</Layer>
+        <FrameSide TypeId="-532340399">Left</FrameSide>
         <Bounds TypeId="489541115">{X=12,Y=14,Width=87,Height=61}</Bounds>
         <FillColor TypeId="-742668771">
         </FillColor>
@@ -88,11 +88,11 @@
       <item TypeId="1364886211">
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">2; 1</FrameID>
-        <FrameSide TypeId="-532340399">Left</FrameSide>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
         <PinnedText TypeId="-2008165553">null</PinnedText>
         <FileName TypeId="1642033309">null</FileName>
         <Layer TypeId="1727199146">1</Layer>
+        <FrameSide TypeId="-532340399">Left</FrameSide>
         <Bounds TypeId="489541115">{X=102,Y=14,Width=85,Height=61}</Bounds>
         <FillColor TypeId="-742668771">
         </FillColor>
@@ -105,11 +105,11 @@
       <item TypeId="1364886211">
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">0; 0</FrameID>
-        <FrameSide TypeId="-532340399">Right</FrameSide>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
         <PinnedText TypeId="-2008165553">null</PinnedText>
         <FileName TypeId="1642033309">null</FileName>
         <Layer TypeId="1727199146">1</Layer>
+        <FrameSide TypeId="-532340399">Right</FrameSide>
         <Bounds TypeId="489541115">{X=213,Y=207,Width=87,Height=61}</Bounds>
         <FillColor TypeId="-742668771">
         </FillColor>
@@ -122,11 +122,11 @@
       <item TypeId="1364886211">
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">0; 1</FrameID>
-        <FrameSide TypeId="-532340399">Right</FrameSide>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
         <PinnedText TypeId="-2008165553">null</PinnedText>
         <FileName TypeId="1642033309">null</FileName>
         <Layer TypeId="1727199146">1</Layer>
+        <FrameSide TypeId="-532340399">Right</FrameSide>
         <Bounds TypeId="489541115">{X=303,Y=207,Width=85,Height=61}</Bounds>
         <FillColor TypeId="-742668771">
         </FillColor>
@@ -139,11 +139,11 @@
       <item TypeId="1364886211">
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">1; 0</FrameID>
-        <FrameSide TypeId="-532340399">Right</FrameSide>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
         <PinnedText TypeId="-2008165553">null</PinnedText>
         <FileName TypeId="1642033309">null</FileName>
         <Layer TypeId="1727199146">1</Layer>
+        <FrameSide TypeId="-532340399">Right</FrameSide>
         <Bounds TypeId="489541115">{X=213,Y=78,Width=175,Height=126}</Bounds>
         <FillColor TypeId="-742668771">
         </FillColor>
@@ -156,11 +156,11 @@
       <item TypeId="1364886211">
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">2; 0</FrameID>
-        <FrameSide TypeId="-532340399">Right</FrameSide>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
         <PinnedText TypeId="-2008165553">null</PinnedText>
         <FileName TypeId="1642033309">null</FileName>
         <Layer TypeId="1727199146">1</Layer>
+        <FrameSide TypeId="-532340399">Right</FrameSide>
         <Bounds TypeId="489541115">{X=213,Y=14,Width=87,Height=61}</Bounds>
         <FillColor TypeId="-742668771">
         </FillColor>
@@ -173,11 +173,11 @@
       <item TypeId="1364886211">
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">2; 1</FrameID>
-        <FrameSide TypeId="-532340399">Right</FrameSide>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
         <PinnedText TypeId="-2008165553">null</PinnedText>
         <FileName TypeId="1642033309">null</FileName>
         <Layer TypeId="1727199146">1</Layer>
+        <FrameSide TypeId="-532340399">Right</FrameSide>
         <Bounds TypeId="489541115">{X=303,Y=14,Width=85,Height=61}</Bounds>
         <FillColor TypeId="-742668771">
         </FillColor>

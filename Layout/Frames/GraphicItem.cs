@@ -24,7 +24,6 @@ namespace Smartproj
         public Logger Log => Owner?.Log;
         public GraphicItem this[int _index] => mItems[_index];
         public GraphicItem this[string _index] => mItems.Find(x => x.KeyId == _index);
-        public IEnumerable<IGrouping<int, GraphicItem>> Layers => mItems.GroupBy(x => x.Layer).OrderBy(y => y.Key);
         public int Count => mItems.Count;
         /// <summary>
         /// Конструктор по умолчанию
@@ -90,6 +89,7 @@ namespace Smartproj
         /// </summary>
         public bool HasStroke => StrokeColor.A > 0 && StrokeWeight > 0;
         /// <summary>
+        /// Пример распределения пр слоям
         /// Индекс слоя, на котором расположен объект. По умолчанию в большинстве случаяю каждый тип графического объекта будет расположен на определенном слое:
         /// 0 - нижний слой стачичное изображения, фон, паттерн (ImageItem)
         /// 1 - фрейм с изображением (ImageFrame)
