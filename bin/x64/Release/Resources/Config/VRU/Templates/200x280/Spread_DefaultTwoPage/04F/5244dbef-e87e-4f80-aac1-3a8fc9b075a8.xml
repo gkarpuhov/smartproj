@@ -21,6 +21,7 @@
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">0; 0</FrameID>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
+        <Radius TypeId="-1119076432">3</Radius>
         <PinnedText TypeId="-2008165553">
           <item TypeId="-1913220081">ccbd5a9f-4adb-424a-83a7-2efaa4da2a94</item>
         </PinnedText>
@@ -33,6 +34,7 @@
         <StrokeColor TypeId="-742668771">
         </StrokeColor>
         <StrokeWeight TypeId="-1119076432">0</StrokeWeight>
+        <TransformationMatrix TypeId="-536951104">0 0 0 0 0 0</TransformationMatrix>
         <KeyId TypeId="1642033309">null</KeyId>
         <TreeNodeItems TypeId="2018040348" />
       </item>
@@ -40,6 +42,7 @@
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">0; 0</FrameID>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
+        <Radius TypeId="-1119076432">3</Radius>
         <PinnedText TypeId="-2008165553">null</PinnedText>
         <FileName TypeId="1642033309">null</FileName>
         <Layer TypeId="1727199146">1</Layer>
@@ -50,6 +53,7 @@
         <StrokeColor TypeId="-742668771">
         </StrokeColor>
         <StrokeWeight TypeId="-1119076432">0</StrokeWeight>
+        <TransformationMatrix TypeId="-536951104">0 0 0 0 0 0</TransformationMatrix>
         <KeyId TypeId="1642033309">null</KeyId>
         <TreeNodeItems TypeId="2018040348" />
       </item>
@@ -57,6 +61,7 @@
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">0; 1</FrameID>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
+        <Radius TypeId="-1119076432">3</Radius>
         <PinnedText TypeId="-2008165553">null</PinnedText>
         <FileName TypeId="1642033309">null</FileName>
         <Layer TypeId="1727199146">1</Layer>
@@ -67,6 +72,7 @@
         <StrokeColor TypeId="-742668771">
         </StrokeColor>
         <StrokeWeight TypeId="-1119076432">0</StrokeWeight>
+        <TransformationMatrix TypeId="-536951104">0 0 0 0 0 0</TransformationMatrix>
         <KeyId TypeId="1642033309">null</KeyId>
         <TreeNodeItems TypeId="2018040348" />
       </item>
@@ -74,6 +80,7 @@
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">1; 0</FrameID>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
+        <Radius TypeId="-1119076432">3</Radius>
         <PinnedText TypeId="-2008165553">null</PinnedText>
         <FileName TypeId="1642033309">null</FileName>
         <Layer TypeId="1727199146">1</Layer>
@@ -84,18 +91,21 @@
         <StrokeColor TypeId="-742668771">
         </StrokeColor>
         <StrokeWeight TypeId="-1119076432">0</StrokeWeight>
+        <TransformationMatrix TypeId="-536951104">0 0 0 0 0 0</TransformationMatrix>
         <KeyId TypeId="1642033309">null</KeyId>
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="542845947">
         <GraphicType TypeId="1066637078">Fill</GraphicType>
-        <Layer TypeId="1727199146">0</Layer>
+        <FrameShape TypeId="1484013679">Rounded</FrameShape>
+        <Radius TypeId="-1119076432">3</Radius>
+        <Layer TypeId="1727199146">2</Layer>
         <FrameSide TypeId="-532340399">Left</FrameSide>
-        <Bounds TypeId="489541115">{X=-3,Y=-3,Width=406,Height=286}</Bounds>
+        <Bounds TypeId="489541115">{X=50,Y=20,Width=306,Height=66}</Bounds>
         <FillColor TypeId="-742668771">Green</FillColor>
-        <StrokeColor TypeId="-742668771">
-        </StrokeColor>
-        <StrokeWeight TypeId="-1119076432">0</StrokeWeight>
+        <StrokeColor TypeId="-742668771">Black</StrokeColor>
+        <StrokeWeight TypeId="-1119076432">1</StrokeWeight>
+        <TransformationMatrix TypeId="-536951104">0.866 0.5 -0.5 0.866 0 0</TransformationMatrix>
         <KeyId TypeId="1642033309">null</KeyId>
         <TreeNodeItems TypeId="2018040348" />
       </item>
@@ -103,6 +113,10 @@
     <Texts TypeId="-1988204926">
       <item TypeId="-426664719">
         <UID TypeId="-1913220081">ccbd5a9f-4adb-424a-83a7-2efaa4da2a94</UID>
+        <PositionToImage TypeId="-535090374">
+          <Shift TypeId="969405874">{X=0,Y=20}</Shift>
+          <LinkTo TypeId="-1100425429">TopLeft</LinkTo>
+        </PositionToImage>
         <GraphicType TypeId="1066637078">TextFrame</GraphicType>
         <ReadOnly TypeId="-491435614">False</ReadOnly>
         <Interval TypeId="-1119076432">2</Interval>
@@ -114,6 +128,7 @@
         <FillColor TypeId="-742668771">White</FillColor>
         <StrokeColor TypeId="-742668771">Transparent</StrokeColor>
         <StrokeWeight TypeId="-1119076432">0</StrokeWeight>
+        <TransformationMatrix TypeId="-536951104">0 0 0 0 0 0</TransformationMatrix>
         <KeyId TypeId="1642033309">null</KeyId>
         <TreeNodeItems TypeId="2018040348">
           <item TypeId="-410551496">
@@ -154,10 +169,13 @@
     <TextFrame Id="-426664719" Guid="(0aeb3b59-60ed-3206-bb7a-c61cc97315f9)">Smartproj.TextFrame, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</TextFrame>
     <SpreadFrameCollection Id="1521838035" Guid="(2d963487-27d9-360e-86cb-1117a1fa9a9b)">Smartproj.SpreadFrameCollection, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</SpreadFrameCollection>
     <List-1 Id="2018040348" Guid="(5af00c2e-048b-3ab3-8ccd-548134771d38)">System.Collections.Generic.List`1[[Smartproj.Utils.Tree, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</List-1>
+    <RelativePosition Id="-535090374" Guid="(9e422610-8369-3981-a0dc-f974f53f9532)">Smartproj.RelativePosition, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</RelativePosition>
     <GraphicTypeEnum Id="1066637078" Guid="(9606e574-c44f-3cac-8f46-236793857f82)">Smartproj.Utils.GraphicTypeEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</GraphicTypeEnum>
     <VerticalPositionEnum Id="34379097" Guid="(5eb0b0c4-9f3b-37b1-b1eb-6be57c47066b)">Smartproj.Utils.VerticalPositionEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</VerticalPositionEnum>
+    <Single__ Id="-536951104" Guid="(00000000-0000-0000-0000-000000000000)">System.Single[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</Single__>
     <TextLine Id="-410551496" Guid="(4c7d326b-1eb0-3967-a7fc-af21fec75a7a)">Smartproj.TextLine, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</TextLine>
     <HorizontalPositionEnum Id="1284647405" Guid="(51c0778e-3afa-320d-9207-808571ee774a)">Smartproj.Utils.HorizontalPositionEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</HorizontalPositionEnum>
+    <PositionEnum Id="-1100425429" Guid="(97a51212-5739-30cb-ae07-e839b04708f2)">Smartproj.Utils.PositionEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</PositionEnum>
     <ImageFrameShapeEnum Id="1484013679" Guid="(8126d31c-2e1a-31a7-aa1f-fb201ea15e6d)">Smartproj.Utils.ImageFrameShapeEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</ImageFrameShapeEnum>
     <PinnedTextCollection Id="-2008165553" Guid="(3a978222-4ee1-3dd2-b77d-2f6fede2177a)">Smartproj.ImageFrame+PinnedTextCollection, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</PinnedTextCollection>
   </Types>

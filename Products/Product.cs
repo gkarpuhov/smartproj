@@ -88,6 +88,8 @@ namespace Smartproj
         public IEnumerable<Detail> Parts => TreeNodeItems.Cast<Detail>();
         public virtual string ProductCode { get; set; }
         [XmlElement]
+        public FileSizeOptimization Optimization { get; set; }
+        [XmlElement]
         public bool TempletesAutoUpdate { get; set; }
         public LayoutCollection LayoutSpace { get; set; }
         [XmlElement]
@@ -178,6 +180,7 @@ namespace Smartproj
             TemplateKeys = new List<Guid>();
             UID = Guid.NewGuid();
             Controllers = new ControllerCollection(null, this);
+            Optimization = FileSizeOptimization.MaxQuality;
         }
         public bool HasPart(string _id)
         {
@@ -270,28 +273,6 @@ namespace Smartproj
                 }
             }
             return defaultProductName;
-        }
-        public void ParsePdfTemplete(string _file)
-        {
-            GdPicturePDF doc = new GdPicturePDF();
-            doc.LoadFromFile(_file);  
-            doc.SetMeasurementUnit(PdfMeasurementUnit.PdfMeasurementUnitMillimeter);
-            doc.SetOrigin(PdfOrigin.PdfOriginBottomLeft);
-            float mediaLeft = 0, mediaBottom = 0, mediaTop = 0, mediaRight = 0;
-            float trimLeft = 0, trimBottom = 0, trimTop = 0, trimRight = 0;
-            doc.GetPageBox(PdfPageBox.PdfPageBoxMediaBox, ref mediaLeft, ref mediaTop, ref mediaRight, ref mediaBottom);
-            doc.GetPageBox(PdfPageBox.PdfPageBoxTrimBox, ref trimLeft, ref trimTop, ref trimRight, ref trimBottom);
-            int pages = doc.GetPageCount();
-            int fonts = doc.GetFontCount();
-            for (int i = 0; i < fonts; i++)
-            {
-                Log.WriteError("ParsePdfTemplete", $"name = {doc.GetFontName(i)}; type = {doc.GetFontType(i)}");
-            }
-            for (int i = 1; i <= pages; i++)
-            {
-                doc.SelectPage(i);
-
-            }
         }
     }
 }

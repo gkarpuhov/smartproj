@@ -18,6 +18,10 @@ using System.Windows.Forms;
 using static Emgu.CV.OCR.Tesseract;
 using System.Diagnostics;
 using smartproj.Products;
+using System.Drawing.Imaging;
+using System.Text;
+using Newtonsoft.Json.Linq;
+using System.Globalization;
 
 namespace debugger
 {
@@ -135,8 +139,56 @@ namespace debugger
         {
             throw new NotImplementedException();
         }
+        public static void TM()
+        {
+            string caption = "Example: AddTransformationMatrix";
+            GdPicturePDF gdpicturePDF = new GdPicturePDF();
+            GdPictureStatus status = gdpicturePDF.NewPDF();
+            if (status == GdPictureStatus.OK)
+            {
+                gdpicturePDF.SetOrigin(PdfOrigin.PdfOriginTopLeft);
+                gdpicturePDF.SetMeasurementUnit(PdfMeasurementUnit.PdfMeasurementUnitMillimeter);
+                if ((gdpicturePDF.NewPage(210, 297) == GdPictureStatus.OK) &&
+                    (gdpicturePDF.ResetGraphicsState() == GdPictureStatus.OK) && //Setting the default graphics state.
+                    (gdpicturePDF.DrawRectangle(0, 0, 40, 20, true, true) == GdPictureStatus.OK) &&
+                    (gdpicturePDF.SetLineWidth(2) == GdPictureStatus.OK) &&
+                    (gdpicturePDF.SetLineColor(0, 0, 255) == GdPictureStatus.OK) &&
+                    (gdpicturePDF.SetFillColor(0, 255, 255) == GdPictureStatus.OK) &&
+                    (gdpicturePDF.DrawRectangle(10, 40, 40, 20, true, true) == GdPictureStatus.OK) &&
+                    (gdpicturePDF.SaveGraphicsState() == GdPictureStatus.OK) &&
+                    //translation
+                    (gdpicturePDF.AddTransformationMatrix(1, 0, 0, 1, 100, -100) == GdPictureStatus.OK) &&
+                    (gdpicturePDF.DrawRectangle(10, 40, 40, 20, true, true) == GdPictureStatus.OK) &&
+                    (gdpicturePDF.RestoreGraphicsState() == GdPictureStatus.OK) &&
+                    //vertical shear and translation
+                    (gdpicturePDF.AddTransformationMatrix(1, 0.2f, 0, 1, 100, -200) == GdPictureStatus.OK) &&
+                    (gdpicturePDF.DrawRectangle(10, 40, 40, 20, true, true) == GdPictureStatus.OK) &&
+                    //vertical and horizontal shear and translation
+                    (gdpicturePDF.AddTransformationMatrix(1, 0.2f, 0.1f, 1, 100, -150) == GdPictureStatus.OK) &&
+                    (gdpicturePDF.DrawRectangle(10, 40, 40, 20, true, true) == GdPictureStatus.OK) &&
+                    (gdpicturePDF.ResetGraphicsState() == GdPictureStatus.OK) && //Resetting back to the default graphics state.
+                    (gdpicturePDF.DrawRectangle(0, 180, 40, 20, true, true) == GdPictureStatus.OK))
+                {
+                    status = gdpicturePDF.SaveToFile(@"c:\Temp\test_TransformationMatrix.pdf");
+                    if (status == GdPictureStatus.OK)
+                        MessageBox.Show("The example has been followed successfully and the file has been saved.", caption);
+                    else
+                        MessageBox.Show("The example has been followed successfully, but the file can't be saved. Status: " + status.ToString(), caption);
+                }
+                else
+                    MessageBox.Show("The example has not been followed successfully.\nThe last known status is " + gdpicturePDF.GetStat().ToString(), caption);
+            }
+            else
+                MessageBox.Show("The NewPDF() method has failed with the status: " + status.ToString(), caption);
+            gdpicturePDF.Dispose();
+        }
         static void Main(string[] args)
         {
+            RectangleF rect1 = new RectangleF(0.555f, -894.1f, 1, 200f);
+            NumberFormatInfo format = new NumberFormatInfo() { NumberDecimalSeparator = "." };
+            Console.WriteLine($"{{X={rect1.X.ToString(format)},Y={rect1.Y.ToString(format)},Width={rect1.Width.ToString(format)},Height={rect1.Height.ToString(format)}}}");
+            Console.ReadLine(); 
+            return;
             WorkSpace.ApplicationPath = @"C:\Users\admin\source\repos\smartproj\bin\x64\Release";
             WorkSpace.ResourcesPath = Path.Combine(WorkSpace.ApplicationPath, "Resources");
             WorkSpace.WorkingPath = Path.Combine(WorkSpace.ApplicationPath, "Working");

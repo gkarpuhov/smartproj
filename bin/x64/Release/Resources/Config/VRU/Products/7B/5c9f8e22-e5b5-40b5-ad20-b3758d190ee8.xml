@@ -1,6 +1,7 @@
 <root>
   <Data TypeId="-1735648906">
     <ProductCode TypeId="1642033309">7B</ProductCode>
+    <Optimization TypeId="-1876236277">Lossless</Optimization>
     <TempletesAutoUpdate TypeId="-491435614">False</TempletesAutoUpdate>
     <Binding TypeId="1905268263">LayFlat</Binding>
     <UID TypeId="-1913220081">5c9f8e22-e5b5-40b5-ad20-b3758d190ee8</UID>
@@ -23,7 +24,7 @@
         <Label TypeId="1642033309">Распознование лиц на изображениях</Label>
         <UID TypeId="-1913220081">53a73f9f-bc6b-4a55-9c5c-0e4ec4e7c6de</UID>
         <Priority TypeId="1727199146">2</Priority>
-        <Enabled TypeId="-491435614">True</Enabled>
+        <Enabled TypeId="-491435614">False</Enabled>
       </item>
       <item TypeId="-390503294">
         <Label TypeId="1642033309">Контроллер осуществляет сборку макета только на основании содержимого исходных папок</Label>
@@ -57,6 +58,7 @@
   </Data>
   <Types>
     <LayFlat Id="-1735648906" Guid="(8ffdc81d-14e4-3536-9c9b-5e6328f58822)">smartproj.Products.LayFlat, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</LayFlat>
+    <FileSizeOptimization Id="-1876236277" Guid="(51ae2f26-a11e-3d42-8fa0-6a09df843912)">Smartproj.Utils.FileSizeOptimization, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</FileSizeOptimization>
     <BindingEnum Id="1905268263" Guid="(946e118c-a1a4-33c4-9e59-f934a774ce44)">Smartproj.Utils.BindingEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</BindingEnum>
     <List-1 Id="593491458" Guid="(5af00c2e-048b-3ab3-8ccd-548134771d38)">System.Collections.Generic.List`1[[System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</List-1>
     <ControllerCollection Id="1481613391" Guid="(f038ac85-352a-3936-a4cd-14e25c913334)">Smartproj.ControllerCollection, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</ControllerCollection>

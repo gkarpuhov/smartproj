@@ -27,7 +27,6 @@ C:\Users\admin\source\repos\smartproj\debugger\obj\x64\Release\debugger.csproj.C
 C:\Users\admin\source\repos\smartproj\debugger\obj\x64\Release\debugger.exe
 C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\debugger.exe.config
 C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\debugger.exe
-C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\smartproj.exe.config
 C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\Smartproj.Utils.dll.config
 C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\Newtonsoft.Json.xml
 C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\System.Buffers.xml
@@ -56,3 +55,4 @@ C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\MedallionShell.dl
 C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\Emgu.CV.xml
 C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\Telegram.Bot.pdb
 C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\MedallionShell.xml
+C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\smartproj.exe.config

@@ -1,7 +1,5 @@
-﻿using Emgu.CV.Linemod;
-using Smartproj.Utils;
+﻿using Smartproj.Utils;
 using System;
-using System.Linq;
 
 namespace Smartproj
 {
@@ -22,6 +20,26 @@ namespace Smartproj
                 converter.ConverterLog = Log;
                 converter.OutPath = job.JobPath;
                 converter.ProfilesPath = ws.Profiles;
+
+                switch (job.Product.Optimization)
+                {
+                    case FileSizeOptimization.Lossless:
+                        converter.OutType = TagFileTypeEnum.TIFF;
+                        break;
+                    case FileSizeOptimization.MaxQuality:
+                        converter.OutType = TagFileTypeEnum.JPEG;
+                        converter.QualityParameter = 100L;
+                        break;
+                    case FileSizeOptimization.Medium:
+                        converter.OutType = TagFileTypeEnum.JPEG;
+                        converter.QualityParameter = 75L;
+                        break;
+                    case FileSizeOptimization.Preview:
+                        converter.OutType = TagFileTypeEnum.JPEG;
+                        converter.QualityParameter = 50L;
+                        break;
+                }
+
                 try
                 {
                     converter.Process(job.DataContainer);
@@ -36,7 +54,10 @@ namespace Smartproj
                 Log?.WriteInfo("ImageConverterController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер завершил работу с процессом '{job.UID}'");
                 return true;
             }
-
+            else
+            {
+                Log?.WriteInfo("ImageConverterController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер деактивирован. Процессы не выполнены");
+            }
             return false;
         }
         protected override void Dispose(bool _disposing)

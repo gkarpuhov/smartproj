@@ -29,7 +29,7 @@ namespace Smartproj
                 detector.CascadesPath = Path.Combine(ws.MLData, "haarcascades");
                 try
                 {
-                    detector.Detect(job.DataContainer, x => Path.Combine(job.JobPath, "~Files", x.GUID + ".jpg"));
+                    detector.Detect(job.DataContainer, x => Path.Combine(job.JobPath, "~Files", x.GUID + (job.Product.Optimization == FileSizeOptimization.Lossless ? ".tiff" : ".jpeg")));
                 }
                 catch (Exception ex)
                 {
@@ -40,6 +40,10 @@ namespace Smartproj
 
                 Log?.WriteInfo("ObjectDetectorController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер завершил работу с процессом '{job.UID}'");
                 return true;
+            }
+            else
+            {
+                Log?.WriteInfo("ImageConverterController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер деактивирован. Процессы не выполнены");
             }
 
             return false;

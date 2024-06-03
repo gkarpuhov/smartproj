@@ -63,7 +63,7 @@ namespace Smartproj.Utils
 		static Serializer()
 		{
             //SerializerLog = new Logger();
-			//SerializerLog.Open(@"C:\Users\g.karpuhov.FINEART-PRINT\source\repos\smartproj\bin\x64\Release\Serializer.txt");
+			//SerializerLog.Open(@"C:\Users\admin\source\repos\smartproj\bin\x64\Release\Serializer.txt");
         }
 		public static Logger SerializerLog;
         public static readonly List<Type> TypesCache = new List<Type>()
@@ -202,13 +202,24 @@ namespace Smartproj.Utils
 						});
 						if (prop != null)
 						{
-							TypeConverter converter = TypeDescriptor.GetConverter(prop.PropertyType);
-							if (converter == null)
+							try
 							{
-								throw new InvalidOperationException(String.Format("Не найден конвертор аттрибута типа '{0}' для его десериализации", prop.PropertyType.Name));
+								TypeConverter converter = TypeDescriptor.GetConverter(prop.PropertyType);
+								if (converter == null)
+								{
+									throw new InvalidOperationException(String.Format("Не найден конвертор аттрибута типа '{0}' для его десериализации", prop.PropertyType.Name));
+								}
+								// Устанавливаем совйству значения из найденного xml аттрибута
+								prop.SetValue(current.Value, converter.ConvertFrom(attribute.Value), null);
 							}
-							// Устанавливаем совйству значения из найденного xml аттрибута
-                            prop.SetValue(current.Value, converter.ConvertFrom(attribute.Value), null);
+							catch (Exception ex)
+							{
+                                SerializerLog?.WriteInfo("LoadXml", $"Exception 2 = {ex.Message}");
+                                SerializerLog?.WriteInfo("LoadXml", $"Exception 2 = {ex.StackTrace}");
+                                SerializerLog?.WriteInfo("LoadXml", $"attribute.Value = {attribute.Value}");
+                                SerializerLog?.WriteInfo("LoadXml", $"current.Value = {current.Value.GetType().Name}");
+                                throw;
+							}
 						}
 						// ПС. Пока не помню зачем реализована эта логика
 					}
@@ -384,12 +395,13 @@ namespace Smartproj.Utils
 																	}
 																	catch (Exception ex)
 																	{
-																		SerializerLog?.WriteInfo("LoadXml", $"Exception = {ex.Message}");
+                                                                        SerializerLog?.WriteInfo("LoadXml", $"Exception = {ex.Message}");
 																		SerializerLog?.WriteInfo("LoadXml", $"Exception = {ex.StackTrace}");
 																		SerializerLog?.WriteInfo("LoadXml", $"itemDataType = {itemDataType.Name}");
 																		SerializerLog?.WriteInfo("LoadXml", $"value = {value}");
 																		SerializerLog?.WriteInfo("LoadXml", $"oldGraph ?? newGraph = {(oldGraph ?? newGraph).GetType().Name}");
 																		SerializerLog?.WriteInfo("LoadXml", $"current = {current.Value?.GetType().Name}; isTreeNodesCollectionProperty = {isTreeNodesCollectionProperty}");
+
 																		throw;
 																	}
 																}
@@ -419,7 +431,7 @@ namespace Smartproj.Utils
 													}
 													else
 													{
-														TypeConverter converter = TypeDescriptor.GetConverter(dataType);
+                                                        TypeConverter converter = TypeDescriptor.GetConverter(dataType);
 														if (converter == null)
 														{
 															throw new InvalidOperationException(String.Format("Не найден конвертор типа '{0}' для его десериализации", dataType.Name));

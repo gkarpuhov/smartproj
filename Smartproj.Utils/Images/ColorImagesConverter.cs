@@ -20,6 +20,7 @@ namespace Smartproj.Utils
     }
     public class ColorImagesConverter
     {
+        private TagFileTypeEnum mOutType;
         public string DefaultRGBProfile { get; set; }
         public string DefaultCMYKProfile { get; set; }
         public string DefaultGRAYProfile { get; set; }
@@ -27,6 +28,22 @@ namespace Smartproj.Utils
         public string DefaultColorPath { get; set; }
         public string ProfilesPath { get; set; }
         public string OutPath { get; set; }
+        public long QualityParameter { get; set; }
+        public TagFileTypeEnum OutType
+        {
+            get { return mOutType; } 
+            set
+            {
+                if (value == TagFileTypeEnum.JPEG || value == TagFileTypeEnum.TIFF)
+                {
+                    mOutType = value;
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
+            }
+        }
         public Logger ConverterLog { get; set; }
         public ColorImagesConverter()
         {
@@ -35,6 +52,8 @@ namespace Smartproj.Utils
             DefaultCMYKProfile = "ISOcoated_v2_eci.icc";
             DefaultGRAYProfile = "Generic Gray Gamma 2.2 Profile.icc";
             DefaultLABProfile = "lab1to1.icc";
+            OutType = TagFileTypeEnum.JPEG;
+            QualityParameter = 100L;
         }
         public void Process(IEnumerable<ExifTaggedFile> _inputData)
         {
@@ -136,12 +155,24 @@ namespace Smartproj.Utils
                 {
                     string tempFiles = Path.Combine(opt.TempPath, "~Files");
                     string tempCms = Path.Combine(opt.TempPath, "~Cms");
+                    
+                    ImageCodecInfo imageCodecInfo;
+                    EncoderParameters encoderParameters;
+                    EncoderParameter encoderParameter1;
 
-                    var jpegImageCodecInfo = ImageCodecInfo.GetImageEncoders().First(i => i.MimeType == "image/jpeg");
+                    if (OutType == TagFileTypeEnum.TIFF)
+                    {
+                        imageCodecInfo = ImageCodecInfo.GetImageEncoders().First(i => i.MimeType == "image/tiff");
+                        encoderParameter1 = new EncoderParameter(System.Drawing.Imaging.Encoder.Compression, (long)EncoderValue.CompressionNone);
+                    }
+                    else
+                    {
+                        imageCodecInfo = ImageCodecInfo.GetImageEncoders().First(i => i.MimeType == "image/jpeg");
+                        encoderParameter1 = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, QualityParameter);
+                    }
 
-                    var jpegEncoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 75L);
-                    var jpegEncoderParameters = new EncoderParameters(1);
-                    jpegEncoderParameters.Param[0] = jpegEncoderParameter;
+                    encoderParameters = new EncoderParameters(1);
+                    encoderParameters.Param[0] = encoderParameter1;
 
                     if (item.ColorSpace != TagColorModeEnum.RGB && item.ColorSpace != TagColorModeEnum.CMYK && item.ColorSpace != TagColorModeEnum.Grayscale)
                     {
@@ -199,11 +230,11 @@ namespace Smartproj.Utils
                     {
                         try
                         {
-                            if (item.ImageType == TagFileTypeEnum.JPEG)
+                            if (item.ImageType == OutType) 
                             {
-                                File.Copy(Path.Combine(item.FilePath, item.FileName), Path.Combine(tempFiles, item.GUID + ".jpg"));
+                                File.Copy(Path.Combine(item.FilePath, item.FileName), Path.Combine(tempFiles, $"{item.GUID}.{OutType.ToString().ToLower()}"));
                                 item.AddStatus(ImageStatusEnum.OriginalIsReady);
-                                m.Add($"ID {item.Index}: Не требуется. Файл: {item.FileName} -> {item.GUID + ".jpg"}");
+                                m.Add($"ID {item.Index}: Не требуется. Файл: {item.FileName} -> {item.GUID}.{OutType.ToString().ToLower()}");
                             }
                             else
                             {
@@ -211,9 +242,10 @@ namespace Smartproj.Utils
                                 {
                                     if ((bitmap.PixelFormat == PixelFormat.Format24bppRgb && !item.HasTransparency) || (bitmap.PixelFormat == PixelFormat.Format32bppArgb && item.HasTransparency))
                                     {
-                                        bitmap.Save(Path.Combine(tempFiles, item.GUID + ".jpg"), jpegImageCodecInfo, jpegEncoderParameters);
+                                        bitmap.Save(Path.Combine(tempFiles, $"{item.GUID}.{OutType.ToString().ToLower()}"), imageCodecInfo, encoderParameters);
+                                        
                                         item.AddStatus(ImageStatusEnum.FormatTransformed);
-                                        m.Add($"ID {item.Index}: Формат изменен: {item.ImageType.ToString()} -> {"JPEG"}. Файл: {item.FileName} -> {item.GUID + ".jpg"}");
+                                        m.Add($"ID {item.Index}: Формат изменен: {item.ImageType.ToString()} -> {OutType}. Файл: {item.FileName} -> {item.GUID}.{OutType.ToString().ToLower()}");
                                     }
                                     else
                                     {
@@ -313,14 +345,14 @@ namespace Smartproj.Utils
                                             Marshal.Copy(rgbValues, 0, rgbData.Scan0, rgbValues.Length);
                                             rgb.UnlockBits(rgbData);
 
-                                            rgb.Save(Path.Combine(tempFiles, item.GUID + ".jpg"), jpegImageCodecInfo, jpegEncoderParameters);
+                                            rgb.Save(Path.Combine(tempFiles, $"{item.GUID}.{OutType.ToString().ToLower()}"), imageCodecInfo, encoderParameters);
 
                                             item.AddStatus(ImageStatusEnum.ColorTransformed);
                                             if (item.ImageType != TagFileTypeEnum.JPEG)
                                             {
                                                 item.AddStatus(ImageStatusEnum.FormatTransformed);
                                             }
-                                            m.Add($"ID {item.Index}: Трансформация выполнена: {item.ColorSpace}:{bitmap.PixelFormat} -> {"RGB"}. Файл: {item.FileName} -> {item.GUID + ".jpg"}");
+                                            m.Add($"ID {item.Index}: Трансформация выполнена: {item.ColorSpace}:{bitmap.PixelFormat} -> {"RGB"}. Файл: {item.FileName} -> {item.GUID}.{OutType.ToString().ToLower()}");
                                         }
                                     }
                                 }

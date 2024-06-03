@@ -41,7 +41,7 @@ namespace Smartproj.Utils
                             string file = _nameSelector(item);
                             if (!File.Exists(file))
                             {
-                                warnings.Add($"File = {item.FileName}; Status = {item.Status}; Error = {"Файл не найден"}");
+                                errors.Add($"File = {item.FileName}; Status = {item.Status}; Error = {"Файл не найден"}");
                                 continue;
                             }
                             List<Rectangle> objectsDetected = new List<Rectangle>();

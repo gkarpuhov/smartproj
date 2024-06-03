@@ -11,6 +11,21 @@ using Color = System.Drawing.Color;
 namespace Smartproj
 {
     /// <summary>
+    /// Структура, определяющая относительное смешение текстового фрейма относительно связанного изображения.
+    /// Точка отсчета от фрейма изображение - стандартное (левый нижний угол)
+    /// </summary>
+    public class RelativePosition
+    {
+        [XmlElement]
+        public PointF Shift { get; set; }
+        [XmlElement]
+        public PositionEnum LinkTo { get; set; }
+        public RelativePosition()
+        {
+            LinkTo = PositionEnum.TopLeft;
+        }
+    }
+    /// <summary>
     /// Структура для передачи параметров свойств форматирования текста
     /// </summary>
     public struct TextParameters
@@ -90,25 +105,6 @@ namespace Smartproj
         }
         public TextFrame this[Guid _id] => (TextFrame)this.SingleOrDefault(x => ((TextFrame)x).UID == _id);
         /// <summary>
-        /// Свойство вызывает метод, возвращающий данные всех текстовых сегментов шаблона в виде коллекции фрагментов <see cref="TextFragment"/>, содержащих данные с одинаковыми параметрами.
-        /// Метод автоматически рассчитывает границы расположения в выходним документе соответствующих фрагментов и возвращает эту информацию.
-        /// При этом, автоматически обновляются границы текстовых сегментов <see cref="GraphicItem.Bounds"/>. Левый нижний угол фиксированный, определяет расположение текста, а размеры корректируются по содержанию внутренних объектов
-        /// </summary>
-        /*
-        public IEnumerable<KeyValuePair<TextFragment, string>> Intervals
-        {
-            get
-            {
-                List<KeyValuePair<TextFragment, string>> intervals = new List<KeyValuePair<TextFragment, string>>();
-                foreach (TextFrame item in this)
-                {
-                    intervals.AddRange(item.Intervals);
-                }
-                return intervals;
-            }
-        }
-        */
-        /// <summary>
         /// Конструктор по умолчанию
         /// </summary>
         /// <param name="_owner">Ссылка на объект <see cref="Template"/>, содержащий коллекцию</param>
@@ -170,6 +166,7 @@ namespace Smartproj
         /// Коллекция объектов строк <see cref="TextLine"/>, принадлежащих данному текстовому фрагменту
         /// </summary>
         public IEnumerable<TextLine> TextLines => TreeNodeItems.OfType<TextLine>();
+        public bool IsEmpty => !TextLines.Any(x => x.Glyphs.Count > 0);
         /// <summary>
         /// Представление объекта в виде одной строки без индивидуальных параметров каждого символа
         /// </summary>
@@ -206,14 +203,8 @@ namespace Smartproj
         /// </summary>
         public IEnumerable<string> Lines => TreeNodeItems.Select(x => ((TextLine)x).Value);
         /// <summary>
-        /// Свойство вызывает метод, возвращающий данные текущего объекта текстового сегмента в виде коллекции фрагментов <see cref="TextFragment"/>, содержащих данные с одинаковыми параметрами.
-        /// Метод автоматически рассчитывает границы расположения в выходним документе соответствующих фрагментов и возвращает эту информацию.
-        /// При этом, автоматически обновляются границы текущего объекта <see cref="GraphicItem.Bounds"/>. Левый нижний угол фиксированный, определяет расположение текста, а размеры корректируются по содержанию внутренних объектов
-        /// </summary>
-        //public IEnumerable<KeyValuePair<TextFragment, string>> Intervals => FrameLinesAnalis();
-        /// <summary>
         /// Уникальный идентификатора объекта. Предназначен для обеспечения механизма ссылочной связи с объектом <see cref="ImageFrame"/>.
-        /// Доступно для сериализации <see cref="Serializer"/>. Если в момент десериализации в системе будет найден объект <see cref="ImageFrame"/> с ссылкой на данный Guid, то он будет привязан к данному тексту
+        /// Если в момент десериализации в системе будет найден объект <see cref="ImageFrame"/> с ссылкой на данный Guid, то он будет привязан к данному тексту
         /// </summary>
         [XmlElement]
         public Guid UID
@@ -229,19 +220,21 @@ namespace Smartproj
                 mUID = value;
             }
         }
+        [XmlContainer]
+        public RelativePosition PositionToImage { get; set; }
         /// <summary>
-        /// Тип данной реализации родительского класса <see cref="GraphicItem"/>. Доступен для сериализации <see cref="Serializer"/>.
+        /// Тип данной реализации родительского класса <see cref="GraphicItem"/>
         /// Имеет значение <see cref="GraphicTypeEnum.TextFrame"/>
         /// </summary>
         [XmlElement]
         public override GraphicTypeEnum GraphicType => GraphicTypeEnum.TextFrame;
         /// <summary>
-        /// Текст данного объекта доступен только для чтения. Доступен для сериализации <see cref="Serializer"/>.
+        /// Текст данного объекта доступен только для чтения
         /// </summary>
         [XmlElement]
         public bool ReadOnly { get; set; }
         /// <summary>
-        /// Значение интервала между строками объектов <see cref="TextLine"/>. Доступен для сериализации <see cref="Serializer"/>.
+        /// Значение интервала между строками объектов <see cref="TextLine"/>
         /// </summary>
         [XmlElement]
         public float Interval { get; set; }
@@ -337,13 +330,13 @@ namespace Smartproj
         /// </summary>
         internal List<Glyph> Glyphs { get; private set; }
         /// <summary>
-        /// Свойство выравнивания строки по горизонтали. Доступно для сериализации <see cref="Serializer"/>
+        /// Свойство выравнивания строки по горизонтали.
         /// </summary>
         [XmlElement]
         public HorizontalPositionEnum Position { get; set; }
         /// <summary>
         /// Представление объекта набора глифов в виде массива двоичных данных в кодировке Base64.
-        /// Свойство предназначено только для серализации данных. Доступно для сериализации <see cref="Serializer"/>
+        /// Свойство предназначено только для серализации данных
         /// </summary>
         [XmlElement]
         protected string Bin

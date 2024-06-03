@@ -87,7 +87,7 @@ namespace Smartproj
         /// <summary>
         /// Возвращает 'Истина' если цвет обводки имеет отличную от нуля степеь прозрачности и толщину линии
         /// </summary>
-        public bool HasStroke => StrokeColor.A > 0 && StrokeWeight > 0;
+        public bool HasStroke => StrokeColor.A > 0 && Bounds != default && StrokeWeight > 0;
         /// <summary>
         /// Пример распределения пр слоям
         /// Индекс слоя, на котором расположен объект. По умолчанию в большинстве случаяю каждый тип графического объекта будет расположен на определенном слое:
@@ -101,30 +101,35 @@ namespace Smartproj
         [XmlElement]
         public int Layer { get; set; }
         /// <summary>
-        /// Сторона расположения в шаблоне, содержащая данный объект. Доступен для сериализации <see cref="Serializer"/>
+        /// Сторона расположения в шаблоне, содержащая данный объект
         /// </summary>
         [XmlElement]
         public PageSide FrameSide { get; set; }
         /// <summary>
-        /// Область рисования графического объекта. Доступно для сериализации <see cref="Serializer"/>
+        /// Область рисования графического объекта
         /// </summary>
         [XmlElement]
         public RectangleF Bounds { get; set; }
         /// <summary>
-        /// Цвет области заливки графического объекта. Доступно для сериализации <see cref="Serializer"/>
+        /// Цвет области заливки графического объекта
         /// </summary>
         [XmlElement]
         public Color FillColor { get; set; }
         /// <summary>
-        /// Цвет линии обводки графического объекта. Доступно для сериализации <see cref="Serializer"/>
+        /// Цвет линии обводки графического объекта
         /// </summary>
         [XmlElement]
         public Color StrokeColor { get; set; }
         /// <summary>
-        /// Толщина линии обводки графического объекта. Доступно для сериализации <see cref="Serializer"/>
+        /// Толщина линии обводки графического объекта
         /// </summary>
         [XmlElement]
         public float StrokeWeight { get; set; }
+        /// <summary>
+        /// Матрица геометрической трансформации
+        /// </summary>
+        [XmlElement]
+        public float[] TransformationMatrix { get; set; }
         /// <summary>
         /// Абстрактный тип графического объекта
         /// </summary>
@@ -135,6 +140,7 @@ namespace Smartproj
         protected GraphicItem() : base()
         {
             ExtraBounds = false;
+            TransformationMatrix = new float[6] { 0, 0, 0, 0, 0, 0, };
         }
     }
     /// <summary>
@@ -143,17 +149,29 @@ namespace Smartproj
     public class FillItem : GraphicItem
     {
         /// <summary>
-        /// Тип данной реализации родительского класса <see cref="GraphicItem"/>. Доступен для сериализации <see cref="Serializer"/>
+        /// Тип данной реализации родительского класса <see cref="GraphicItem"/>
         /// Имеет значение <see cref="GraphicTypeEnum.Fill"/>
         /// </summary>
         [XmlElement]
         public override GraphicTypeEnum GraphicType { get; } = GraphicTypeEnum.Fill;
+        /// <summary>
+        /// Тип формы данного объекта фрейма
+        /// </summary>
+        [XmlElement]
+        public ImageFrameShapeEnum FrameShape { get; set; }
+        /// <summary>
+        /// Радиус скругления угла для объекта типа <see cref="ImageFrameShapeEnum.Rounded"/>
+        /// </summary>
+        [XmlElement]
+        public float Radius { get; set; }
         /// <summary>
         /// Констркутор по умолчанию
         /// </summary>
         public FillItem() : base()
         {
             Layer = 2;
+            FrameShape = ImageFrameShapeEnum.Rectangle;
+            Radius = 3;
         }
     }
     /// <summary>
@@ -162,7 +180,7 @@ namespace Smartproj
     public class ClipItem : GraphicItem
     {
         /// <summary>
-        /// Тип данной реализации родительского класса <see cref="GraphicItem"/>. Доступен для сериализации <see cref="Serializer"/>
+        /// Тип данной реализации родительского класса <see cref="GraphicItem"/>
         /// Имеет значение <see cref="GraphicTypeEnum.Clip"/>
         /// </summary>
         [XmlElement]
@@ -175,45 +193,18 @@ namespace Smartproj
         }
     }
     /// <summary>
-    /// Круглая область заливки. Наследовано <see cref="GraphicItem"/>
-    /// </summary>
-    public class EllipseItem : GraphicItem
-    {
-        /// <summary>
-        /// Тип данной реализации родительского класса <see cref="GraphicItem"/>. Доступен для сериализации <see cref="Serializer"/>
-        /// Имеет значение <see cref="GraphicTypeEnum.Ellipse"/>
-        /// </summary>
-        [XmlElement]
-        public override GraphicTypeEnum GraphicType { get; } = GraphicTypeEnum.Ellipse;
-        /// <summary>
-        /// Констркутор по умолчанию
-        /// </summary>
-        public EllipseItem() : base()
-        {
-            Layer = 2;
-        }
-    }
-    /// <summary>
     /// Растровый графический объект. Наследовано <see cref="GraphicItem"/>
     /// </summary>
     public class ImageItem : GraphicItem
     {
         /// <summary>
-        /// Идентификатор изображения в связанном объекте документа <see cref="GdPicture14.GdPictureImaging"/>
-        /// </summary>
-        public int ImageID { get; set; }
-        /// <summary>
-        /// Идентификатор изображения в связанном объекте PDF <see cref="GdPicture14.GdPicturePDF"/> документа <see cref="Job.PdfObject"/>
-        /// </summary>
-        public string FdfID { get; set; }
-        /// <summary>
-        /// Тип данной реализации родительского класса <see cref="GraphicItem"/>. Доступен для сериализации <see cref="Serializer"/>
+        /// Тип данной реализации родительского класса <see cref="GraphicItem"/>
         /// Имеет значение <see cref="GraphicTypeEnum.Image"/>
         /// </summary>
         [XmlElement]
         public override GraphicTypeEnum GraphicType { get; } = GraphicTypeEnum.Image;
         /// <summary>
-        /// Имя файла изображения, помещаемого в данный графический объект. Доступен для сериализации <see cref="Serializer"/>
+        /// Имя файла изображения, помещаемого в данный графический объект
         /// </summary>
         [XmlElement]
         public string FileName { get; set; }
@@ -235,23 +226,28 @@ namespace Smartproj
         /// </summary>
         public int ProcessID { get; set; }
         /// <summary>
-        /// Тип данной реализации родительского класса <see cref="GraphicItem"/>. Доступен для сериализации <see cref="Serializer"/>.
+        /// Тип данной реализации родительского класса <see cref="GraphicItem"/>
         /// Имеет значение <see cref="GraphicTypeEnum.ImageFrame"/>
         /// </summary>
         [XmlElement]
         public override GraphicTypeEnum GraphicType { get; } = GraphicTypeEnum.ImageFrame;
         /// <summary>
-        /// Координаты соответствия данного графического объекта определенному фрейму в коллекции шаблона <see cref="FrameCollection"/>. Доступен для сериализации <see cref="Serializer"/>
+        /// Координаты соответствия данного графического объекта определенному фрейму в коллекции шаблона <see cref="FrameCollection"/>
         /// </summary>
         [XmlElement]
         public Point FrameID { get; set; }
         /// <summary>
-        /// Тип формы данного объекта фрейма. В соответствии с данным свойством на изображение будет наложены маска соответствующей формы. Доступен для сериализации <see cref="Serializer"/>
+        /// Тип формы данного объекта фрейма. В соответствии с данным свойством на изображение будет наложены маска соответствующей формы
         /// </summary>
         [XmlElement]
         public ImageFrameShapeEnum FrameShape { get; set; }
         /// <summary>
-        /// Ссылка на экземпляр контейнера, содержащего ссылки на текстовуй информацию, прикрепленную к данному графическому объекту. Доступен для сериализации <see cref="Serializer"/>
+        /// Радиус скругления угла для объекта типа <see cref="ImageFrameShapeEnum.Rounded"/>
+        /// </summary>
+        [XmlElement]
+        public float Radius { get; set; }
+        /// <summary>
+        /// Ссылка на экземпляр контейнера, содержащего ссылки на текстовуй информацию, прикрепленную к данному графическому объекту
         /// </summary>
         [XmlCollection(false, false, typeof(Guid), typeof(ImageFrame))]
         public PinnedTextCollection PinnedText { get; set; }
@@ -262,6 +258,7 @@ namespace Smartproj
         {
             Layer = 1;
             FrameShape = ImageFrameShapeEnum.Rectangle;
+            Radius = 3;
         }
         /// <summary>
         /// Контейнер, содержащий ссылки на текстовуй информацию, прикрепленную к данному графическому объекту

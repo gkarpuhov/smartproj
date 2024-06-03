@@ -1,345 +1,61 @@
-31.05.2024 14:09:48: Message; AbstractInputProvider.Start => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер начал работу
-31.05.2024 14:09:59: Message; VruAdapter.GetNext => Процесс VRU => 0b2ad85e-8937-4ecd-9469-be30f6e6ba42: файлы для работы получены
-31.05.2024 14:09:59: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) передан процессу 0b2ad85e-8937-4ecd-9469-be30f6e6ba42 для инициализации
-31.05.2024 14:09:59: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
-31.05.2024 14:09:59: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) успешно иницализирован процессом 0b2ad85e-8937-4ecd-9469-be30f6e6ba42
-31.05.2024 14:09:59: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Файловая структура для выполнения процесса '0b2ad85e-8937-4ecd-9469-be30f6e6ba42' загружена: 21 файлов
-31.05.2024 14:10:00: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Процесс формирование данных для обработки завершен. Процесс '0b2ad85e-8937-4ecd-9469-be30f6e6ba42'
-31.05.2024 14:10:00: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер начал работу с процессом '0b2ad85e-8937-4ecd-9469-be30f6e6ba42'
-31.05.2024 14:10:05: Message; Нормализация (Поток 26) => ID 1: Не требуется. Файл: shutterstock_468938591.jpg -> 3ea89e62-794d-46c7-ae29-2432d59febad.jpg
-31.05.2024 14:10:05: Message; Нормализация (Поток 26) => ID 9: Не требуется. Файл: shutterstock_117779284.jpg -> a8cedbe6-2251-4bff-8b13-3cda26913c9d.jpg
-31.05.2024 14:10:05: Message; Нормализация (Поток 26) => ID 13: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3325.jpg
-31.05.2024 14:10:05: Message; Нормализация (Поток 26) => ID 13: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3325.jpg -> cdd88cb7-a98f-4cbf-baba-facd41def039.jpg
-31.05.2024 14:10:05: Message; Нормализация (Поток 26) => ID 17: Не требуется. Файл: original (12).jpg -> deb73b81-1dcc-4f9f-822a-359f15e781be.jpg
-31.05.2024 14:10:05: Message; Нормализация (Поток 26) => ID 18: Не требуется. Файл: shutterstock_121537738.jpg -> e53b7f21-8fa4-4107-bf5b-0de75753a9bd.jpg
-31.05.2024 14:10:05: Message; Нормализация (Поток 26) => ID 19: Не требуется. Файл: shutterstock_123923356.jpg -> 8cd1388d-0f73-4786-b015-e6111f831646.jpg
-31.05.2024 14:10:05: Message; Нормализация (Поток 26) => ID 20: Не требуется. Файл: shutterstock_127746875.jpg -> 362a38e3-6c04-4f9c-a48e-8da0c3f6654c.jpg
-31.05.2024 14:10:06: Message; Нормализация (Поток 24) => ID 3: Не требуется. Файл: shutterstock_471595004.jpg -> 7f0f781a-c14c-4ac2-809d-965f2bb1cda4.jpg
-31.05.2024 14:10:06: Message; Нормализация (Поток 24) => ID 7: Не требуется. Файл: shutterstock_111029240.jpg -> 6ecef974-f7de-4de5-a500-60f72790dbc8.jpg
-31.05.2024 14:10:06: Message; Нормализация (Поток 24) => ID 12: Цветовой профиль источника соответствует профилю по умолчанию. Файл: shutterstock_472966438.jpg
-31.05.2024 14:10:06: Message; Нормализация (Поток 24) => ID 12: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'. Файл: shutterstock_472966438.jpg
-31.05.2024 14:10:06: Message; Нормализация (Поток 24) => ID 12: Трансформация выполнена: Grayscale:Format8bppIndexed -> RGB. Файл: shutterstock_472966438.jpg -> 54b795f8-17cd-416d-9284-72ad10a35c92.jpg
-31.05.2024 14:10:06: Message; Нормализация (Поток 24) => ID 16: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3331.jpg
-31.05.2024 14:10:06: Message; Нормализация (Поток 24) => ID 16: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3331.jpg -> 01800e12-ae7c-44a8-8d1d-4dadfea61a8c.jpg
-31.05.2024 14:10:06: Message; Нормализация (Поток 25) => ID 0: Не требуется. Файл: shutterstock_463643660.jpg -> 5009c3cf-dd44-4874-931d-6f4fdd7e0735.jpg
-31.05.2024 14:10:06: Message; Нормализация (Поток 25) => ID 6: Не требуется. Файл: shutterstock_110065853.jpg -> 92ccced1-8dff-4495-a694-edce4224f289.jpg
-31.05.2024 14:10:06: Message; Нормализация (Поток 25) => ID 11: Не требуется. Файл: shutterstock_416402569.jpg -> 83d45d40-fb70-4b84-a61a-b6866fd4dd64.jpg
-31.05.2024 14:10:06: Message; Нормализация (Поток 25) => ID 15: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3330.jpg
-31.05.2024 14:10:06: Message; Нормализация (Поток 25) => ID 15: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3330.jpg -> baa0234f-0bbd-4e66-b5b0-6bbbb38e5c1d.jpg
-31.05.2024 14:10:07: Message; Нормализация (Поток 27) => ID 2: Не требуется. Файл: shutterstock_468938600.jpg -> 46b66065-6bca-4cdf-b2f8-586638a0b555.jpg
-31.05.2024 14:10:07: Message; Нормализация (Поток 27) => ID 4: Не требуется. Файл: original (4).jpg -> b4aa8b02-b6cc-4440-ac30-afd7f2cbe8e0.jpg
-31.05.2024 14:10:07: Message; Нормализация (Поток 27) => ID 5: Не требуется. Файл: original (5).jpg -> 6d9b79b9-da50-44f1-9616-aece8fc9928e.jpg
-31.05.2024 14:10:07: Message; Нормализация (Поток 27) => ID 8: Не требуется. Файл: shutterstock_111368450.jpg -> a3e6d29e-f1b0-44a0-a3d0-36d90f155085.jpg
-31.05.2024 14:10:07: Message; Нормализация (Поток 27) => ID 10: Не требуется. Файл: shutterstock_415929772.jpg -> 5f8aa8f6-6530-4196-b87b-f0a9c91f8f4a.jpg
-31.05.2024 14:10:07: Message; Нормализация (Поток 27) => ID 14: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3328.jpg
-31.05.2024 14:10:07: Message; Нормализация (Поток 27) => ID 14: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3328.jpg -> ab5ab82f-201f-4b8b-9824-2b27d2ca5ca3.jpg
-31.05.2024 14:10:07: Message; Нормализация => sRGB Color Space Profile.icm: Использован RGB профиль по умолчанию: Ver = 2,1;  '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [sRGB IEC61966-2.1]'
-31.05.2024 14:10:07: Message; Нормализация => ID ISOcoated_v2_eci.icc: Использован CMYK профиль по умолчанию: Ver = 2,4;  '[231 152 204 29 159 101 154 97 85 172 53 173 154 195 131 187] [ISO Coated v2 (ECI)]'
-31.05.2024 14:10:07: Message; Нормализация => ID Generic Gray Gamma 2.2 Profile.icc: Использован Grayscale профиль по умолчанию: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'
-31.05.2024 14:10:07: Message; Нормализация => Общее время обработки = 6 сек
-31.05.2024 14:10:07: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер завершил работу с процессом '0b2ad85e-8937-4ecd-9469-be30f6e6ba42'
-31.05.2024 14:10:07: Message; ObjectDetectorController.Start => VRU: 'ObjectDetectorController' => Контроллер начал начал работу с процессом '0b2ad85e-8937-4ecd-9469-be30f6e6ba42'
-31.05.2024 14:12:50: Message; Распознавание лиц => File = original (4).jpg; Face rect: 185,211; 335x335
-31.05.2024 14:12:50: Message; Распознавание лиц => File = original (12).jpg; Face rect: 754,245; 378x378
-31.05.2024 14:12:50: Message; Распознавание лиц => Общее время обработки = 164 сек
-31.05.2024 14:12:50: Message; ObjectDetectorController.Start => VRU: 'ObjectDetectorController' => Контроллер завершил работу с процессом '0b2ad85e-8937-4ecd-9469-be30f6e6ba42'
-31.05.2024 14:12:50: Message; DirectFileToTemplateImposeController.Start => VRU: 'DirectFileToTemplateImposeController' => Контроллер начал сборку макета... '0b2ad85e-8937-4ecd-9469-be30f6e6ba42'
-31.05.2024 14:12:50: Message; PdfOutputProvider.Start => VRU: 'PdfOutputProvider' => Контроллер начал генерацию PDF файла... '0b2ad85e-8937-4ecd-9469-be30f6e6ba42'
-31.05.2024 14:12:54: Error; PdfOutputProvider.Start => VRU: Обработанное исключении в процессе генерации макета 'Значение не может быть неопределенным.
-Имя параметра: collection' (Job '0b2ad85e-8937-4ecd-9469-be30f6e6ba42')
-31.05.2024 14:12:54: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Выполнение процесса '0b2ad85e-8937-4ecd-9469-be30f6e6ba42' успешно завершено
-31.05.2024 14:15:07: Message; Project.Dispose => VRU: Освобождение ресурсов системы...
-31.05.2024 14:15:07: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Запрос на завершения работы запускающего контроллера... Статус Processing
-31.05.2024 14:15:07: Message; Project.Dispose => VRU: Ожидание завершения процессов...
-31.05.2024 14:15:07: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Ожидание завершения процессов запускающего контроллера...
-31.05.2024 14:15:07: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер завершил работу
-31.05.2024 14:15:07: Message; AbstractInputProvider.Dispose => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер => Ресурсы освобождены
-31.05.2024 14:15:07: Message; AbstractOutputProvider.Dispose => VRU: 'PdfOutputProvider' => Контроллер вывода => Ресурсы освобождены
-31.05.2024 14:15:07: Message; Project.Dispose => VRU: Ресурсы освобождены
-31.05.2024 14:15:20: Message; AbstractInputProvider.Start => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер начал работу
-31.05.2024 14:15:36: Message; VruAdapter.GetNext => Процесс VRU => e40ca66d-0f15-4ce8-91a8-8b5d87a0652e: файлы для работы получены
-31.05.2024 14:15:36: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) передан процессу e40ca66d-0f15-4ce8-91a8-8b5d87a0652e для инициализации
-31.05.2024 14:15:36: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
-31.05.2024 14:15:36: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) успешно иницализирован процессом e40ca66d-0f15-4ce8-91a8-8b5d87a0652e
-31.05.2024 14:15:36: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Файловая структура для выполнения процесса 'e40ca66d-0f15-4ce8-91a8-8b5d87a0652e' загружена: 21 файлов
-31.05.2024 14:15:38: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Процесс формирование данных для обработки завершен. Процесс 'e40ca66d-0f15-4ce8-91a8-8b5d87a0652e'
-31.05.2024 14:15:38: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер начал работу с процессом 'e40ca66d-0f15-4ce8-91a8-8b5d87a0652e'
-31.05.2024 14:15:42: Message; Нормализация (Поток 26) => ID 3: Не требуется. Файл: shutterstock_471595004.jpg -> 7a5a541f-c064-4cc2-bd32-b732c7555788.jpg
-31.05.2024 14:15:42: Message; Нормализация (Поток 26) => ID 9: Не требуется. Файл: shutterstock_117779284.jpg -> 915ced56-cb2c-4c64-8fdf-a782f041f2eb.jpg
-31.05.2024 14:15:42: Message; Нормализация (Поток 26) => ID 13: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3325.jpg
-31.05.2024 14:15:42: Message; Нормализация (Поток 26) => ID 13: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3325.jpg -> 09a34d9d-419f-4c08-b592-15b47333d6a1.jpg
-31.05.2024 14:15:42: Message; Нормализация (Поток 26) => ID 17: Не требуется. Файл: original (12).jpg -> a80742de-ff0b-4fc4-b23f-0f5491825817.jpg
-31.05.2024 14:15:42: Message; Нормализация (Поток 26) => ID 18: Не требуется. Файл: shutterstock_121537738.jpg -> edb3c6eb-e539-467b-a30d-d700194d6374.jpg
-31.05.2024 14:15:42: Message; Нормализация (Поток 26) => ID 19: Не требуется. Файл: shutterstock_123923356.jpg -> 63879fde-a12c-4be8-b013-f3820662adaf.jpg
-31.05.2024 14:15:42: Message; Нормализация (Поток 26) => ID 20: Не требуется. Файл: shutterstock_127746875.jpg -> f2b8bf40-63ae-4a3c-9777-644d258a3e56.jpg
-31.05.2024 14:15:43: Message; Нормализация (Поток 23) => ID 0: Не требуется. Файл: shutterstock_463643660.jpg -> 8220f923-0434-47df-8eae-238d12b3d6fe.jpg
-31.05.2024 14:15:43: Message; Нормализация (Поток 23) => ID 5: Не требуется. Файл: original (5).jpg -> da84f10a-da54-41a6-8749-729737702ef4.jpg
-31.05.2024 14:15:43: Message; Нормализация (Поток 23) => ID 7: Не требуется. Файл: shutterstock_111029240.jpg -> d7854404-853a-47e0-9be8-d60a110639d0.jpg
-31.05.2024 14:15:43: Message; Нормализация (Поток 23) => ID 12: Цветовой профиль источника соответствует профилю по умолчанию. Файл: shutterstock_472966438.jpg
-31.05.2024 14:15:43: Message; Нормализация (Поток 23) => ID 12: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'. Файл: shutterstock_472966438.jpg
-31.05.2024 14:15:43: Message; Нормализация (Поток 23) => ID 12: Трансформация выполнена: Grayscale:Format8bppIndexed -> RGB. Файл: shutterstock_472966438.jpg -> 5a3a42c4-3e28-4300-a3e8-2c9776b36737.jpg
-31.05.2024 14:15:43: Message; Нормализация (Поток 23) => ID 16: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3331.jpg
-31.05.2024 14:15:43: Message; Нормализация (Поток 23) => ID 16: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3331.jpg -> 1bfa1a66-c7a9-4577-8128-d78d7a46fadb.jpg
-31.05.2024 14:15:43: Message; Нормализация (Поток 25) => ID 2: Не требуется. Файл: shutterstock_468938600.jpg -> 8e9500e5-2524-4fa0-8b1c-133c55715193.jpg
-31.05.2024 14:15:43: Message; Нормализация (Поток 25) => ID 4: Не требуется. Файл: original (4).jpg -> ad5a46fa-cb42-4c16-80d2-b62e615a6d7b.jpg
-31.05.2024 14:15:43: Message; Нормализация (Поток 25) => ID 6: Не требуется. Файл: shutterstock_110065853.jpg -> fe5ee957-045d-4831-99c9-0e57ec0422e3.jpg
-31.05.2024 14:15:43: Message; Нормализация (Поток 25) => ID 11: Не требуется. Файл: shutterstock_416402569.jpg -> 077640ae-867c-4afd-9bd6-4e75b0d9013a.jpg
-31.05.2024 14:15:43: Message; Нормализация (Поток 25) => ID 15: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3330.jpg
-31.05.2024 14:15:43: Message; Нормализация (Поток 25) => ID 15: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3330.jpg -> 63b78f6c-d95a-4798-af8d-0484a0675472.jpg
-31.05.2024 14:15:44: Message; Нормализация (Поток 24) => ID 1: Не требуется. Файл: shutterstock_468938591.jpg -> 3b7f5b65-9c3c-49c7-9786-d4060f0d95a7.jpg
-31.05.2024 14:15:44: Message; Нормализация (Поток 24) => ID 8: Не требуется. Файл: shutterstock_111368450.jpg -> e0f5f831-7174-4fd0-82f3-f625075805b6.jpg
-31.05.2024 14:15:44: Message; Нормализация (Поток 24) => ID 10: Не требуется. Файл: shutterstock_415929772.jpg -> cec8ef2f-fef4-4034-a3c4-1218e8bbf994.jpg
-31.05.2024 14:15:44: Message; Нормализация (Поток 24) => ID 14: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3328.jpg
-31.05.2024 14:15:44: Message; Нормализация (Поток 24) => ID 14: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3328.jpg -> ff638900-44c3-405f-a1fd-c3beb9639b1b.jpg
-31.05.2024 14:15:44: Message; Нормализация => sRGB Color Space Profile.icm: Использован RGB профиль по умолчанию: Ver = 2,1;  '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [sRGB IEC61966-2.1]'
-31.05.2024 14:15:44: Message; Нормализация => ID ISOcoated_v2_eci.icc: Использован CMYK профиль по умолчанию: Ver = 2,4;  '[231 152 204 29 159 101 154 97 85 172 53 173 154 195 131 187] [ISO Coated v2 (ECI)]'
-31.05.2024 14:15:44: Message; Нормализация => ID Generic Gray Gamma 2.2 Profile.icc: Использован Grayscale профиль по умолчанию: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'
-31.05.2024 14:15:44: Message; Нормализация => Общее время обработки = 6 сек
-31.05.2024 14:15:44: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер завершил работу с процессом 'e40ca66d-0f15-4ce8-91a8-8b5d87a0652e'
-31.05.2024 14:15:44: Message; ObjectDetectorController.Start => VRU: 'ObjectDetectorController' => Контроллер начал начал работу с процессом 'e40ca66d-0f15-4ce8-91a8-8b5d87a0652e'
-31.05.2024 14:18:20: Message; Распознавание лиц => File = original (4).jpg; Face rect: 185,211; 335x335
-31.05.2024 14:18:20: Message; Распознавание лиц => File = original (12).jpg; Face rect: 754,245; 378x378
-31.05.2024 14:18:20: Message; Распознавание лиц => Общее время обработки = 156 сек
-31.05.2024 14:18:20: Message; ObjectDetectorController.Start => VRU: 'ObjectDetectorController' => Контроллер завершил работу с процессом 'e40ca66d-0f15-4ce8-91a8-8b5d87a0652e'
-31.05.2024 14:18:20: Message; DirectFileToTemplateImposeController.Start => VRU: 'DirectFileToTemplateImposeController' => Контроллер начал сборку макета... 'e40ca66d-0f15-4ce8-91a8-8b5d87a0652e'
-31.05.2024 14:18:20: Message; PdfOutputProvider.Start => VRU: 'PdfOutputProvider' => Контроллер начал генерацию PDF файла... 'e40ca66d-0f15-4ce8-91a8-8b5d87a0652e'
-31.05.2024 14:18:44: Message; PdfOutputProvider.Start => VRU: 'PdfOutputProvider' => PDF файл '1000-0000-q1-tVRU_7B_200X280-BLK.pdf' успешно создан (Job 'e40ca66d-0f15-4ce8-91a8-8b5d87a0652e')
-31.05.2024 14:18:45: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Выполнение процесса 'e40ca66d-0f15-4ce8-91a8-8b5d87a0652e' успешно завершено
-31.05.2024 14:29:54: Message; Project.Dispose => VRU: Освобождение ресурсов системы...
-31.05.2024 14:29:54: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Запрос на завершения работы запускающего контроллера... Статус Processing
-31.05.2024 14:29:54: Message; Project.Dispose => VRU: Ожидание завершения процессов...
-31.05.2024 14:29:54: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Ожидание завершения процессов запускающего контроллера...
-31.05.2024 14:29:54: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер завершил работу
-31.05.2024 14:29:54: Message; AbstractInputProvider.Dispose => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер => Ресурсы освобождены
-31.05.2024 14:29:54: Message; AbstractOutputProvider.Dispose => VRU: 'PdfOutputProvider' => Контроллер вывода => Ресурсы освобождены
-31.05.2024 14:29:54: Message; Project.Dispose => VRU: Ресурсы освобождены
-31.05.2024 14:30:01: Message; AbstractInputProvider.Start => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер начал работу
-31.05.2024 14:30:27: Message; VruAdapter.GetNext => Процесс VRU => d2ea4313-e2d5-4801-9ae8-b9ebec7821e5: файлы для работы получены
-31.05.2024 14:30:27: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) передан процессу d2ea4313-e2d5-4801-9ae8-b9ebec7821e5 для инициализации
-31.05.2024 14:30:27: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
-31.05.2024 14:30:27: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) успешно иницализирован процессом d2ea4313-e2d5-4801-9ae8-b9ebec7821e5
-31.05.2024 14:30:27: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Файловая структура для выполнения процесса 'd2ea4313-e2d5-4801-9ae8-b9ebec7821e5' загружена: 21 файлов
-31.05.2024 14:30:28: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Процесс формирование данных для обработки завершен. Процесс 'd2ea4313-e2d5-4801-9ae8-b9ebec7821e5'
-31.05.2024 14:30:28: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер начал работу с процессом 'd2ea4313-e2d5-4801-9ae8-b9ebec7821e5'
-31.05.2024 14:30:33: Message; Нормализация (Поток 27) => ID 3: Не требуется. Файл: shutterstock_471595004.jpg -> 05138ed8-ee93-425e-a851-6719eb9b95ee.jpg
-31.05.2024 14:30:33: Message; Нормализация (Поток 27) => ID 9: Не требуется. Файл: shutterstock_117779284.jpg -> 533b6041-b947-4b8d-86e2-e391676cdbce.jpg
-31.05.2024 14:30:33: Message; Нормализация (Поток 27) => ID 13: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3325.jpg
-31.05.2024 14:30:33: Message; Нормализация (Поток 27) => ID 13: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3325.jpg -> 11da4b4a-d499-4a92-8850-f9194a5c4583.jpg
-31.05.2024 14:30:33: Message; Нормализация (Поток 27) => ID 17: Не требуется. Файл: original (12).jpg -> 6441058c-1c2c-4b2f-a405-53ec7cfdb62c.jpg
-31.05.2024 14:30:33: Message; Нормализация (Поток 27) => ID 18: Не требуется. Файл: shutterstock_121537738.jpg -> 72b358ff-9e45-434a-9dee-0890548695f9.jpg
-31.05.2024 14:30:33: Message; Нормализация (Поток 27) => ID 19: Не требуется. Файл: shutterstock_123923356.jpg -> 451e7ab3-3a9a-49aa-a948-cb807155d951.jpg
-31.05.2024 14:30:33: Message; Нормализация (Поток 27) => ID 20: Не требуется. Файл: shutterstock_127746875.jpg -> 0319e7b8-acaf-472a-bc48-f209b95eaadb.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 26) => ID 2: Не требуется. Файл: shutterstock_468938600.jpg -> ec3730e7-1949-4976-a2ec-54bb41dea9ea.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 26) => ID 4: Не требуется. Файл: original (4).jpg -> 5f1e20c4-f006-4a22-98fc-3f58f54fa492.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 26) => ID 5: Не требуется. Файл: original (5).jpg -> 65c6096e-7eee-417a-bb54-7044ef6b2b24.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 26) => ID 7: Не требуется. Файл: shutterstock_111029240.jpg -> 0bd7188e-cde1-4a09-95c2-4fa2486a415d.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 26) => ID 12: Цветовой профиль источника соответствует профилю по умолчанию. Файл: shutterstock_472966438.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 26) => ID 12: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'. Файл: shutterstock_472966438.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 26) => ID 12: Трансформация выполнена: Grayscale:Format8bppIndexed -> RGB. Файл: shutterstock_472966438.jpg -> ca77bf69-b96a-4b1b-b1f8-dec9689657b9.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 26) => ID 16: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3331.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 26) => ID 16: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3331.jpg -> 5e7ac501-a39c-4b5a-96ab-0006e254d60d.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 24) => ID 0: Не требуется. Файл: shutterstock_463643660.jpg -> baf4c370-c777-4561-9a5d-d7256beb4d04.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 24) => ID 6: Не требуется. Файл: shutterstock_110065853.jpg -> 23d301a7-3f7b-4b38-acef-d7b5d10c68cc.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 24) => ID 11: Не требуется. Файл: shutterstock_416402569.jpg -> 81837d1d-10cd-4675-bb0b-290528bf89ec.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 24) => ID 15: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3330.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 24) => ID 15: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3330.jpg -> e9089f9b-60d7-453d-b0f4-f35d7f1e533a.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 25) => ID 1: Не требуется. Файл: shutterstock_468938591.jpg -> d2e7fb24-1ca0-4302-bd10-573f7a0ae047.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 25) => ID 8: Не требуется. Файл: shutterstock_111368450.jpg -> 985c8abc-61b8-4ce4-8ad5-7790ced64590.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 25) => ID 10: Не требуется. Файл: shutterstock_415929772.jpg -> 9e800449-47f5-4691-80e7-ac3f6045b29a.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 25) => ID 14: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3328.jpg
-31.05.2024 14:30:34: Message; Нормализация (Поток 25) => ID 14: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3328.jpg -> 68971ff3-4e51-4116-8f66-6da4dfd0e8fb.jpg
-31.05.2024 14:30:34: Message; Нормализация => sRGB Color Space Profile.icm: Использован RGB профиль по умолчанию: Ver = 2,1;  '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [sRGB IEC61966-2.1]'
-31.05.2024 14:30:34: Message; Нормализация => ID ISOcoated_v2_eci.icc: Использован CMYK профиль по умолчанию: Ver = 2,4;  '[231 152 204 29 159 101 154 97 85 172 53 173 154 195 131 187] [ISO Coated v2 (ECI)]'
-31.05.2024 14:30:34: Message; Нормализация => ID Generic Gray Gamma 2.2 Profile.icc: Использован Grayscale профиль по умолчанию: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'
-31.05.2024 14:30:34: Message; Нормализация => Общее время обработки = 6 сек
-31.05.2024 14:30:34: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер завершил работу с процессом 'd2ea4313-e2d5-4801-9ae8-b9ebec7821e5'
-31.05.2024 14:30:34: Message; ObjectDetectorController.Start => VRU: 'ObjectDetectorController' => Контроллер начал начал работу с процессом 'd2ea4313-e2d5-4801-9ae8-b9ebec7821e5'
-31.05.2024 14:33:13: Message; Распознавание лиц => File = original (4).jpg; Face rect: 185,211; 335x335
-31.05.2024 14:33:13: Message; Распознавание лиц => File = original (12).jpg; Face rect: 754,245; 378x378
-31.05.2024 14:33:13: Message; Распознавание лиц => Общее время обработки = 159 сек
-31.05.2024 14:33:13: Message; ObjectDetectorController.Start => VRU: 'ObjectDetectorController' => Контроллер завершил работу с процессом 'd2ea4313-e2d5-4801-9ae8-b9ebec7821e5'
-31.05.2024 14:33:13: Message; DirectFileToTemplateImposeController.Start => VRU: 'DirectFileToTemplateImposeController' => Контроллер начал сборку макета... 'd2ea4313-e2d5-4801-9ae8-b9ebec7821e5'
-31.05.2024 14:33:13: Message; PdfOutputProvider.Start => VRU: 'PdfOutputProvider' => Контроллер начал генерацию PDF файла... 'd2ea4313-e2d5-4801-9ae8-b9ebec7821e5'
-31.05.2024 14:33:13: Error; PdfOutputProvider.BlockImpose => item.FillColor = Color [Green]; rect = {X=0,Y=0,Width=0,Height=0}
-31.05.2024 14:33:13: Message; Template:Save => Конфигурации шаблона успешно сохранена 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Templates\200x280\Spread_DefaultTwoPage\04F\5244dbef-e87e-4f80-aac1-3a8fc9b075a8.xml'
-31.05.2024 14:33:40: Message; PdfOutputProvider.Start => VRU: 'PdfOutputProvider' => PDF файл '1000-0000-q1-tVRU_7B_200X280-BLK.pdf' успешно создан (Job 'd2ea4313-e2d5-4801-9ae8-b9ebec7821e5')
-31.05.2024 14:33:40: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Выполнение процесса 'd2ea4313-e2d5-4801-9ae8-b9ebec7821e5' успешно завершено
-31.05.2024 14:55:59: Message; Project.Dispose => VRU: Освобождение ресурсов системы...
-31.05.2024 14:55:59: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Запрос на завершения работы запускающего контроллера... Статус Processing
-31.05.2024 14:55:59: Message; Project.Dispose => VRU: Ожидание завершения процессов...
-31.05.2024 14:55:59: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Ожидание завершения процессов запускающего контроллера...
-31.05.2024 14:55:59: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер завершил работу
-31.05.2024 14:55:59: Message; AbstractInputProvider.Dispose => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер => Ресурсы освобождены
-31.05.2024 14:55:59: Message; AbstractOutputProvider.Dispose => VRU: 'PdfOutputProvider' => Контроллер вывода => Ресурсы освобождены
-31.05.2024 14:55:59: Message; Project.Dispose => VRU: Ресурсы освобождены
-31.05.2024 14:56:53: Message; AbstractInputProvider.Start => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер начал работу
-31.05.2024 14:57:09: Message; VruAdapter.GetNext => Процесс VRU => b7880b1a-109f-42e7-9d0c-4e2730382767: файлы для работы получены
-31.05.2024 14:57:10: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) передан процессу b7880b1a-109f-42e7-9d0c-4e2730382767 для инициализации
-31.05.2024 14:57:10: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
-31.05.2024 14:57:10: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) успешно иницализирован процессом b7880b1a-109f-42e7-9d0c-4e2730382767
-31.05.2024 14:57:10: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Файловая структура для выполнения процесса 'b7880b1a-109f-42e7-9d0c-4e2730382767' загружена: 21 файлов
-31.05.2024 14:57:11: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Процесс формирование данных для обработки завершен. Процесс 'b7880b1a-109f-42e7-9d0c-4e2730382767'
-31.05.2024 14:57:11: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер начал работу с процессом 'b7880b1a-109f-42e7-9d0c-4e2730382767'
-31.05.2024 14:57:15: Message; Нормализация (Поток 26) => ID 1: Не требуется. Файл: shutterstock_468938591.jpg -> 1ed64b36-40ed-4bc7-be26-25479c7c2d7f.jpg
-31.05.2024 14:57:15: Message; Нормализация (Поток 26) => ID 9: Не требуется. Файл: shutterstock_117779284.jpg -> 243908f0-861e-404c-b71d-1e87940407f1.jpg
-31.05.2024 14:57:15: Message; Нормализация (Поток 26) => ID 13: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3325.jpg
-31.05.2024 14:57:15: Message; Нормализация (Поток 26) => ID 13: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3325.jpg -> 214d233d-0cd2-46d8-90a3-ff442f6d845f.jpg
-31.05.2024 14:57:15: Message; Нормализация (Поток 26) => ID 17: Не требуется. Файл: original (12).jpg -> 80153219-bea6-4f99-ad4d-d8faf1a787bf.jpg
-31.05.2024 14:57:15: Message; Нормализация (Поток 26) => ID 18: Не требуется. Файл: shutterstock_121537738.jpg -> 2941139f-ea2c-4505-978c-702696d21b57.jpg
-31.05.2024 14:57:15: Message; Нормализация (Поток 26) => ID 19: Не требуется. Файл: shutterstock_123923356.jpg -> c83fd8ae-2f33-4929-ae77-9f4e300ee816.jpg
-31.05.2024 14:57:15: Message; Нормализация (Поток 26) => ID 20: Не требуется. Файл: shutterstock_127746875.jpg -> 17369380-567e-41c8-a04f-76a70323db45.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 24) => ID 0: Не требуется. Файл: shutterstock_463643660.jpg -> d40c2b4c-3224-4ccb-be29-4d3bbd129cbb.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 24) => ID 7: Не требуется. Файл: shutterstock_111029240.jpg -> 79fd77be-a7e5-4276-b0eb-34eecd1d5ec5.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 24) => ID 12: Цветовой профиль источника соответствует профилю по умолчанию. Файл: shutterstock_472966438.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 24) => ID 12: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'. Файл: shutterstock_472966438.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 24) => ID 12: Трансформация выполнена: Grayscale:Format8bppIndexed -> RGB. Файл: shutterstock_472966438.jpg -> 965aa621-2ad1-4094-920f-9c3f4828285b.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 24) => ID 16: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3331.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 24) => ID 16: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3331.jpg -> d29f1cc5-b49c-4222-ae3b-163411e0fa67.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 27) => ID 2: Не требуется. Файл: shutterstock_468938600.jpg -> 26c371f7-67a0-463f-82a6-7755926820b2.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 27) => ID 4: Не требуется. Файл: original (4).jpg -> 678d7a47-c986-458a-839e-bc0848376e1a.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 27) => ID 5: Не требуется. Файл: original (5).jpg -> c7e87a1d-c850-4eb2-8d2c-79dad3913e93.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 27) => ID 6: Не требуется. Файл: shutterstock_110065853.jpg -> 5d0ce46f-092a-45d4-9be4-1929cf205d8a.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 27) => ID 11: Не требуется. Файл: shutterstock_416402569.jpg -> 0568deba-085d-48f0-92f2-39717c1b58c8.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 27) => ID 15: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3330.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 27) => ID 15: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3330.jpg -> 96f61a1a-7bd7-4d1b-860a-76350cc251b2.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 25) => ID 3: Не требуется. Файл: shutterstock_471595004.jpg -> ed47aa11-52b7-4262-a8ad-26d6942ef3db.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 25) => ID 8: Не требуется. Файл: shutterstock_111368450.jpg -> 35a8fadd-a43c-44cc-a7b1-3943f858aca0.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 25) => ID 10: Не требуется. Файл: shutterstock_415929772.jpg -> 825dd978-5f72-45fc-a7f3-6278a73bb912.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 25) => ID 14: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3328.jpg
-31.05.2024 14:57:17: Message; Нормализация (Поток 25) => ID 14: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3328.jpg -> b63cbf67-0cf6-4014-b5f9-b39dd75197cc.jpg
-31.05.2024 14:57:17: Message; Нормализация => sRGB Color Space Profile.icm: Использован RGB профиль по умолчанию: Ver = 2,1;  '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [sRGB IEC61966-2.1]'
-31.05.2024 14:57:17: Message; Нормализация => ID ISOcoated_v2_eci.icc: Использован CMYK профиль по умолчанию: Ver = 2,4;  '[231 152 204 29 159 101 154 97 85 172 53 173 154 195 131 187] [ISO Coated v2 (ECI)]'
-31.05.2024 14:57:17: Message; Нормализация => ID Generic Gray Gamma 2.2 Profile.icc: Использован Grayscale профиль по умолчанию: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'
-31.05.2024 14:57:17: Message; Нормализация => Общее время обработки = 6 сек
-31.05.2024 14:57:17: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер завершил работу с процессом 'b7880b1a-109f-42e7-9d0c-4e2730382767'
-31.05.2024 14:57:17: Message; ObjectDetectorController.Start => VRU: 'ObjectDetectorController' => Контроллер начал начал работу с процессом 'b7880b1a-109f-42e7-9d0c-4e2730382767'
-31.05.2024 14:59:48: Message; Распознавание лиц => File = original (4).jpg; Face rect: 185,211; 335x335
-31.05.2024 14:59:48: Message; Распознавание лиц => File = original (12).jpg; Face rect: 754,245; 378x378
-31.05.2024 14:59:48: Message; Распознавание лиц => Общее время обработки = 151 сек
-31.05.2024 14:59:48: Message; ObjectDetectorController.Start => VRU: 'ObjectDetectorController' => Контроллер завершил работу с процессом 'b7880b1a-109f-42e7-9d0c-4e2730382767'
-31.05.2024 14:59:48: Message; DirectFileToTemplateImposeController.Start => VRU: 'DirectFileToTemplateImposeController' => Контроллер начал сборку макета... 'b7880b1a-109f-42e7-9d0c-4e2730382767'
-31.05.2024 14:59:48: Message; PdfOutputProvider.Start => VRU: 'PdfOutputProvider' => Контроллер начал генерацию PDF файла... 'b7880b1a-109f-42e7-9d0c-4e2730382767'
-31.05.2024 15:00:12: Message; PdfOutputProvider.Start => VRU: 'PdfOutputProvider' => PDF файл '1000-0000-q1-tVRU_7B_200X280-BLK.pdf' успешно создан (Job 'b7880b1a-109f-42e7-9d0c-4e2730382767')
-31.05.2024 15:00:13: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Выполнение процесса 'b7880b1a-109f-42e7-9d0c-4e2730382767' успешно завершено
-31.05.2024 15:11:39: Message; Project.Dispose => VRU: Освобождение ресурсов системы...
-31.05.2024 15:11:39: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Запрос на завершения работы запускающего контроллера... Статус Processing
-31.05.2024 15:11:39: Message; Project.Dispose => VRU: Ожидание завершения процессов...
-31.05.2024 15:11:39: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Ожидание завершения процессов запускающего контроллера...
-31.05.2024 15:11:39: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер завершил работу
-31.05.2024 15:11:39: Message; AbstractInputProvider.Dispose => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер => Ресурсы освобождены
-31.05.2024 15:11:39: Message; AbstractOutputProvider.Dispose => VRU: 'PdfOutputProvider' => Контроллер вывода => Ресурсы освобождены
-31.05.2024 15:11:39: Message; Project.Dispose => VRU: Ресурсы освобождены
-31.05.2024 15:11:51: Message; AbstractInputProvider.Start => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер начал работу
-31.05.2024 15:12:12: Message; VruAdapter.GetNext => Процесс VRU => d302f166-05b2-48f3-8c88-6100363a877e: файлы для работы получены
-31.05.2024 15:12:12: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) передан процессу d302f166-05b2-48f3-8c88-6100363a877e для инициализации
-31.05.2024 15:12:12: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
-31.05.2024 15:12:12: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) успешно иницализирован процессом d302f166-05b2-48f3-8c88-6100363a877e
-31.05.2024 15:12:12: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Файловая структура для выполнения процесса 'd302f166-05b2-48f3-8c88-6100363a877e' загружена: 21 файлов
-31.05.2024 15:12:14: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Процесс формирование данных для обработки завершен. Процесс 'd302f166-05b2-48f3-8c88-6100363a877e'
-31.05.2024 15:12:14: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер начал работу с процессом 'd302f166-05b2-48f3-8c88-6100363a877e'
-31.05.2024 15:12:19: Message; Нормализация (Поток 27) => ID 3: Не требуется. Файл: shutterstock_471595004.jpg -> bcb79bd9-cc95-4e7f-abfe-3e822572ae71.jpg
-31.05.2024 15:12:19: Message; Нормализация (Поток 27) => ID 4: Не требуется. Файл: original (4).jpg -> 1f185997-b07c-4d28-8977-50a6215b0bbd.jpg
-31.05.2024 15:12:19: Message; Нормализация (Поток 27) => ID 5: Не требуется. Файл: original (5).jpg -> 9e31b267-3b71-442c-ba4d-947c32d1af63.jpg
-31.05.2024 15:12:19: Message; Нормализация (Поток 27) => ID 6: Не требуется. Файл: shutterstock_110065853.jpg -> 4c06fae6-f0bc-4f52-b6a3-82cc53030003.jpg
-31.05.2024 15:12:19: Message; Нормализация (Поток 27) => ID 10: Не требуется. Файл: shutterstock_415929772.jpg -> c3e2008f-e12a-4ad3-b297-4e8f6008622e.jpg
-31.05.2024 15:12:19: Message; Нормализация (Поток 27) => ID 13: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3325.jpg
-31.05.2024 15:12:19: Message; Нормализация (Поток 27) => ID 13: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3325.jpg -> 6d4103c4-dc7e-45e9-8c7d-be690adf6c4d.jpg
-31.05.2024 15:12:19: Message; Нормализация (Поток 27) => ID 17: Не требуется. Файл: original (12).jpg -> cd8314f9-0a9e-476f-af51-ca320a8f9747.jpg
-31.05.2024 15:12:19: Message; Нормализация (Поток 27) => ID 18: Не требуется. Файл: shutterstock_121537738.jpg -> e1bd767e-e24d-4d8f-9d44-d4a931320f9c.jpg
-31.05.2024 15:12:19: Message; Нормализация (Поток 27) => ID 19: Не требуется. Файл: shutterstock_123923356.jpg -> d4edad94-57d5-4eb5-8b65-fee50d40c367.jpg
-31.05.2024 15:12:19: Message; Нормализация (Поток 27) => ID 20: Не требуется. Файл: shutterstock_127746875.jpg -> 216274bf-4471-4f1c-b363-1a5304cf9d08.jpg
-31.05.2024 15:12:20: Message; Нормализация (Поток 26) => ID 2: Не требуется. Файл: shutterstock_468938600.jpg -> c82f58ac-8a1a-47e0-8c67-13086e102e6c.jpg
-31.05.2024 15:12:20: Message; Нормализация (Поток 26) => ID 7: Не требуется. Файл: shutterstock_111029240.jpg -> 54c746a9-3e54-48df-aea9-174027fc0181.jpg
-31.05.2024 15:12:20: Message; Нормализация (Поток 26) => ID 12: Цветовой профиль источника соответствует профилю по умолчанию. Файл: shutterstock_472966438.jpg
-31.05.2024 15:12:20: Message; Нормализация (Поток 26) => ID 12: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'. Файл: shutterstock_472966438.jpg
-31.05.2024 15:12:20: Message; Нормализация (Поток 26) => ID 12: Трансформация выполнена: Grayscale:Format8bppIndexed -> RGB. Файл: shutterstock_472966438.jpg -> 62ba9e8b-0fcb-4df6-a0b0-08ca990067d8.jpg
-31.05.2024 15:12:20: Message; Нормализация (Поток 26) => ID 16: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3331.jpg
-31.05.2024 15:12:20: Message; Нормализация (Поток 26) => ID 16: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3331.jpg -> a0bee5e1-7270-4aca-a86d-a090dabde2d1.jpg
-31.05.2024 15:12:20: Message; Нормализация (Поток 24) => ID 0: Не требуется. Файл: shutterstock_463643660.jpg -> b059775b-a547-461c-833b-45f47742bb1b.jpg
-31.05.2024 15:12:20: Message; Нормализация (Поток 24) => ID 8: Не требуется. Файл: shutterstock_111368450.jpg -> f60daf87-3ba6-4091-8057-ed49894c583b.jpg
-31.05.2024 15:12:20: Message; Нормализация (Поток 24) => ID 11: Не требуется. Файл: shutterstock_416402569.jpg -> e95a936b-0c6f-4090-aa5b-75812f8d4770.jpg
-31.05.2024 15:12:20: Message; Нормализация (Поток 24) => ID 15: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3330.jpg
-31.05.2024 15:12:20: Message; Нормализация (Поток 24) => ID 15: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3330.jpg -> f66f49e7-ddc3-412d-8b59-0d446d9b7ef1.jpg
-31.05.2024 15:12:21: Message; Нормализация (Поток 25) => ID 1: Не требуется. Файл: shutterstock_468938591.jpg -> ba352406-a0f3-45cd-9d4b-e54ed18711d3.jpg
-31.05.2024 15:12:21: Message; Нормализация (Поток 25) => ID 9: Не требуется. Файл: shutterstock_117779284.jpg -> 1194b1c9-a054-4589-ac96-706c598db8d6.jpg
-31.05.2024 15:12:21: Message; Нормализация (Поток 25) => ID 14: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3328.jpg
-31.05.2024 15:12:21: Message; Нормализация (Поток 25) => ID 14: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3328.jpg -> 0b94173b-4309-4e16-9bce-ebf11ecd184f.jpg
-31.05.2024 15:12:21: Message; Нормализация => sRGB Color Space Profile.icm: Использован RGB профиль по умолчанию: Ver = 2,1;  '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [sRGB IEC61966-2.1]'
-31.05.2024 15:12:21: Message; Нормализация => ID ISOcoated_v2_eci.icc: Использован CMYK профиль по умолчанию: Ver = 2,4;  '[231 152 204 29 159 101 154 97 85 172 53 173 154 195 131 187] [ISO Coated v2 (ECI)]'
-31.05.2024 15:12:21: Message; Нормализация => ID Generic Gray Gamma 2.2 Profile.icc: Использован Grayscale профиль по умолчанию: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'
-31.05.2024 15:12:21: Message; Нормализация => Общее время обработки = 7 сек
-31.05.2024 15:12:21: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер завершил работу с процессом 'd302f166-05b2-48f3-8c88-6100363a877e'
-31.05.2024 15:12:21: Message; ObjectDetectorController.Start => VRU: 'ObjectDetectorController' => Контроллер начал начал работу с процессом 'd302f166-05b2-48f3-8c88-6100363a877e'
-31.05.2024 15:15:01: Message; Распознавание лиц => File = original (4).jpg; Face rect: 185,211; 335x335
-31.05.2024 15:15:01: Message; Распознавание лиц => File = original (12).jpg; Face rect: 754,245; 378x378
-31.05.2024 15:15:01: Message; Распознавание лиц => Общее время обработки = 160 сек
-31.05.2024 15:15:01: Message; ObjectDetectorController.Start => VRU: 'ObjectDetectorController' => Контроллер завершил работу с процессом 'd302f166-05b2-48f3-8c88-6100363a877e'
-31.05.2024 15:15:01: Message; DirectFileToTemplateImposeController.Start => VRU: 'DirectFileToTemplateImposeController' => Контроллер начал сборку макета... 'd302f166-05b2-48f3-8c88-6100363a877e'
-31.05.2024 15:15:01: Message; PdfOutputProvider.Start => VRU: 'PdfOutputProvider' => Контроллер начал генерацию PDF файла... 'd302f166-05b2-48f3-8c88-6100363a877e'
-31.05.2024 15:15:27: Message; PdfOutputProvider.Start => VRU: 'PdfOutputProvider' => PDF файл '1000-0000-q1-tVRU_7B_200X280-BLK.pdf' успешно создан (Job 'd302f166-05b2-48f3-8c88-6100363a877e')
-31.05.2024 15:15:27: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Выполнение процесса 'd302f166-05b2-48f3-8c88-6100363a877e' успешно завершено
-31.05.2024 15:28:14: Message; Project.Dispose => VRU: Освобождение ресурсов системы...
-31.05.2024 15:28:14: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Запрос на завершения работы запускающего контроллера... Статус Processing
-31.05.2024 15:28:14: Message; Project.Dispose => VRU: Ожидание завершения процессов...
-31.05.2024 15:28:14: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Ожидание завершения процессов запускающего контроллера...
-31.05.2024 15:28:14: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер завершил работу
-31.05.2024 15:28:14: Message; AbstractInputProvider.Dispose => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер => Ресурсы освобождены
-31.05.2024 15:28:14: Message; AbstractOutputProvider.Dispose => VRU: 'PdfOutputProvider' => Контроллер вывода => Ресурсы освобождены
-31.05.2024 15:28:14: Message; Project.Dispose => VRU: Ресурсы освобождены
-31.05.2024 15:28:25: Message; AbstractInputProvider.Start => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер начал работу
-31.05.2024 15:28:41: Message; VruAdapter.GetNext => Процесс VRU => a9a2d8eb-30be-46ac-9179-6e4f647af94d: файлы для работы получены
-31.05.2024 15:28:41: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) передан процессу a9a2d8eb-30be-46ac-9179-6e4f647af94d для инициализации
-31.05.2024 15:28:41: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
-31.05.2024 15:28:41: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) успешно иницализирован процессом a9a2d8eb-30be-46ac-9179-6e4f647af94d
-31.05.2024 15:28:41: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Файловая структура для выполнения процесса 'a9a2d8eb-30be-46ac-9179-6e4f647af94d' загружена: 21 файлов
-31.05.2024 15:28:42: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Процесс формирование данных для обработки завершен. Процесс 'a9a2d8eb-30be-46ac-9179-6e4f647af94d'
-31.05.2024 15:28:42: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер начал работу с процессом 'a9a2d8eb-30be-46ac-9179-6e4f647af94d'
-31.05.2024 15:28:47: Message; Нормализация (Поток 27) => ID 3: Не требуется. Файл: shutterstock_471595004.jpg -> 5a7ef8d6-45ae-4909-8ccd-5912723d3d16.jpg
-31.05.2024 15:28:47: Message; Нормализация (Поток 27) => ID 9: Не требуется. Файл: shutterstock_117779284.jpg -> 13d726d9-3d81-4774-aac4-64e0417f37d0.jpg
-31.05.2024 15:28:47: Message; Нормализация (Поток 27) => ID 13: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3325.jpg
-31.05.2024 15:28:47: Message; Нормализация (Поток 27) => ID 13: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3325.jpg -> 680c93cb-7b35-4e4b-a547-193423ac5342.jpg
-31.05.2024 15:28:47: Message; Нормализация (Поток 27) => ID 17: Не требуется. Файл: original (12).jpg -> 5bea3573-3b5c-4b34-9f16-578ef98e56b2.jpg
-31.05.2024 15:28:47: Message; Нормализация (Поток 27) => ID 18: Не требуется. Файл: shutterstock_121537738.jpg -> 909a96a0-6a60-4d32-b78d-a229a2bc383a.jpg
-31.05.2024 15:28:47: Message; Нормализация (Поток 27) => ID 19: Не требуется. Файл: shutterstock_123923356.jpg -> e2ab1ade-eef9-42ce-9a1c-595fc35f9192.jpg
-31.05.2024 15:28:47: Message; Нормализация (Поток 27) => ID 20: Не требуется. Файл: shutterstock_127746875.jpg -> 14eae584-6e2d-4586-853c-c8f4e6d4e992.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 26) => ID 2: Не требуется. Файл: shutterstock_468938600.jpg -> b88fdb82-0aed-4a40-ba30-5f205bd7ea05.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 26) => ID 5: Не требуется. Файл: original (5).jpg -> 90ac43ce-f7bb-4e54-99e3-a0bb69847ddb.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 26) => ID 7: Не требуется. Файл: shutterstock_111029240.jpg -> 0c7ea4ed-02b5-4466-a7f0-b1eb781e0962.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 26) => ID 12: Цветовой профиль источника соответствует профилю по умолчанию. Файл: shutterstock_472966438.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 26) => ID 12: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'. Файл: shutterstock_472966438.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 26) => ID 12: Трансформация выполнена: Grayscale:Format8bppIndexed -> RGB. Файл: shutterstock_472966438.jpg -> 468165dd-8ccd-4596-b61f-f70661afb7a1.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 26) => ID 16: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3331.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 26) => ID 16: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3331.jpg -> 6b61ed10-775a-4e4b-a26d-7a505a6eb324.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 25) => ID 0: Не требуется. Файл: shutterstock_463643660.jpg -> 4da095c0-cb10-41eb-a7d3-9ba1a471ffde.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 25) => ID 4: Не требуется. Файл: original (4).jpg -> 0ed87ef2-ccde-479c-b35a-85c460b44fff.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 25) => ID 6: Не требуется. Файл: shutterstock_110065853.jpg -> b31cf834-bee8-4abd-9a5f-a87064adbb7b.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 25) => ID 11: Не требуется. Файл: shutterstock_416402569.jpg -> 410a8089-8d51-4a3a-ac6c-3449f8f4067f.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 25) => ID 15: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3330.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 25) => ID 15: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3330.jpg -> 334793cf-8d7f-4e1b-a288-817d57c7a49d.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 28) => ID 1: Не требуется. Файл: shutterstock_468938591.jpg -> 666edf2a-eb18-4dd8-87e9-d8ce536138bb.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 28) => ID 8: Не требуется. Файл: shutterstock_111368450.jpg -> 33b35a00-ba02-46ec-828c-aa9655ddbd53.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 28) => ID 10: Не требуется. Файл: shutterstock_415929772.jpg -> 6a1f3780-f643-4435-83ec-5f4462317bae.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 28) => ID 14: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3328.jpg
-31.05.2024 15:28:48: Message; Нормализация (Поток 28) => ID 14: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3328.jpg -> 4f61c5c8-0569-4291-8cf2-927849afec35.jpg
-31.05.2024 15:28:48: Message; Нормализация => sRGB Color Space Profile.icm: Использован RGB профиль по умолчанию: Ver = 2,1;  '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [sRGB IEC61966-2.1]'
-31.05.2024 15:28:48: Message; Нормализация => ID ISOcoated_v2_eci.icc: Использован CMYK профиль по умолчанию: Ver = 2,4;  '[231 152 204 29 159 101 154 97 85 172 53 173 154 195 131 187] [ISO Coated v2 (ECI)]'
-31.05.2024 15:28:48: Message; Нормализация => ID Generic Gray Gamma 2.2 Profile.icc: Использован Grayscale профиль по умолчанию: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'
-31.05.2024 15:28:48: Message; Нормализация => Общее время обработки = 6 сек
-31.05.2024 15:28:48: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер завершил работу с процессом 'a9a2d8eb-30be-46ac-9179-6e4f647af94d'
-31.05.2024 15:28:48: Message; ObjectDetectorController.Start => VRU: 'ObjectDetectorController' => Контроллер начал начал работу с процессом 'a9a2d8eb-30be-46ac-9179-6e4f647af94d'
-31.05.2024 15:31:23: Message; Распознавание лиц => File = original (4).jpg; Face rect: 185,211; 335x335
-31.05.2024 15:31:23: Message; Распознавание лиц => File = original (12).jpg; Face rect: 754,245; 378x378
-31.05.2024 15:31:23: Message; Распознавание лиц => Общее время обработки = 154 сек
-31.05.2024 15:31:23: Message; ObjectDetectorController.Start => VRU: 'ObjectDetectorController' => Контроллер завершил работу с процессом 'a9a2d8eb-30be-46ac-9179-6e4f647af94d'
-31.05.2024 15:31:23: Message; DirectFileToTemplateImposeController.Start => VRU: 'DirectFileToTemplateImposeController' => Контроллер начал сборку макета... 'a9a2d8eb-30be-46ac-9179-6e4f647af94d'
-31.05.2024 15:31:23: Message; PdfOutputProvider.Start => VRU: 'PdfOutputProvider' => Контроллер начал генерацию PDF файла... 'a9a2d8eb-30be-46ac-9179-6e4f647af94d'
-31.05.2024 15:31:48: Message; PdfOutputProvider.Start => VRU: 'PdfOutputProvider' => PDF файл '1000-0000-q1-tVRU_7B_200X280-BLK.pdf' успешно создан (Job 'a9a2d8eb-30be-46ac-9179-6e4f647af94d')
-31.05.2024 15:31:48: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Выполнение процесса 'a9a2d8eb-30be-46ac-9179-6e4f647af94d' успешно завершено
-31.05.2024 17:25:07: Message; Project.Dispose => VRU: Освобождение ресурсов системы...
-31.05.2024 17:25:07: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Запрос на завершения работы запускающего контроллера... Статус Processing
-31.05.2024 17:25:07: Message; Project.Dispose => VRU: Ожидание завершения процессов...
-31.05.2024 17:25:07: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Ожидание завершения процессов запускающего контроллера...
-31.05.2024 17:25:07: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер завершил работу
-31.05.2024 17:25:07: Message; AbstractInputProvider.Dispose => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер => Ресурсы освобождены
-31.05.2024 17:25:07: Message; AbstractOutputProvider.Dispose => VRU: 'PdfOutputProvider' => Контроллер вывода => Ресурсы освобождены
-31.05.2024 17:25:07: Message; Project.Dispose => VRU: Ресурсы освобождены
+03.06.2024 19:30:10: Message; AbstractInputProvider.Start => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер начал работу
+03.06.2024 19:30:21: Message; VruAdapter.GetNext => Процесс VRU => 81743984-7a49-4039-afa4-861cf9961801: файлы для работы получены
+03.06.2024 19:30:21: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) передан процессу 81743984-7a49-4039-afa4-861cf9961801 для инициализации
+03.06.2024 19:30:21: Message; Template:Save => Конфигурации шаблона успешно сохранена 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Templates\200x280\Spread_DefaultTwoPage\04F\5244dbef-e87e-4f80-aac1-3a8fc9b075a8.xml'
+03.06.2024 19:30:21: Message; Template:Save => Конфигурации шаблона успешно сохранена 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Templates\200x280\Spread_DefaultTwoPage\08F\3fe7328c-5c88-412f-a530-c14313ea4941.xml'
+03.06.2024 19:30:21: Message; Template:Save => Конфигурации шаблона успешно сохранена 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Templates\200x280\Spread_DefaultTwoPage\09F\380cfb65-9614-4abe-9430-46f8ef0cfcae.xml'
+03.06.2024 19:30:21: Message; Template:Save => Конфигурации шаблона успешно сохранена 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Templates\200x280\Spread_DefaultTwoPage\10F\2066b204-9de7-46ae-9107-720bf1478d81.xml'
+03.06.2024 19:30:21: Message; Template:Save => Конфигурации шаблона успешно сохранена 'C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Templates\200x280\Spread_DefaultTwoPage\13F\b22006cd-5464-44a0-a9bc-5897797c45f4.xml'
+03.06.2024 19:30:21: Message; CreateLayoutSpace => Обновление шаблонов продукта выполнено 200x280
+03.06.2024 19:30:21: Message; CreateLayoutSpace => Загружено шаблонов 200x280. Всего: 5; Добавлено: 5
+03.06.2024 19:30:21: Error; VruAdapter.GetNext => Ошибка при загрузке продукта Lossless
+03.06.2024 19:30:21: Message; VruAdapter.GetNext => Продукт  VRU => 5c9f8e22-e5b5-40b5-ad20-b3758d190ee8 ({Width=200, Height=280}) успешно иницализирован процессом 81743984-7a49-4039-afa4-861cf9961801
+03.06.2024 19:30:21: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Файловая структура для выполнения процесса '81743984-7a49-4039-afa4-861cf9961801' загружена: 21 файлов
+03.06.2024 19:30:23: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Процесс формирование данных для обработки завершен. Процесс '81743984-7a49-4039-afa4-861cf9961801'
+03.06.2024 19:30:23: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер начал работу с процессом '81743984-7a49-4039-afa4-861cf9961801'
+03.06.2024 19:30:31: Message; Нормализация (Поток 28) => ID 3: Формат изменен: JPEG -> TIFF. Файл: shutterstock_471595004.jpg -> 1a234c66-fbdb-4d54-acae-b523b722c0f2.tiff
+03.06.2024 19:30:31: Message; Нормализация (Поток 28) => ID 8: Формат изменен: JPEG -> TIFF. Файл: shutterstock_111368450.jpg -> 2dc8abe9-d0ad-4bc5-b92c-a3218cbc1b5d.tiff
+03.06.2024 19:30:31: Message; Нормализация (Поток 28) => ID 11: Формат изменен: JPEG -> TIFF. Файл: shutterstock_416402569.jpg -> 3918fb43-b6f8-4832-a770-113b726ace9b.tiff
+03.06.2024 19:30:31: Message; Нормализация (Поток 28) => ID 16: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3331.jpg
+03.06.2024 19:30:31: Message; Нормализация (Поток 28) => ID 16: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3331.jpg -> 7890d3db-a189-46a4-9380-e37deb385d0a.tiff
+03.06.2024 19:30:31: Message; Нормализация (Поток 26) => ID 1: Формат изменен: JPEG -> TIFF. Файл: shutterstock_468938591.jpg -> 30d8c3a6-8da8-4e7f-989b-6b43cbe26607.tiff
+03.06.2024 19:30:31: Message; Нормализация (Поток 26) => ID 9: Формат изменен: JPEG -> TIFF. Файл: shutterstock_117779284.jpg -> ed078635-2ff4-41b1-a00d-b44aa33f1f00.tiff
+03.06.2024 19:30:31: Message; Нормализация (Поток 26) => ID 15: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3330.jpg
+03.06.2024 19:30:31: Message; Нормализация (Поток 26) => ID 15: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3330.jpg -> 75c17386-f5c0-4a2c-ac2c-a9d6e5182154.tiff
+03.06.2024 19:30:32: Message; Нормализация (Поток 27) => ID 2: Формат изменен: JPEG -> TIFF. Файл: shutterstock_468938600.jpg -> 4e1e19aa-75f3-4c5a-a253-d49c3f5817a8.tiff
+03.06.2024 19:30:32: Message; Нормализация (Поток 27) => ID 4: Формат изменен: JPEG -> TIFF. Файл: original (4).jpg -> 3559cb09-b060-4137-bd8f-caacd4342632.tiff
+03.06.2024 19:30:32: Message; Нормализация (Поток 27) => ID 5: Формат изменен: JPEG -> TIFF. Файл: original (5).jpg -> db1e14fb-49f9-4a60-9da8-db76f38d77cf.tiff
+03.06.2024 19:30:32: Message; Нормализация (Поток 27) => ID 6: Формат изменен: JPEG -> TIFF. Файл: shutterstock_110065853.jpg -> 0c1af99d-453f-4f07-a8fe-9811c33dc8df.tiff
+03.06.2024 19:30:32: Message; Нормализация (Поток 27) => ID 10: Формат изменен: JPEG -> TIFF. Файл: shutterstock_415929772.jpg -> 42f15dab-e3ee-4254-ba07-2a094d92185d.tiff
+03.06.2024 19:30:32: Message; Нормализация (Поток 27) => ID 13: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3325.jpg
+03.06.2024 19:30:32: Message; Нормализация (Поток 27) => ID 13: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3325.jpg -> 07ae429b-a530-4316-b66f-534c717e55c1.tiff
+03.06.2024 19:30:32: Message; Нормализация (Поток 27) => ID 17: Формат изменен: JPEG -> TIFF. Файл: original (12).jpg -> 4beb368a-4373-44c8-823d-b4679fd312f7.tiff
+03.06.2024 19:30:32: Message; Нормализация (Поток 27) => ID 18: Формат изменен: JPEG -> TIFF. Файл: shutterstock_121537738.jpg -> 4ff180ae-12a2-46b5-a737-04cc12ada2d9.tiff
+03.06.2024 19:30:32: Message; Нормализация (Поток 27) => ID 19: Формат изменен: JPEG -> TIFF. Файл: shutterstock_123923356.jpg -> b17979f5-ceca-4356-b983-909c7403fa13.tiff
+03.06.2024 19:30:32: Message; Нормализация (Поток 27) => ID 20: Формат изменен: JPEG -> TIFF. Файл: shutterstock_127746875.jpg -> e13d7c96-e86a-4911-bc7b-23fc6fb00b59.tiff
+03.06.2024 19:30:32: Message; Нормализация (Поток 25) => ID 0: Формат изменен: JPEG -> TIFF. Файл: shutterstock_463643660.jpg -> 9b582ef3-a2e1-4a1a-9991-bd63a519612e.tiff
+03.06.2024 19:30:32: Message; Нормализация (Поток 25) => ID 7: Формат изменен: JPEG -> TIFF. Файл: shutterstock_111029240.jpg -> d8f74ae8-e31d-4a13-a448-78e04e3c7ba3.tiff
+03.06.2024 19:30:32: Message; Нормализация (Поток 25) => ID 12: Цветовой профиль источника соответствует профилю по умолчанию. Файл: shutterstock_472966438.jpg
+03.06.2024 19:30:32: Message; Нормализация (Поток 25) => ID 12: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'. Файл: shutterstock_472966438.jpg
+03.06.2024 19:30:32: Message; Нормализация (Поток 25) => ID 12: Трансформация выполнена: Grayscale:Format8bppIndexed -> RGB. Файл: shutterstock_472966438.jpg -> 60db2649-2f7e-487e-920f-0d8a9f379e81.tiff
+03.06.2024 19:30:32: Message; Нормализация (Поток 25) => ID 14: Использован входной профиль RgbData: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Offset Euro pos U340 K95]'. Файл: foto.3328.jpg
+03.06.2024 19:30:32: Message; Нормализация (Поток 25) => ID 14: Трансформация выполнена: CMYK:8207 -> RGB. Файл: foto.3328.jpg -> e9bd4ef0-dd63-4e7e-99c7-b0b2bfe35ef5.tiff
+03.06.2024 19:30:32: Message; Нормализация => sRGB Color Space Profile.icm: Использован RGB профиль по умолчанию: Ver = 2,1;  '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [sRGB IEC61966-2.1]'
+03.06.2024 19:30:32: Message; Нормализация => ID ISOcoated_v2_eci.icc: Использован CMYK профиль по умолчанию: Ver = 2,4;  '[231 152 204 29 159 101 154 97 85 172 53 173 154 195 131 187] [ISO Coated v2 (ECI)]'
+03.06.2024 19:30:32: Message; Нормализация => ID Generic Gray Gamma 2.2 Profile.icc: Использован Grayscale профиль по умолчанию: Ver = 2; '[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] [Generic Gray Gamma 2.2 Profile]'
+03.06.2024 19:30:32: Message; Нормализация => Общее время обработки = 9 сек
+03.06.2024 19:30:32: Message; ImageConverterController.Start => VRU: 'ImageConverterController' => Контроллер завершил работу с процессом '81743984-7a49-4039-afa4-861cf9961801'
+03.06.2024 19:30:32: Message; ImageConverterController.Start => VRU: 'ObjectDetectorController' => Контроллер деактивирован. Процессы не выполнены
+03.06.2024 19:30:32: Message; DirectFileToTemplateImposeController.Start => VRU: 'DirectFileToTemplateImposeController' => Контроллер начал сборку макета... '81743984-7a49-4039-afa4-861cf9961801'
+03.06.2024 19:30:32: Message; PdfOutputProvider.Start => VRU: 'PdfOutputProvider' => Контроллер начал генерацию PDF файла... '81743984-7a49-4039-afa4-861cf9961801'
+03.06.2024 19:31:47: Message; PdfOutputProvider.Start => VRU: 'PdfOutputProvider' => PDF файл '1000-0000-q1-tVRU_7B_200X280-BLK.pdf' успешно создан (Job '81743984-7a49-4039-afa4-861cf9961801')
+03.06.2024 19:31:48: Message; ImageConverterController.Start => VRU: 'PdfOutputProvider' => Контроллер деактивирован. Процессы не выполнены
+03.06.2024 19:31:48: Message; HotFolderImagesInputProvider.ProcessHandler => VRU => Выполнение процесса '81743984-7a49-4039-afa4-861cf9961801' успешно завершено
+03.06.2024 19:34:11: Message; Project.Dispose => VRU: Освобождение ресурсов системы...
+03.06.2024 19:34:11: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Запрос на завершения работы запускающего контроллера... Статус Processing
+03.06.2024 19:34:11: Message; Project.Dispose => VRU: Ожидание завершения процессов...
+03.06.2024 19:34:11: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Ожидание завершения процессов запускающего контроллера...
+03.06.2024 19:34:11: Message; AbstractInputProvider.Stop => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер завершил работу
+03.06.2024 19:34:11: Message; AbstractInputProvider.Dispose => VRU: 'HotFolderImagesPackInputProvider' => Запускающий контроллер => Ресурсы освобождены
+03.06.2024 19:34:11: Message; AbstractOutputProvider.Dispose => VRU: 'PdfOutputProvider' => Контроллер вывода => Ресурсы освобождены
+03.06.2024 19:34:11: Message; Project.Dispose => VRU: Ресурсы освобождены

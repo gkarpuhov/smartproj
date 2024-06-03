@@ -71,19 +71,19 @@ namespace Smartproj
                             _job.ItemId = "0000";
                             _job.ProductionQty = 1;
                             _job.Create((Product)Serializer.LoadXml(productFile), productSize, metadata, MetadataType, FileDataFilter);
-
+                            _project.Log?.WriteError("VruAdapter.GetNext", $"Ошибка при загрузке продукта {_job.Product.Optimization}");
                             _project.Log?.WriteInfo("VruAdapter.GetNext", $"Продукт  {_project.ProjectId} => {productId} ({productSize}) успешно иницализирован процессом {_job.UID}");
 
                             return true;
                         }
                         catch (Exception ex)
                         {
-                            _project.Log?.WriteError("VruAdapter.GetNext", $"Ошибка при загрузке продукта '{productFile}: {ex.Message}");
-                            _project.Log?.WriteError("VruAdapter.GetNext", $"Ошибка при загрузке продукта '{productFile}: {ex.StackTrace}");
+                            _project.Log?.WriteError("VruAdapter.GetNext", $"Ошибка при загрузке продукта '{productFile}': {ex.Message}");
+                            _project.Log?.WriteError("VruAdapter.GetNext", $"Ошибка при загрузке продукта '{productFile}': {ex.StackTrace}");
                         }
                     }
 
-                    _project.Log?.WriteError("VruAdapter.GetNext", $"Процесс {_project.ProjectId} => {_job.UID}: ошибка загрузки продукта {_project.ProjectId} => {productId}");
+                    _project.Log?.WriteError("VruAdapter.GetNext", $"Процесс {_project.ProjectId} => {_job.UID}: ошибка загрузки продукта '{_project.ProjectId}' => {productId}");
                     _job.Dispose();
                     _job = null;
                 }

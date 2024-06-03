@@ -1,14 +1,11 @@
-﻿using Emgu.CV.Linemod;
-using GdPicture14;
+﻿using GdPicture14;
 using Smartproj.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Smartproj
 {
@@ -44,8 +41,28 @@ namespace Smartproj
                         return false;
                     }
                     pdfObject.SetMeasurementUnit(PdfMeasurementUnit.PdfMeasurementUnitMillimeter);
-                    pdfObject.SetCompressionForColorImage(PdfCompression.PdfCompressionJPEG);
-                    pdfObject.SetJpegQuality(100);
+
+                    if (job.Product.Optimization == FileSizeOptimization.Lossless)
+                    {
+                        pdfObject.SetCompressionForColorImage(PdfCompression.PdfCompressionFlate);
+                    }
+                    else
+                    {
+                        pdfObject.SetCompressionForColorImage(PdfCompression.PdfCompressionJPEG);
+                        switch (job.Product.Optimization)
+                        {
+                            case FileSizeOptimization.MaxQuality:
+                                pdfObject.SetJpegQuality(100);
+                                break;
+                            case FileSizeOptimization.Medium:
+                                pdfObject.SetJpegQuality(75);
+                                break;
+                            case FileSizeOptimization.Preview:
+                                pdfObject.SetJpegQuality(50);
+                                break;
+                        }
+                    }
+
                     pdfObject.EnableCompression(true);
                     pdfObject.SetOrigin(PdfOrigin.PdfOriginBottomLeft);
 
@@ -98,6 +115,10 @@ namespace Smartproj
                 }
 
                 return true;
+            }
+            else
+            {
+                Log?.WriteInfo("ImageConverterController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер деактивирован. Процессы не выполнены");
             }
 
             return false;
@@ -166,6 +187,7 @@ namespace Smartproj
                         // ИЛИ
                         // 2. Фреймы находятся на правой стороне шаблона, но, при условии, что продукт не является бабочкой или КШС (PageSide имеет значение LeftAndRight). Макет в данном случае должен быть пополосным, и делить разворот на две страницы
                         _pdfObject.NewPage(pagesize.Width + 2 * bleedsize, pagesize.Height + 2 * bleedsize);
+                        _pdfObject.ResetGraphicsState();
                         _pdfObject.SelectPage(++pageId);
                         _pdfObject.SetPageBox(PdfPageBox.PdfPageBoxCropBox, 0, 0, pagesize.Width + 2 * bleedsize, pagesize.Height + 2 * bleedsize);
                         _pdfObject.SetPageBox(PdfPageBox.PdfPageBoxTrimBox, bleedsize, bleedsize, pagesize.Width + bleedsize, pagesize.Height + bleedsize);
@@ -190,7 +212,7 @@ namespace Smartproj
                         foreach (var layer in graphics.GroupBy(x => x.Layer).OrderBy(y => y.Key))
                         {
                             if (layer.Count() == 0) continue;
-                            GraphicTypeEnum currentLayerType = layer.First().GraphicType;
+
                             // Начинаем перебирать графические элементы шаблона отсортированные по слоям в порядке приоритета
                             // Нужно учитывать, что если шаблон разворотный, то графический элемент может попадать на корешок, и присутствовать сразу на двух сторонах
                             // В таком случае, если разворот физически делится на две страницы, данный элемент нужно добавить два раза (на обе страницы)
@@ -204,33 +226,52 @@ namespace Smartproj
                                     {
                                         var rect = item.Bounds;
                                         // Обработка по типу слоя
-                                        if (currentLayerType == GraphicTypeEnum.Fill)
+                                        if (item.GraphicType == GraphicTypeEnum.Fill)
                                         {
-                                            if (item.GraphicType != GraphicTypeEnum.Fill)
+                                            if (item.HasFill || item.HasStroke)
                                             {
-                                                Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Объект типа {item.GraphicType} не может быть расположен на {layer.Key} уровне (Job '{_job.UID}')");
-                                                CurrentStatus = ProcessStatusEnum.Error;
-                                                return false;
+                                                DrawFillItem(_pdfObject, (FillItem)item, xShift, bleedsize);
                                             }
-                                            _pdfObject.SetFillColor(item.FillColor);
-                                            _pdfObject.DrawRectangle(rect.X - xShift + bleedsize, rect.Y + bleedsize, rect.Width, rect.Height, true, false);
                                         }
-                                        if (currentLayerType == GraphicTypeEnum.ImageFrame)
+                                        if (item.GraphicType == GraphicTypeEnum.ImageFrame)
                                         {
-                                            if (item.GraphicType != GraphicTypeEnum.ImageFrame)
-                                            {
-                                                Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Объект типа {item.GraphicType} не может быть расположен на {layer.Key} уровне (Job '{_job.UID}')");
-                                                CurrentStatus = ProcessStatusEnum.Error;
-                                                return false;
-                                            }
-
                                             ImageFrame frame = (ImageFrame)item;
                                             // Если выставлен флаг item.ExtraBounds, элемент может быть только на левой стороне - 0
-                                            ImposedImageData framedata = pdfpage.Imposed[0][frame.FrameID.X, frame.FrameID.Y];
-
-                                            string filename = Path.Combine(_job.JobPath, "~Files", _job.DataContainer[framedata.FileId].GUID + ".jpg");
+                                            ImposedImageData framedata = null;
+                                            try
+                                            {
+                                                // Пока считаю операцию небезопасной
+                                                framedata = pdfpage.Imposed[0][frame.FrameID.X, frame.FrameID.Y];
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: {ex.Message} (Job '{_job.UID}')");
+                                                CurrentStatus = ProcessStatusEnum.Error;
+                                                return false;
+                                            }
+                                            string filename = Path.Combine(_job.JobPath, "~Files", _job.DataContainer[framedata.FileId].GUID + (_job.Product.Optimization == FileSizeOptimization.Lossless ? ".tiff" : ".jpeg"));
                                             // Координаты фреймов имеют ноль в обрезном формате. Вылет идет в минус. Поэтому сдвигаем на величину вылета (отнимая от общего смещения влево)
-                                            FileToFrame(_pdfObject, rect, xShift, bleedsize, filename, framedata.Shift, framedata.Scale);
+                                            DrawImageFrame(_pdfObject, frame, xShift, bleedsize, filename, framedata);
+                                        }
+                                        if (item.GraphicType == GraphicTypeEnum.TextFrame)
+                                        {
+                                            TextFrame text = (TextFrame)item;
+                                            ImposedImageData framedata = null;
+                                            if (text.PinObject != null)
+                                            {
+                                                try
+                                                {
+                                                    // Пока считаю операцию небезопасной
+                                                    framedata = pdfpage.Imposed[0][text.PinObject.FrameID.X, text.PinObject.FrameID.Y];
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: {ex.Message} (Job '{_job.UID}')");
+                                                    CurrentStatus = ProcessStatusEnum.Error;
+                                                    return false;
+                                                }
+                                            }
+                                            DrawTextFrame(_pdfObject, text, framedata, xShift, bleedsize);
                                         }
                                     }
                                 }
@@ -266,54 +307,54 @@ namespace Smartproj
                                     // б) i == 1 && item.FrameSide == PageSide.Right:                               пропускаем только правые страницы двухстороннего шаблона
 
                                     // Обработка по типу слоя
-                                    if (currentLayerType == GraphicTypeEnum.Fill)
+                                    if (item.GraphicType == GraphicTypeEnum.Fill)
                                     {
-                                        if (item.GraphicType != GraphicTypeEnum.Fill)
+                                        if (item.HasFill || item.HasStroke)
                                         {
-                                            Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Объект типа {item.GraphicType} не может быть расположен на {layer.Key} уровне (Job '{_job.UID}')");
-                                            CurrentStatus = ProcessStatusEnum.Error;
-                                            return false;
+                                            DrawFillItem(_pdfObject, (FillItem)item, xShift, bleedsize);
                                         }
-                                        _pdfObject.SetFillColor(item.FillColor);
-                                        _pdfObject.DrawRectangle(rect.X - xShift + bleedsize, rect.Y + bleedsize, rect.Width, rect.Height, true, false);
                                     }
-                                    if (currentLayerType == GraphicTypeEnum.ImageFrame)
+                                    if (item.GraphicType == GraphicTypeEnum.ImageFrame)
                                     {
-                                        if (item.GraphicType != GraphicTypeEnum.ImageFrame)
-                                        {
-                                            Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Объект типа {item.GraphicType} не может быть расположен на {layer.Key} уровне (Job '{_job.UID}')");
-                                            CurrentStatus = ProcessStatusEnum.Error;
-                                            return false;
-                                        }
-
                                         ImageFrame frame = (ImageFrame)item;
-                                        ImposedImageData framedata = pdfpage.Imposed[sideindex][frame.FrameID.X, frame.FrameID.Y];
-
-                                        string filename = Path.Combine(_job.JobPath, "~Files", _job.DataContainer[framedata.FileId].GUID + ".jpg");
-                                        // Координаты фреймов имеют ноль в обрезном формате. Вылет идет в минус. Поэтому сдвигаем на величину вылета (отнимая от общего смещения влево)
-                                        FileToFrame(_pdfObject, rect, xShift, bleedsize, filename, framedata.Shift, framedata.Scale);
-                                    }
-                                    if (currentLayerType == GraphicTypeEnum.TextFrame)
-                                    {
-                                        if (item.GraphicType != GraphicTypeEnum.TextFrame)
+                                        ImposedImageData framedata = null;
+                                        try
                                         {
-                                            Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Объект типа {item.GraphicType} не может быть расположен на {layer.Key} уровне (Job '{_job.UID}')");
+                                            // Пока считаю операцию небезопасной
+                                            framedata = pdfpage.Imposed[sideindex][frame.FrameID.X, frame.FrameID.Y];
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: {ex.Message} (Job '{_job.UID}')");
                                             CurrentStatus = ProcessStatusEnum.Error;
                                             return false;
                                         }
-
-                                        TextFrame texts = (TextFrame)item;
-                                        string fontName = _pdfObject.AddTrueTypeFontU("Montserrat", true, false, true);
-                                        _pdfObject.SetFillColor(Color.Red);
-                                        int c = 0;
-                                        _pdfObject.SetTextSize(37);
-                                        foreach (var text in texts.Lines)
+                                        string filename = Path.Combine(_job.JobPath, "~Files", _job.DataContainer[framedata.FileId].GUID + (_job.Product.Optimization == FileSizeOptimization.Lossless ? ".tiff" : ".jpeg"));
+                                        // Координаты фреймов имеют ноль в обрезном формате. Вылет идет в минус. Поэтому сдвигаем на величину вылета (отнимая от общего смещения влево)
+                                        DrawImageFrame(_pdfObject, frame, xShift, bleedsize, filename, framedata);
+                                    }
+                                    if (item.GraphicType == GraphicTypeEnum.TextFrame)
+                                    {
+                                        TextFrame text = (TextFrame)item;
+                                        if (!text.IsEmpty)
                                         {
-                                            _pdfObject.DrawText(fontName, 50, 100 - c * 10, text);
-                                            c++;
+                                            ImposedImageData framedata = null;
+                                            if (text.PinObject != null)
+                                            {
+                                                try
+                                                {
+                                                    // Пока считаю операцию небезопасной
+                                                    framedata = pdfpage.Imposed[sideindex][text.PinObject.FrameID.X, text.PinObject.FrameID.Y];
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: {ex.Message} (Job '{_job.UID}')");
+                                                    CurrentStatus = ProcessStatusEnum.Error;
+                                                    return false;
+                                                }
+                                            }
+                                            //DrawTextFrame(_pdfObject, text, framedata, xShift, bleedsize);
                                         }
-                                        //float textWidth = doc.GetTextWidth(fontName, 35, value);
-                                        //float textHeight = doc.GetTextHeight(fontName, 35);
                                     }
                                 }
 
@@ -333,8 +374,147 @@ namespace Smartproj
 
             return true;
         }
-        private float FileToFrame(GdPicturePDF _doc, RectangleF _frame, float _shift, float _bleed, string _file, Point _correction, float _scale)
+        protected void DrawTextFrame(GdPicturePDF _doc, TextFrame _item, ImposedImageData _framedata, float _shift, float _bleed)
         {
+            var rect = _item.Bounds;
+            string[] strings = null;
+            Job job = null;
+
+            // Привязан ли текст чему то?
+            if (_framedata != null && !_item.ReadOnly)
+            {
+                // Пробуем поискать текст подмены
+                // Если он не найдется, значит что-то не так - не будем ничего рисовать. Если надо нарисовать без привязки к фрейму, выставляем флаг ReadOnly
+                job = _framedata.Owner.Owner;
+                var filedata = job.DataContainer[_framedata.FileId];
+                string txtFileName = Path.Combine(filedata.FilePath, Path.ChangeExtension(filedata.FileName, ".txt"));
+                if (File.Exists(txtFileName))
+                {
+                    strings = File.ReadAllLines(txtFileName);
+                    // В случае замены строки шаблона, к тексту применяются параметры первого символа соответствующей строки шаблона
+                    // Если строка для замены есть, а в шаблоне соответствующая строка пустая:
+                    // - Если это первая строка, пропускаются строки шаблона, пока найдется непустое значение (строки)
+                    // - Если это не первая строка, применяются параметры предыдущей строки
+                    // Если количество строк больше, чем в шаблоне, далее применяются параметры последней строки
+                    if (strings.Length == 0 || !strings.Any(x => x != "")) return;
+                }
+                else
+                {
+                    Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Не найдены даннные для замены текста в шаблоне. Операция не выполнена (Job '{job.UID}')");
+                    return;
+                }
+            }
+            else
+            {
+                // Просто рисуем текст из шаблона
+            }
+
+            if (strings != null)
+            {
+
+
+                int templIndex = 0;
+                TextLine currentLine = null;
+
+                for (int i = 0; i < strings.Length; i++)
+                {
+                    // Code = x, Size = _size, Font = _font, FillColor = _fillColor.ToUint32(), StrokeColor = _strokeColor.ToUint32(), StrokeWeight = _strokeWeight, Paragraph = Owner.Index, Line = Index
+                    // По умолчанию индексы i и templIndex должны соответствовать друг другу
+                    // Отличаться могут если в шаблоне содержиться строка для разделения двух блоков. В таком случае нумерации индексов сдвигаются
+                    while (templIndex < _item.Degree && currentLine == null) 
+                    {
+                        currentLine = (TextLine)_item[templIndex];
+                        if (currentLine.Glyphs.Count == 0)
+                        {
+                            currentLine = null;
+                        }
+                        templIndex++;
+                    }
+                    //Color fillColor;
+                    //Color strokeColor;
+                    //float fontSize;
+                    //float strokeWeight;
+
+                    if (strings[i] != "")
+                    {
+                        if (i < _item.Degree)
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        // Не рисуем пустую строку
+                    }
+                    currentLine = null;
+                }
+            }
+
+            for (int i = 0; i < _item.Degree; i++)
+            {
+                TextLine line = (TextLine)_item[i];
+            }
+
+
+            _doc.SaveGraphicsState();
+            try
+            {
+
+
+                string fontName = _doc.AddTrueTypeFontU("Montserrat", true, false, true);
+                _doc.SetFillColor(Color.Red);
+                int c = 0;
+                _doc.SetTextSize(37);
+                foreach (var text in _item.Lines)
+                {
+                    _doc.DrawText(fontName, 50, 100 - c * 10, text);
+                    c++;
+                }
+                //float textWidth = doc.GetTextWidth(fontName, 35, value);
+                //float textHeight = doc.GetTextHeight(fontName, 35);
+            }
+            finally
+            {
+                _doc.RestoreGraphicsState();
+            }
+        }
+        protected void DrawFillItem(GdPicturePDF _doc, FillItem _item, float _shift, float _bleed)
+        {
+            var rect = _item.Bounds;
+            _doc.SaveGraphicsState();
+            try
+            {
+                if (_item.HasFill) _doc.SetFillColor(_item.FillColor);
+                if (_item.HasStroke) _doc.SetLineColor(_item.StrokeColor);
+
+                if (_item.TransformationMatrix.Any(x => x != 0))
+                {
+                    _doc.AddTransformationMatrix(_item.TransformationMatrix[0], _item.TransformationMatrix[1], _item.TransformationMatrix[2], _item.TransformationMatrix[3], _item.TransformationMatrix[4], _item.TransformationMatrix[5]);
+                }
+                switch (_item.FrameShape)
+                {
+                    case ImageFrameShapeEnum.Rectangle:
+                        _doc.DrawRectangle(rect.X - _shift + _bleed, rect.Y + _bleed, rect.Width, rect.Height, _item.HasFill, _item.HasStroke);
+                        break;
+                    case ImageFrameShapeEnum.Rounded:
+                        _doc.DrawRoundedRectangle(rect.X - _shift + _bleed, rect.Y + _bleed, rect.Width, rect.Height, _item.Radius, _item.HasFill, _item.HasStroke);
+                        break;
+                    case ImageFrameShapeEnum.Ellipse:
+                        _doc.DrawEllipse((rect.Left + rect.Right) / 2 - _shift + _bleed, (rect.Bottom + rect.Top) / 2 + _bleed, rect.Width, rect.Height, _item.HasFill, _item.HasStroke);
+                        break;
+                }
+            }
+            finally
+            {
+                _doc.RestoreGraphicsState();
+            }
+        }
+        protected void DrawImageFrame(GdPicturePDF _doc, ImageFrame _frame, float _shift, float _bleed, string _file, ImposedImageData _imagedata)
+        {
+            var rect = _frame.Bounds;
+            PointF correction = _imagedata.Shift;
+            float scale = _imagedata.Scale;
+
             using (GdPictureImaging oImage = new GdPictureImaging())
             {
                 int id = oImage.CreateGdPictureImageFromFile(_file);
@@ -350,16 +530,16 @@ namespace Smartproj
 
                     PointF[] points = new PointF[4] 
                     { 
-                        new PointF(_frame.X - _shift + _bleed, _frame.Y + _bleed), 
-                        new PointF(_frame.X - _shift + _bleed, _frame.Y + _bleed + _frame.Height), 
-                        new PointF(_frame.X - _shift + _bleed + _frame.Width, _frame.Y + _bleed + _frame.Height), 
-                        new PointF(_frame.X - _shift + _bleed + _frame.Width, _frame.Y + _bleed)
+                        new PointF(rect.X - _shift + _bleed, rect.Y + _bleed), 
+                        new PointF(rect.X - _shift + _bleed, rect.Y + _bleed + rect.Height), 
+                        new PointF(rect.X - _shift + _bleed + rect.Width, rect.Y + _bleed + rect.Height), 
+                        new PointF(rect.X - _shift + _bleed + rect.Width, rect.Y + _bleed)
                     };
                     _doc.AddGraphicsToPath(new GraphicsPath(points, new byte[4] { (byte)(PathPointType.Start | PathPointType.Line), (byte)PathPointType.Line, (byte)PathPointType.Line, (byte)PathPointType.Line }));
                     _doc.ClipPath();
 
-                    var fitedRect = _frame.FitToFrameF(iWidth, iHeight, _shift, _bleed);
-                    res = _doc.DrawImage(imagename, fitedRect.Item1.X + _correction.X, fitedRect.Item1.Y + _correction.Y, fitedRect.Item1.Width, fitedRect.Item1.Height);
+                    var fitedRect = rect.FitToFrameF(iWidth, iHeight, _shift, _bleed);
+                    res = _doc.DrawImage(imagename, fitedRect.Item1.X + correction.X, fitedRect.Item1.Y + correction.Y, fitedRect.Item1.Width, fitedRect.Item1.Height);
                     effectiveRes = fitedRect.Item2;
 
                     if (res != GdPictureStatus.OK)
@@ -376,8 +556,6 @@ namespace Smartproj
                     _doc.RestoreGraphicsState();
                     oImage.ReleaseGdPictureImage(id);
                 }
-
-                return effectiveRes;
             }
         }
     }

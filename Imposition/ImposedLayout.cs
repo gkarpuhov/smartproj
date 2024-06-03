@@ -47,9 +47,14 @@ namespace Smartproj
     public class ImposedImageData : IEqualityComparer<ImposedImageData>
     {
         public int FileId { get; set; }
-        public Point Shift { get; set; }
+        public PointF Shift { get; set; }
         public float Scale { get; set; }
         public int OrderBy { get; set; }
+        public ImposedDataContainer Owner { get; }
+        public ImposedImageData(ImposedDataContainer _owner)
+        {
+            Owner = _owner;
+        }
         public bool Equals(ImposedImageData x, ImposedImageData y)
         {
             return x.FileId  != -1 && y.FileId != -1 && x.FileId == y.FileId;
@@ -65,7 +70,6 @@ namespace Smartproj
         public List<ImposedImageData[,]> Imposed { get; }
         public List<Segment> Segments { get; }
         public ImposedDataContainer Owner { get; set; }
-        //public int PageCount { get; }
         private int Safezone_F { get; set; } = 10;
         private int Safezone_C { get; set; } = 10;
         public double MinFileIdS { get; set; } = 1.0d;
@@ -311,7 +315,7 @@ namespace Smartproj
                 {
                     for (int m = 0; m < h; m++)
                     {
-                        frames[k, m] = new ImposedImageData() { FileId = -1, Shift = new Point(0, 0), Scale = 1.0f, OrderBy = 0 };
+                        frames[k, m] = new ImposedImageData(Owner) { FileId = -1, Shift = new Point(0, 0), Scale = 1.0f, OrderBy = 0 };
                     }
                 }
                 Imposed.Add(frames);

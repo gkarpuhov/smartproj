@@ -192,6 +192,26 @@ namespace Smartproj.Utils
         Bottom,
         Center
     }
+    [Flags]
+    public enum PositionEnum
+    {
+        Undefined = 0,
+        Left = 1,
+        Right = 2,
+        Top = 4,
+        Bottom = 8,
+        CenterHorizontal = 16,
+        CenterVertical = 32,
+        TopLeft = Top | Left,
+        TopCenter = Top | CenterHorizontal,
+        TopRight = Top | Right,
+        CenterLeft = Left | CenterVertical,
+        Center = CenterHorizontal | CenterVertical,
+        CenterRight = Right | CenterVertical,
+        BottomLeft = Bottom | Left,
+        BottomCenter = Bottom | CenterHorizontal,
+        BottomRight = Bottom | Right
+    }
     public enum TextCaseEnum
     {
         Any,
@@ -201,7 +221,6 @@ namespace Smartproj.Utils
     public enum GraphicTypeEnum
     {
         Fill,
-        Ellipse,
         Path,
         Image,
         Clip,
@@ -211,6 +230,14 @@ namespace Smartproj.Utils
     public enum ImageFrameShapeEnum
     {
         Rectangle,
+        Rounded,
         Ellipse
+    }
+    public enum FileSizeOptimization
+    {
+        Lossless,
+        MaxQuality,
+        Medium,
+        Preview
     }
 }
