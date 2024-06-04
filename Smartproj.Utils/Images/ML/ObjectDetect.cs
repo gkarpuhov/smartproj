@@ -11,7 +11,7 @@ namespace Smartproj.Utils
         public string CascadesPath { get; set; }
         public Logger DetectLog { get; set; }
         public ObjectDetectImageEnum ObjectDetectType { get; set; }
-        public void Detect(IEnumerable<ExifTaggedFile> _input, Func<ExifTaggedFile, string> _nameSelector)
+        public bool Detect(IEnumerable<ExifTaggedFile> _input, Func<ExifTaggedFile, string> _nameSelector)
         {
             CascadeClassifier frontalface = null;
             CascadeClassifier profileface = null;
@@ -23,7 +23,9 @@ namespace Smartproj.Utils
             List<string> warnings = new List<string>();
             List<string> errors = new List<string>();
             DateTime start = DateTime.Now;
-            
+
+            bool hasErrors = false;
+
             try
             {
                 if ((ObjectDetectType & ObjectDetectImageEnum.FrontFace) == ObjectDetectImageEnum.FrontFace) frontalface = new CascadeClassifier(Path.Combine(CascadesPath, "haarcascade_frontalface_alt2.xml"));
@@ -41,7 +43,9 @@ namespace Smartproj.Utils
                             string file = _nameSelector(item);
                             if (!File.Exists(file))
                             {
-                                errors.Add($"File = {item.FileName}; Status = {item.Status}; Error = {"Файл не найден"}");
+                                item.AddStatus(ImageStatusEnum.Error);  
+                                errors.Add($"File = {item.FileName}; Error = {"Файл не найден"}");
+                                hasErrors = true;
                                 continue;
                             }
                             List<Rectangle> objectsDetected = new List<Rectangle>();
@@ -140,8 +144,9 @@ namespace Smartproj.Utils
                         }
                         catch (Exception ex)
                         {
-                            errors.Add($"File = {item.FileName}; Error = {ex.Message}");
                             item.AddStatus(ImageStatusEnum.Error);
+                            errors.Add($"File = {item.FileName}; Error = {ex.Message}");
+                            hasErrors = true;
                         }
                     }
                 }
@@ -157,7 +162,9 @@ namespace Smartproj.Utils
 
             messages.Add($"Общее время обработки = {Math.Round((DateTime.Now - start).TotalSeconds)} сек");
 
-            if (DetectLog != null) DetectLog.WriteAll("Распознавание лиц", messages, warnings, errors);
+            if (DetectLog != null) DetectLog.WriteAll("ObjectDetect.Detect: Распознавание лиц", messages, warnings, errors);
+
+            return !hasErrors;
         }
         public ObjectDetect()
         {

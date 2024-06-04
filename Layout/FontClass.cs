@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Xml.Serialization;
 
 namespace Smartproj
@@ -14,10 +15,9 @@ namespace Smartproj
     public class FontCollection : IEnumerable<FontClass>
     {
         private List<FontClass> mItems;
-        public FontClass this[int _uid] => mItems[_uid];
+        public FontClass this[int _uid] => mItems.Find(x => x.GetHashCode() == _uid);
         public IEnumerable<FontClass> this[string _name] => mItems.Where(x => String.Compare(x.Family, _name, true) == 0);
         public int Count => mItems.Count;
-        public FontClass FindFont(int _id) => mItems.Find(x => x.GetHashCode() == _id);
         public WorkSpace Owner { get; }
         public FontCollection(WorkSpace _owner) 
         {

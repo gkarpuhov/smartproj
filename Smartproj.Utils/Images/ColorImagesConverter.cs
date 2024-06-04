@@ -17,6 +17,7 @@ namespace Smartproj.Utils
         public ConcurrentQueue<ExifTaggedFile> Queue;
         public string TempPath;
         public ManualResetEvent ResetEvent;
+        public bool HasErrors = false;
     }
     public class ColorImagesConverter
     {
@@ -29,6 +30,7 @@ namespace Smartproj.Utils
         public string ProfilesPath { get; set; }
         public string OutPath { get; set; }
         public long QualityParameter { get; set; }
+
         public TagFileTypeEnum OutType
         {
             get { return mOutType; } 
@@ -55,7 +57,7 @@ namespace Smartproj.Utils
             OutType = TagFileTypeEnum.JPEG;
             QualityParameter = 100L;
         }
-        public void Process(IEnumerable<ExifTaggedFile> _inputData)
+        public bool Process(IEnumerable<ExifTaggedFile> _inputData)
         {
             Dictionary<TagColorModeEnum, Profile> defaultProfiles = new Dictionary<TagColorModeEnum, Profile>
             {
@@ -91,21 +93,21 @@ namespace Smartproj.Utils
                 defaultProfiles[TagColorModeEnum.RGB] = Profile.Open(Path.Combine(ProfilesPath, DefaultRGBProfile), "r");
                 var id = defaultProfiles[TagColorModeEnum.RGB].HeaderProfileID;
                 string description = defaultProfiles[TagColorModeEnum.RGB].GetProfileInfo(InfoType.Description, "en", "US");
-                messages.Add($"{DefaultRGBProfile}: Использован RGB профиль по умолчанию: Ver = {defaultProfiles[TagColorModeEnum.RGB].Version};  '[{String.Join(" ", id)}] [{description}]'");
+                messages.Add($"{DefaultRGBProfile} => Использован RGB профиль по умолчанию: Ver = {defaultProfiles[TagColorModeEnum.RGB].Version};  '[{String.Join(" ", id)}] [{description}]'");
             }
             if (File.Exists(Path.Combine(ProfilesPath, DefaultCMYKProfile)))
             {
                 defaultProfiles[TagColorModeEnum.CMYK] = Profile.Open(Path.Combine(ProfilesPath, DefaultCMYKProfile), "r");
                 var id = defaultProfiles[TagColorModeEnum.CMYK].HeaderProfileID;
                 string description = defaultProfiles[TagColorModeEnum.CMYK].GetProfileInfo(InfoType.Description, "en", "US");
-                messages.Add($"ID {DefaultCMYKProfile}: Использован CMYK профиль по умолчанию: Ver = {defaultProfiles[TagColorModeEnum.CMYK].Version};  '[{String.Join(" ", id)}] [{description}]'");
+                messages.Add($"{DefaultCMYKProfile} => Использован CMYK профиль по умолчанию: Ver = {defaultProfiles[TagColorModeEnum.CMYK].Version};  '[{String.Join(" ", id)}] [{description}]'");
             }
             if (File.Exists(Path.Combine(ProfilesPath, DefaultGRAYProfile)))
             {
                 defaultProfiles[TagColorModeEnum.Grayscale] = Profile.Open(Path.Combine(ProfilesPath, DefaultGRAYProfile), "r");
                 var id = defaultProfiles[TagColorModeEnum.Grayscale].HeaderProfileID;
                 string description = defaultProfiles[TagColorModeEnum.Grayscale].GetProfileInfo(InfoType.Description, "en", "US");
-                messages.Add($"ID {DefaultGRAYProfile}: Использован Grayscale профиль по умолчанию: Ver = {defaultProfiles[TagColorModeEnum.Grayscale].Version}; '[{String.Join(" ", id)}] [{description}]'");
+                messages.Add($"{DefaultGRAYProfile} => Использован Grayscale профиль по умолчанию: Ver = {defaultProfiles[TagColorModeEnum.Grayscale].Version}; '[{String.Join(" ", id)}] [{description}]'");
             }
 
             ConcurrentQueue<ExifTaggedFile> queue = new ConcurrentQueue<ExifTaggedFile>(_inputData);
@@ -114,6 +116,8 @@ namespace Smartproj.Utils
             int threadsCount = 4;
             Thread[] pool = new Thread[threadsCount];
             ManualResetEvent[] callback = new ManualResetEvent[threadsCount];
+            ProcessThreadOptions[] processoptions = new ProcessThreadOptions[threadsCount];
+
             DateTime start = DateTime.Now;
 
             for (int i = 0; i < threadsCount; i++)
@@ -123,7 +127,7 @@ namespace Smartproj.Utils
                     IsBackground = true
                 };
                 callback[i] = new ManualResetEvent(false);
-                pool[i].Start(new ProcessThreadOptions() { Queue = queue, DefaultProfiles = defaultProfiles, TempPath = OutPath, ResetEvent = callback[i]});
+                pool[i].Start(processoptions[i] = new ProcessThreadOptions() { Queue = queue, DefaultProfiles = defaultProfiles, TempPath = OutPath, ResetEvent = callback[i]});
             }
 
             WaitHandle.WaitAll(callback);
@@ -141,7 +145,9 @@ namespace Smartproj.Utils
                 callback[i].Dispose();
             }
 
-            ConverterLog?.WriteAll("Нормализация", messages, warnings, errors);
+            ConverterLog?.WriteAll("ColorImagesConverter.Process: Нормализация", messages, warnings, errors);
+
+            return !processoptions.Any(x => x.HasErrors);
 
             void parallelAction(object _object)
             {
@@ -178,6 +184,7 @@ namespace Smartproj.Utils
                     {
                         item.AddStatus(ImageStatusEnum.NotSupported);
                         e.Add($"ID {item.Index}: Цветового пространство не поддерживается: '{item.ColorSpace}'. Файл: {item.FileName}");
+                        opt.HasErrors = true;
                     }
                     if (item.HasTransparency)
                     {
@@ -187,6 +194,7 @@ namespace Smartproj.Utils
                     {
                         item.AddStatus(ImageStatusEnum.NotSupported);
                         e.Add($"ID {item.Index}: Требуется формат 8 бит на пиксель: Обнаружено '{item.ColorSpace}:{item.Bpc}'. Задача прервана. Файл: {item.FileName}");
+                        opt.HasErrors = true;
                     }
 
                     if (item.HasStatus(ImageStatusEnum.NotSupported)) continue;
@@ -204,6 +212,7 @@ namespace Smartproj.Utils
                             {
                                 item.AddStatus(ImageStatusEnum.Error);
                                 e.Add($"ID {item.Index}: ОШИБКА - Некорректный формат цветового профиля: Ожидается '{item.ColorSpace}', обнаружен '{inputProfile.ColorSpace}'. Файл: {item.FileName}");
+                                opt.HasErrors = true;
                             }
 
                             isDefaultProfile = CMS.CompareProfiles(inputProfile, opt.DefaultProfiles[item.ColorSpace]);
@@ -216,6 +225,7 @@ namespace Smartproj.Utils
                         {
                             item.AddStatus(ImageStatusEnum.Error);
                             e.Add($"ID {item.Index}: ОШИБКА - Ошибка данных цветового профиля. Файл: {item.FileName}");
+                            opt.HasErrors = true;
                         }
                     }
                     else
@@ -251,6 +261,7 @@ namespace Smartproj.Utils
                                     {
                                         item.AddStatus(ImageStatusEnum.Error);
                                         e.Add($"ID {item.Index}: ОШИБКА - Неожиданный формат цветового пространства: Ожидается '{"Format24bppRgb или PixelFormat.Format32bppArgb"}'. Обнаружен '{bitmap.PixelFormat}' (HasTransparency = {item.HasTransparency}). Файл: {item.FileName}");
+                                        opt.HasErrors = true;
                                     }
                                 }
                             }
@@ -261,6 +272,7 @@ namespace Smartproj.Utils
                         {
                             item.AddStatus(ImageStatusEnum.Error);
                             e.Add($"ID {item.Index}: ИСКЛЮЧЕНИЕ #1 '{ex.Message}'. Файл: {item.FileName}");
+                            opt.HasErrors = true;
                             continue;
                         }
                     }
@@ -276,6 +288,7 @@ namespace Smartproj.Utils
                                     {
                                         item.AddStatus(ImageStatusEnum.Error);
                                         e.Add($"ID {item.Index}: ОШИБКА - Неожиданный формат цветового пространства RGB: '{bitmap.PixelFormat}'. Файл: {item.FileName}");
+                                        opt.HasErrors = true;
                                     }
                                     break;
                                 case TagColorModeEnum.CMYK:
@@ -283,6 +296,7 @@ namespace Smartproj.Utils
                                     {
                                         item.AddStatus(ImageStatusEnum.Error);
                                         e.Add($"ID {item.Index}: ОШИБКА - Неожиданный формат цветового пространства CMYK: '{bitmap.PixelFormat}'. Файл: {item.FileName}");
+                                        opt.HasErrors = true;
                                     }
                                     break;
                                 case TagColorModeEnum.Grayscale:
@@ -290,6 +304,7 @@ namespace Smartproj.Utils
                                     {
                                         item.AddStatus(ImageStatusEnum.Error);
                                         e.Add($"ID {item.Index}: ОШИБКА - Неожиданный формат цветового пространства GRAY: '{bitmap.PixelFormat}'. Файл: {item.FileName}");
+                                        opt.HasErrors = true;
                                     }
                                     break;
                             }
@@ -360,12 +375,14 @@ namespace Smartproj.Utils
                                 {
                                     item.AddStatus(ImageStatusEnum.Error);
                                     e.Add($"ID {item.Index}: Не определены необходимые параметры цветоделения для типа данных '{bitmap.PixelFormat}'. Файл: {item.FileName}");
+                                    opt.HasErrors = true;
                                 }
                             }
                             else
                             {
                                 item.AddStatus(ImageStatusEnum.Error);
                                 e.Add($"ID {item.Index}: Не определены необходимые профили цветоделения. Файл: {item.FileName}");
+                                opt.HasErrors = true;
                             }
                         }
                     }
@@ -373,6 +390,7 @@ namespace Smartproj.Utils
                     {
                         item.AddStatus(ImageStatusEnum.Error);
                         e.Add($"ID {item.Index}: ИСКЛЮЧЕНИЕ #2 '{ex.Message}'. Файл: {item.FileName}");
+                        opt.HasErrors = true;
                     }
                     finally
                     {
@@ -380,7 +398,7 @@ namespace Smartproj.Utils
                     }
                 }
 
-                ConverterLog?.WriteAll($"Нормализация (Поток {Thread.CurrentThread.ManagedThreadId})", m, w, e);
+                ConverterLog?.WriteAll($"ColorImagesConverter.Process: Нормализация (Поток {Thread.CurrentThread.ManagedThreadId})", m, w, e);
 
                 opt.ResetEvent.Set();
             }

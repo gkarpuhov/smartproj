@@ -85,7 +85,7 @@ namespace Smartproj
                             Log?.WriteInfo("AbstractInputProvider.Stop", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Ожидание завершения процессов запускающего контроллера...");
                         }
                         WaitHandle.WaitAll(new WaitHandle[] { mStopWaitHandle });
-                        CurrentStatus = ProcessStatusEnum.Finished;
+                        CurrentStatus = ProcessStatusEnum.Idle;
                         Log?.WriteInfo("AbstractInputProvider.Stop", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Запускающий контроллер завершил работу");
                         mTimer = null;
                     }
@@ -106,7 +106,7 @@ namespace Smartproj
         /// Начинает выполнение определенного для данного контроллера, процесса
         ///  Если свойство Enabled имеет значение false, то при вызове метода никаиrе действия не будут выполнены, и метод вернет значение false
         /// </summary>
-        public override bool Start(object[] _settings)
+        public override void Start(object[] _settings)
         {
             if (mCurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
 
@@ -119,11 +119,8 @@ namespace Smartproj
                     StartParameters = _settings;
                     mTimer = new Timer(ProcessHandler, _settings, 0, 5000);
                     mCurrentStatus = ProcessStatusEnum.Processing;
-                    return true;
                 }
             }
-
-            return false;
         }
         /// <summary>
         /// Освобождает внутренние ресурсы объекта. Переопределяет абстрактный метод базоваго класса

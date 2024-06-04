@@ -16,6 +16,7 @@ namespace Smartproj
         Initalizing,
         Processing,
         Stopping,
+        Idle,
         Error,
         Finished,
         Disposed
@@ -46,7 +47,7 @@ namespace Smartproj
         /// Начинает выполнение определенного для данного контроллера, процесса
         ///  Если свойство Enabled имеет значение false, то при вызове метода никаиrе действия не будут выполнены, и метод вернет значение false
         /// </summary>
-        bool Start(object[] _settings);
+        void Start(object[] _settings);
     }
     /// <summary>
     /// Интерфейс для определения способа выдачи конечного результата обработки в определенный объект назначения. Расширяет функциональность контроллера
@@ -127,7 +128,7 @@ namespace Smartproj
         /// Начинает выполнение определенного для данного контроллера, процесса
         /// </summary>
         /// <param name="_settings"></param>
-        public abstract bool Start(object[] _settings);
+        public abstract void Start(object[] _settings);
         /// <summary>
         /// Стандартный метод для переопределения механизма освобождения внутренних ресурсов
         /// Если свойство Enabled имеет значение false, то при вызове метода никаиrе действия не будут выполнены, и метод вернет значение false

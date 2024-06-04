@@ -8,7 +8,7 @@ namespace Smartproj
         public override ProcessStatusEnum CurrentStatus { get; protected set; }
         [XmlElement]
         public string Destination { get; set; }
-        public override bool Start(object[] _settings)
+        public override void Start(object[] _settings)
         {
             throw new NotImplementedException();
         }

@@ -3,17 +3,13 @@ using Smartproj.Utils;
 using System;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.ServiceProcess;
-using System.Threading;
-using static Emgu.CV.OCR.Tesseract;
 
 namespace Smartproj
 {
     public partial class Service1 : ServiceBase
     {
         private WorkSpace Work;
-        private Timer mTimer;
         private object mSyncroot;
         private bool mIsRunning;
         public bool CheckForRun()

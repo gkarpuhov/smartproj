@@ -50,10 +50,9 @@ namespace Smartproj
         public PointF Shift { get; set; }
         public float Scale { get; set; }
         public int OrderBy { get; set; }
-        public ImposedDataContainer Owner { get; }
-        public ImposedImageData(ImposedDataContainer _owner)
+        public ImposedDataContainer Owner { get; set; }
+        public ImposedImageData()
         {
-            Owner = _owner;
         }
         public bool Equals(ImposedImageData x, ImposedImageData y)
         {
@@ -315,7 +314,7 @@ namespace Smartproj
                 {
                     for (int m = 0; m < h; m++)
                     {
-                        frames[k, m] = new ImposedImageData(Owner) { FileId = -1, Shift = new Point(0, 0), Scale = 1.0f, OrderBy = 0 };
+                        frames[k, m] = new ImposedImageData() { FileId = -1, Shift = new Point(0, 0), Scale = 1.0f, OrderBy = 0 };
                     }
                 }
                 Imposed.Add(frames);

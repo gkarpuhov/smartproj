@@ -17,111 +17,121 @@ namespace Smartproj
         public PdfOutputProvider() : base()
         {
         }
-        public override bool Start(object[] _settings)
+        public override void Start(object[] _settings)
         {
             if (Enabled)
             {
-                StartParameters = _settings;
-                Job job = (Job)StartParameters[0];
-                WorkSpace ws = job.Owner.Owner.Owner;
-                Log?.WriteInfo("PdfOutputProvider.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер начал генерацию PDF файла... '{job.UID}'");
+                CurrentStatus = ProcessStatusEnum.Processing;
+                Job job = (Job)_settings[0];
 
-                string outPath = Path.Combine(job.JobPath, "~Output");
-                Directory.CreateDirectory(outPath);
-
-                foreach (var detaildata in job.OutData)
+                try
                 {
-                    string fileName = $"{job.OrderNumber}-{job.ItemId}-q{job.ProductionQty}-t{job.Owner.ProjectId}_{job.Product.ProductKeyCode}_{job.ProductSize.Width}X{job.ProductSize.Height}-{detaildata.Key}.pdf";
+                    StartParameters = _settings;
+                    WorkSpace ws = job.Owner.Owner.Owner;
+                    Log?.WriteInfo("PdfOutputProvider.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер начал генерацию PDF файла... '{job.UID}'");
 
-                    GdPicturePDF pdfObject = new GdPicturePDF();
-                    if (pdfObject.NewPDF(PdfConformance.PDF1_7) != GdPictureStatus.OK)
-                    {
-                        Log?.WriteError("PdfOutputProvider.Start", $"{Owner?.Project?.ProjectId}: Ошибка создания экземпляра PDF документа (Job '{job.UID}')");
-                        CurrentStatus = ProcessStatusEnum.Error;
-                        return false;
-                    }
-                    pdfObject.SetMeasurementUnit(PdfMeasurementUnit.PdfMeasurementUnitMillimeter);
+                    string outPath = Path.Combine(job.JobPath, "~Output");
+                    Directory.CreateDirectory(outPath);
 
-                    if (job.Product.Optimization == FileSizeOptimization.Lossless)
+                    foreach (var detaildata in job.OutData)
                     {
-                        pdfObject.SetCompressionForColorImage(PdfCompression.PdfCompressionFlate);
-                    }
-                    else
-                    {
-                        pdfObject.SetCompressionForColorImage(PdfCompression.PdfCompressionJPEG);
-                        switch (job.Product.Optimization)
+                        string fileName = $"{job.OrderNumber}-{job.ItemId}-q{job.ProductionQty}-t{job.Owner.ProjectId}_{job.Product.ProductKeyCode}_{job.ProductSize.Width}X{job.ProductSize.Height}-{detaildata.Key}.pdf";
+
+                        GdPicturePDF pdfObject = new GdPicturePDF();
+                        if (pdfObject.NewPDF(PdfConformance.PDF1_7) != GdPictureStatus.OK)
                         {
-                            case FileSizeOptimization.MaxQuality:
-                                pdfObject.SetJpegQuality(100);
-                                break;
-                            case FileSizeOptimization.Medium:
-                                pdfObject.SetJpegQuality(75);
-                                break;
-                            case FileSizeOptimization.Preview:
-                                pdfObject.SetJpegQuality(50);
-                                break;
+                            Log?.WriteError("PdfOutputProvider.Start", $"{Owner?.Project?.ProjectId}: Ошибка создания экземпляра PDF документа (Job '{job.UID}')");
+                            job.Status= ProcessStatusEnum.Error;
+                            return;
                         }
-                    }
+                        pdfObject.SetMeasurementUnit(PdfMeasurementUnit.PdfMeasurementUnitMillimeter);
 
-                    pdfObject.EnableCompression(true);
-                    pdfObject.SetOrigin(PdfOrigin.PdfOriginBottomLeft);
-
-                    try
-                    {
-                        bool imposeSuccess = false;
-                        switch (detaildata.Key)
+                        if (job.Product.Optimization == FileSizeOptimization.Lossless)
                         {
-                            case "BLK":
-                            case "INS":
-                                imposeSuccess = BlockImpose(pdfObject, detaildata.Value, job);
-                                break;
-                            case "CVR":
-                                imposeSuccess = CoverImpose(pdfObject, detaildata.Value, job);
-                                break;
-                        }
-
-                        if (imposeSuccess)
-                        {
-                            pdfObject.SaveToFile(Path.Combine(outPath, fileName));
-                            Log?.WriteInfo("PdfOutputProvider.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => PDF файл '{fileName}' успешно создан (Job '{job.UID}')");
+                            pdfObject.SetCompressionForColorImage(PdfCompression.PdfCompressionFlate);
                         }
                         else
                         {
-                            Log?.WriteError("PdfOutputProvider.Start", $"{Owner?.Project?.ProjectId}: Ошибка при выводе макета (Job '{job.UID}')");
-                            CurrentStatus = ProcessStatusEnum.Error;
-                            return false;
+                            pdfObject.SetCompressionForColorImage(PdfCompression.PdfCompressionJPEG);
+                            switch (job.Product.Optimization)
+                            {
+                                case FileSizeOptimization.MaxQuality:
+                                    pdfObject.SetJpegQuality(100);
+                                    break;
+                                case FileSizeOptimization.Medium:
+                                    pdfObject.SetJpegQuality(75);
+                                    break;
+                                case FileSizeOptimization.Preview:
+                                    pdfObject.SetJpegQuality(50);
+                                    break;
+                            }
+                        }
+
+                        pdfObject.EnableCompression(true);
+                        pdfObject.SetOrigin(PdfOrigin.PdfOriginBottomLeft);
+
+                        try
+                        {
+                            bool imposeSuccess = false;
+                            switch (detaildata.Key)
+                            {
+                                case "BLK":
+                                case "INS":
+                                    imposeSuccess = BlockImpose(pdfObject, detaildata.Value, job);
+                                    break;
+                                case "CVR":
+                                    imposeSuccess = CoverImpose(pdfObject, detaildata.Value, job);
+                                    break;
+                            }
+
+                            if (imposeSuccess)
+                            {
+                                pdfObject.SaveToFile(Path.Combine(outPath, fileName));
+                                Log?.WriteInfo("PdfOutputProvider.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => PDF файл '{fileName}' успешно создан (Job '{job.UID}')");
+                            }
+                            else
+                            {
+                                Log?.WriteError("PdfOutputProvider.Start", $"{Owner?.Project?.ProjectId}: Ошибка при выводе макета (Job '{job.UID}')");
+                                job.Status = ProcessStatusEnum.Error;
+                                return;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log?.WriteError("PdfOutputProvider.Start", $"{Owner?.Project?.ProjectId}: Обработанное исключении в процессе создания макета '{ex.Message}' (Job '{job.UID}')");
+                            job.Status = ProcessStatusEnum.Error;
+                            return;
+                        }
+                        finally
+                        {
+                            pdfObject.CloseDocument();
+                            pdfObject.Dispose();
                         }
                     }
-                    catch (Exception ex)
+
+                    if (Destination != null && Destination != "")
                     {
-                        Log?.WriteError("PdfOutputProvider.Start", $"{Owner?.Project?.ProjectId}: Обработанное исключении в процессе генерации макета '{ex.Message}' (Job '{job.UID}')");
-                        CurrentStatus = ProcessStatusEnum.Error;
-                        return false;
-                    }
-                    finally
-                    {
-                        pdfObject.CloseDocument();
-                        pdfObject.Dispose();
+                        Directory.CreateDirectory(Path.Combine(Destination, job.UID.ToString()));
+                        foreach (var file in Directory.EnumerateFiles(outPath))
+                        {
+                            File.Copy(file, Path.Combine(Destination, job.UID.ToString(), Path.GetFileName(file)));
+                        }
                     }
                 }
-
-                if (Destination != null && Destination != "")
+                catch (Exception ex)
                 {
-                    Directory.CreateDirectory(Path.Combine(Destination, job.UID.ToString()));
-                    foreach (var file in Directory.EnumerateFiles(outPath))
-                    {
-                        File.Copy(file, Path.Combine(Destination, job.UID.ToString(), Path.GetFileName(file)));
-                    }
+                    Log?.WriteError("PdfOutputProvider.Start", $"{Owner?.Project?.ProjectId}: Обработанное исключении в процессе '{ex.Message}' (Job '{job.UID}')");
+                    job.Status = ProcessStatusEnum.Error;
                 }
-
-                return true;
+                finally
+                {
+                    CurrentStatus = ProcessStatusEnum.Finished;
+                }
             }
             else
             {
-                Log?.WriteInfo("ImageConverterController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер деактивирован. Процессы не выполнены");
+                Log?.WriteInfo("PdfOutputProvider.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер деактивирован. Процессы не выполнены");
             }
-
-            return false;
         }
         private bool CoverImpose(GdPicturePDF _pdfObject, ImposedDataContainer _detaildata, Job _job)
         {
@@ -156,13 +166,11 @@ namespace Smartproj
                 if (pdfpage.Templ.LayoutType == DetailLayoutTypeEnum.Spread && ((int)Math.Round(pdfpage.Templ.Trim.Width / 2) != _job.ProductSize.Width || (int)Math.Round(pdfpage.Templ.Trim.Height) != _job.ProductSize.Height))
                 {
                     Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Недопустимый формат разворотного шаблона {pdfpage.Templ.Trim.Width}x{pdfpage.Templ.Trim.Height} для продукта {_job.ProductSize.Width}x{_job.ProductSize.Height} (Job '{_job.UID}')");
-                    CurrentStatus = ProcessStatusEnum.Error;
                     return false;
                 }
                 if ((pdfpage.Templ.LayoutType == DetailLayoutTypeEnum.Page || pdfpage.Templ.LayoutType == DetailLayoutTypeEnum.Single) && ((int)Math.Round(pdfpage.Templ.Trim.Width) != _job.ProductSize.Width || (int)Math.Round(pdfpage.Templ.Trim.Height) != _job.ProductSize.Height))
                 {
                     Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Недопустимый формат постраничного шаблона {pdfpage.Templ.Trim.Width}x{pdfpage.Templ.Trim.Height} для продукта {_job.ProductSize.Width}x{_job.ProductSize.Height} (Job '{_job.UID}')");
-                    CurrentStatus = ProcessStatusEnum.Error;
                     return false;
                 }
 
@@ -173,7 +181,6 @@ namespace Smartproj
                 if (bleedsize != pdfpage.Templ.Bleed)
                 {
                     Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Отступы навылет доступных шаблонов должны совпадать (Job '{_job.UID}')");
-                    CurrentStatus = ProcessStatusEnum.Error;
                     return false;
                 }
 
@@ -246,7 +253,6 @@ namespace Smartproj
                                             catch (Exception ex)
                                             {
                                                 Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: {ex.Message} (Job '{_job.UID}')");
-                                                CurrentStatus = ProcessStatusEnum.Error;
                                                 return false;
                                             }
                                             string filename = Path.Combine(_job.JobPath, "~Files", _job.DataContainer[framedata.FileId].GUID + (_job.Product.Optimization == FileSizeOptimization.Lossless ? ".tiff" : ".jpeg"));
@@ -267,13 +273,14 @@ namespace Smartproj
                                                 catch (Exception ex)
                                                 {
                                                     Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: {ex.Message} (Job '{_job.UID}')");
-                                                    CurrentStatus = ProcessStatusEnum.Error;
                                                     return false;
                                                 }
                                             }
-                                            DrawTextFrame(_pdfObject, text, framedata, xShift, bleedsize);
+                                            DrawTextFrame(_pdfObject, text, framedata, _job, xShift, bleedsize);
                                         }
                                     }
+
+                                    if (_job.Status == ProcessStatusEnum.Error) return false;
                                 }
                             }
 
@@ -326,7 +333,6 @@ namespace Smartproj
                                         catch (Exception ex)
                                         {
                                             Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: {ex.Message} (Job '{_job.UID}')");
-                                            CurrentStatus = ProcessStatusEnum.Error;
                                             return false;
                                         }
                                         string filename = Path.Combine(_job.JobPath, "~Files", _job.DataContainer[framedata.FileId].GUID + (_job.Product.Optimization == FileSizeOptimization.Lossless ? ".tiff" : ".jpeg"));
@@ -349,11 +355,10 @@ namespace Smartproj
                                                 catch (Exception ex)
                                                 {
                                                     Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: {ex.Message} (Job '{_job.UID}')");
-                                                    CurrentStatus = ProcessStatusEnum.Error;
                                                     return false;
                                                 }
                                             }
-                                            //DrawTextFrame(_pdfObject, text, framedata, xShift, bleedsize);
+                                            DrawTextFrame(_pdfObject, text, framedata, _job, xShift, bleedsize);
                                         }
                                     }
                                 }
@@ -366,6 +371,8 @@ namespace Smartproj
                                     // Сохраняем информация для элементов, переходящих черех корешок разворота
                                     item.ExtraBounds = rect.X + rect.Width > _job.ProductSize.Width;
                                 }
+
+                                if (_job.Status == ProcessStatusEnum.Error) return false;
                             }
                         }
                     }
@@ -374,108 +381,127 @@ namespace Smartproj
 
             return true;
         }
-        protected void DrawTextFrame(GdPicturePDF _doc, TextFrame _item, ImposedImageData _framedata, float _shift, float _bleed)
+        protected void DrawTextFrame(GdPicturePDF _doc, TextFrame _item, ImposedImageData _framedata, Job _job, float _shift, float _bleed)
         {
             var rect = _item.Bounds;
-            string[] strings = null;
-            Job job = null;
+            
+            //WorkSpace ws = _job.Owner.Owner.Owner;
+            List<ValueTuple<string, string, float, Color, Color>> testfordraw = null;
 
             // Привязан ли текст чему то?
             if (_framedata != null && !_item.ReadOnly)
             {
+                string[] strings = null;
                 // Пробуем поискать текст подмены
                 // Если он не найдется, значит что-то не так - не будем ничего рисовать. Если надо нарисовать без привязки к фрейму, выставляем флаг ReadOnly
-                job = _framedata.Owner.Owner;
-                var filedata = job.DataContainer[_framedata.FileId];
+                _job = _framedata.Owner.Owner;
+                var filedata = _job.DataContainer[_framedata.FileId];
+
                 string txtFileName = Path.Combine(filedata.FilePath, Path.ChangeExtension(filedata.FileName, ".txt"));
                 if (File.Exists(txtFileName))
                 {
                     strings = File.ReadAllLines(txtFileName);
-                    // В случае замены строки шаблона, к тексту применяются параметры первого символа соответствующей строки шаблона
-                    // Если строка для замены есть, а в шаблоне соответствующая строка пустая:
-                    // - Если это первая строка, пропускаются строки шаблона, пока найдется непустое значение (строки)
-                    // - Если это не первая строка, применяются параметры предыдущей строки
-                    // Если количество строк больше, чем в шаблоне, далее применяются параметры последней строки
-                    if (strings.Length == 0 || !strings.Any(x => x != "")) return;
+                    if (strings.Length == 0 || !strings.Any(x => x.Replace(" ", "") != "")) return;
+
+                    testfordraw = UserTextData(_doc, _job, _item, strings);
+
+                    if (testfordraw != null)
+                    {
+                        float width = 0;
+                        float height = 0;
+
+                        for (int i = 0; i < testfordraw.Count; i++)
+                        {
+                            float textWidth = _doc.GetTextWidth(testfordraw[i].Item2, testfordraw[i].Item3, testfordraw[i].Item1);
+                            float textHeight = _doc.GetTextHeight(testfordraw[i].Item2, testfordraw[i].Item3);
+
+                            width = Math.Max(width, textWidth);
+                            height = height + textHeight;
+                        }
+
+                        Log?.WriteError("PdfOutputProvider.BlockImpose", $"_item.PinObject.Bounds: {_item.PinObject.Bounds}");
+
+                        height = height + _item.Interval * (testfordraw.Count - 1);
+                        width = width + 2 * _item.Space;
+                        height = height + 2 * _item.Space;
+
+                        Log?.WriteError("PdfOutputProvider.BlockImpose", $"size: {width}x{height}");
+
+                        PointF topPoint = default;
+                        switch (_item.PositionToImage.LinkTo)
+                        {
+                            case PositionEnum.TopLeft:
+                                topPoint = new PointF(_item.PinObject.Bounds.X - _item.PositionToImage.Shift.X, _item.PinObject.Bounds.Y - _item.PositionToImage.Shift.Y);
+                                break;
+                            case PositionEnum.TopRight:
+                                topPoint = new PointF(_item.PinObject.Bounds.X - _item.PositionToImage.Shift.X - width, _item.PinObject.Bounds.Y - _item.PositionToImage.Shift.Y);
+                                break;
+                            case PositionEnum.TopCenter:
+                                topPoint = new PointF(_item.PinObject.Bounds.X - _item.PositionToImage.Shift.X - width / 2, _item.PinObject.Bounds.Y - _item.PositionToImage.Shift.Y);
+                                break;
+                            case PositionEnum.CenterLeft:
+                                topPoint = new PointF(_item.PinObject.Bounds.X - _item.PositionToImage.Shift.X, _item.PinObject.Bounds.Y - _item.PositionToImage.Shift.Y + height / 2);
+                                break;
+                            case PositionEnum.CenterRight:
+                                topPoint = new PointF(_item.PinObject.Bounds.X - _item.PositionToImage.Shift.X - width, _item.PinObject.Bounds.Y - _item.PositionToImage.Shift.Y + height / 2);
+                                break;
+                            case PositionEnum.Center:
+                                topPoint = new PointF(_item.PinObject.Bounds.X - _item.PositionToImage.Shift.X - width / 2, _item.PinObject.Bounds.Y - _item.PositionToImage.Shift.Y + height / 2);
+                                break;
+                            case PositionEnum.BottomLeft:
+                                topPoint = new PointF(_item.PinObject.Bounds.X - _item.PositionToImage.Shift.X, _item.PinObject.Bounds.Y - _item.PositionToImage.Shift.Y + height);
+                                break;
+                            case PositionEnum.BottomRight:
+                                topPoint = new PointF(_item.PinObject.Bounds.X - _item.PositionToImage.Shift.X - width, _item.PinObject.Bounds.Y - _item.PositionToImage.Shift.Y + height);
+                                break;
+                            case PositionEnum.BottomCenter:
+                                topPoint = new PointF(_item.PinObject.Bounds.X - _item.PositionToImage.Shift.X - width / 2, _item.PinObject.Bounds.Y - _item.PositionToImage.Shift.Y + height);
+                                break;
+                        }
+                        Log?.WriteError("PdfOutputProvider.BlockImpose", $"topPoint: {topPoint}");
+
+
+                        _doc.SaveGraphicsState();
+                        try
+                        {
+                            float y = topPoint.Y - _item.Space;
+
+                            for (int i = 0; i < testfordraw.Count; i++)
+                            {
+                                _doc.SetFillColor(testfordraw[i].Item4);
+                                _doc.SetLineColor(testfordraw[i].Item5);
+                                _doc.SetTextSize(testfordraw[i].Item3);
+
+                                float textWidth = _doc.GetTextWidth(testfordraw[i].Item2, testfordraw[i].Item3, testfordraw[i].Item1);
+                                float textHeight = _doc.GetTextHeight(testfordraw[i].Item2, testfordraw[i].Item3);
+                                Log?.WriteError("PdfOutputProvider.BlockImpose", $"Text: {textWidth}x{textHeight}; size = {testfordraw[i].Item3}; x = {topPoint.X + _item.Space}; y = {y - textHeight}");
+
+                                _doc.DrawText(testfordraw[i].Item2, topPoint.X + _item.Space, y - textHeight, testfordraw[i].Item1);
+
+                                y = y - textHeight - _item.Interval;
+                            }
+                        }
+                        finally
+                        {
+                            _doc.RestoreGraphicsState();
+                        }
+                    }
+                    else
+                    {
+                        _job.Status = ProcessStatusEnum.Error;
+                        return;
+                    }
                 }
                 else
                 {
-                    Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Не найдены даннные для замены текста в шаблоне. Операция не выполнена (Job '{job.UID}')");
+                    Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Не найдены даннные для замены текста в шаблоне. Операция не выполнена (Job '{_job.UID}')");
+                    _job.Status = ProcessStatusEnum.Error;
                     return;
                 }
             }
             else
             {
                 // Просто рисуем текст из шаблона
-            }
-
-            if (strings != null)
-            {
-
-
-                int templIndex = 0;
-                TextLine currentLine = null;
-
-                for (int i = 0; i < strings.Length; i++)
-                {
-                    // Code = x, Size = _size, Font = _font, FillColor = _fillColor.ToUint32(), StrokeColor = _strokeColor.ToUint32(), StrokeWeight = _strokeWeight, Paragraph = Owner.Index, Line = Index
-                    // По умолчанию индексы i и templIndex должны соответствовать друг другу
-                    // Отличаться могут если в шаблоне содержиться строка для разделения двух блоков. В таком случае нумерации индексов сдвигаются
-                    while (templIndex < _item.Degree && currentLine == null) 
-                    {
-                        currentLine = (TextLine)_item[templIndex];
-                        if (currentLine.Glyphs.Count == 0)
-                        {
-                            currentLine = null;
-                        }
-                        templIndex++;
-                    }
-                    //Color fillColor;
-                    //Color strokeColor;
-                    //float fontSize;
-                    //float strokeWeight;
-
-                    if (strings[i] != "")
-                    {
-                        if (i < _item.Degree)
-                        {
-
-                        }
-                    }
-                    else
-                    {
-                        // Не рисуем пустую строку
-                    }
-                    currentLine = null;
-                }
-            }
-
-            for (int i = 0; i < _item.Degree; i++)
-            {
-                TextLine line = (TextLine)_item[i];
-            }
-
-
-            _doc.SaveGraphicsState();
-            try
-            {
-
-
-                string fontName = _doc.AddTrueTypeFontU("Montserrat", true, false, true);
-                _doc.SetFillColor(Color.Red);
-                int c = 0;
-                _doc.SetTextSize(37);
-                foreach (var text in _item.Lines)
-                {
-                    _doc.DrawText(fontName, 50, 100 - c * 10, text);
-                    c++;
-                }
-                //float textWidth = doc.GetTextWidth(fontName, 35, value);
-                //float textHeight = doc.GetTextHeight(fontName, 35);
-            }
-            finally
-            {
-                _doc.RestoreGraphicsState();
             }
         }
         protected void DrawFillItem(GdPicturePDF _doc, FillItem _item, float _shift, float _bleed)
@@ -557,6 +583,95 @@ namespace Smartproj
                     oImage.ReleaseGdPictureImage(id);
                 }
             }
+        }
+        private List<ValueTuple<string, string, float, Color, Color>> UserTextData(GdPicturePDF _doc, Job _job, TextFrame _textframe, string[] _usertext)
+        {
+            // Удаляем пустые строки в конце
+            string[] usertext = _usertext.Reverse().SkipWhile(x => x.Replace(" ", "") == "").Reverse().ToArray();
+            List<ValueTuple<string, string, float, Color, Color>> textForOut = new List<(string, string, float, Color, Color)>();
+
+            // Устанавливаем соответствие между текстовым блоком шаблона и пользовательским
+            int j = 0;
+            int i = 0;
+            ValueTuple<string, string, float, Color, Color> stringProp = default;
+
+            while (j < usertext.Length)
+            {
+                // Вместо пустой строки добавляем пробел, чтобы у символа были явные параметры строки
+                if (usertext[j] == "") usertext[j] = " ";
+                // Если пользватель в своих данных оставил пустую строку, то пустое место не добавляет новые строки, а использует текущую строку шаблона (просто делает её пустой)
+                if (i < _textframe.Degree)
+                {
+                    TextLine line = (TextLine)_textframe[i];
+                    // Шаблоном можно регулировать добавление пропуска между строками путем добавление строки, содержащую служебную информацию %#%
+                    if (line.Glyphs.Count > 0)
+                    {
+                        // Полностью пустые это непонятно что, таких не должно быть. Но проверить надо, если есть, то просто игнорируем
+                        string fontname = GetPdfFont(_doc, _job, line.Glyphs[0].Font);
+                        if (fontname != "")
+                        {
+                            if (line.Value != "%#%")
+                            {
+                                stringProp = new ValueTuple<string, string, float, Color, Color>(usertext[j], fontname, line.Glyphs[0].Size, line.Glyphs[0].FillColor.FromUint32(), line.Glyphs[0].StrokeColor.FromUint32());
+                                textForOut.Add(stringProp);
+                                // Пользовательская строка добавилась, значит можно брать следующую
+                                j++;
+                            }
+                            else
+                            {
+                                textForOut.Add(new ValueTuple<string, string, float, Color, Color>(" ", fontname, line.Glyphs[0].Size, line.Glyphs[0].FillColor.FromUint32(), line.Glyphs[0].StrokeColor.FromUint32()));
+                                // Пропуск строки
+                            }
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                    i++;
+                }
+                else
+                {
+                    // Пользовательских строк больше чем в шаблоне. Значит берем параметры последней строки
+                    if (stringProp != default)
+                    {
+                        textForOut.Add(new ValueTuple<string, string, float, Color, Color>(usertext[j], stringProp.Item2, stringProp.Item3, stringProp.Item4, stringProp.Item5));
+                        // Пользовательская строка добавилась, значит можно брать следующую
+                        j++;
+                    }
+                }
+            }
+
+            return textForOut;
+        }
+        public static string GetPdfFont(GdPicturePDF _doc, Job _job, int _id)
+        {
+            WorkSpace ws = _job?.Owner?.Owner?.Owner;
+
+            if (_job == null || ws == null) throw new NullReferenceException();
+
+            foreach (var pair in _job.Document.Fonts)
+            {
+                if (pair.Value.Id == _id) return pair.Key;
+            }
+
+            var font = ws.ApplicationFonts[_id];
+            if (font != null)
+            {
+                string fontname = _doc.AddTrueTypeFontU(font.Family, (font.Style & FontStyle.Bold) == FontStyle.Bold, (font.Style & FontStyle.Italic) == FontStyle.Italic, true);
+                GdPictureStatus status = _doc.GetStat();
+                if (status != GdPictureStatus.OK)
+                {
+                    _job.Log?.WriteError("GetPdfFont", $"{_job.Owner.ProjectId}: Ошибка при включении шрифта в PDF документ '{status}'  (Job '{_job.UID}')");
+                    return "";
+                }
+                _job.Document.Fonts.Add(fontname, font);
+                return fontname;
+            }
+
+            _job.Log?.WriteError("GetPdfFont", $"{_job.Owner.ProjectId}: Ошибка при включении шрифта в PDF документ: шрифт id = {_id} не найден  (Job '{_job.UID}')");
+
+            return "";
         }
     }
 }

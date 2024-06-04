@@ -22,6 +22,7 @@ using System.Drawing.Imaging;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
+using Emgu.CV;
 
 namespace debugger
 {
@@ -182,11 +183,15 @@ namespace debugger
                 MessageBox.Show("The NewPDF() method has failed with the status: " + status.ToString(), caption);
             gdpicturePDF.Dispose();
         }
+
         static void Main(string[] args)
         {
-            RectangleF rect1 = new RectangleF(0.555f, -894.1f, 1, 200f);
-            NumberFormatInfo format = new NumberFormatInfo() { NumberDecimalSeparator = "." };
-            Console.WriteLine($"{{X={rect1.X.ToString(format)},Y={rect1.Y.ToString(format)},Width={rect1.Width.ToString(format)},Height={rect1.Height.ToString(format)}}}");
+            TagFileTypeEnum ssd = TagFileTypeEnum.JPEG | TagFileTypeEnum.PNG | TagFileTypeEnum.HEIC;
+            Console.WriteLine(ssd);
+
+            ssd = ssd ^ TagFileTypeEnum.TEXT;
+            Console.WriteLine(ssd);
+
             Console.ReadLine(); 
             return;
             WorkSpace.ApplicationPath = @"C:\Users\admin\source\repos\smartproj\bin\x64\Release";

@@ -7,18 +7,19 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 
 namespace Smartproj
 {
     public class HotFolderImagesPackInputProvider : AbstractInputProvider
     {
         private bool mIsLocked;
+        [XmlElement]
         public bool AutoExifParse { get; set; }
         public HotFolderImagesPackInputProvider() : base()
         {
             AutoExifParse = true;
             mIsLocked = false;
-            Label = "Запуск процесса обработки изображений из горячей папки";
         }
         bool CheckAndBlock()
         {
@@ -130,6 +131,7 @@ namespace Smartproj
                 }
 
                 Log?.WriteInfo("HotFolderImagesInputProvider.ProcessHandler", $"{project.ProjectId} => Процесс формирование данных для обработки завершен. Процесс '{job.UID}'");
+
                 job.Status = ProcessStatusEnum.Processing;
                 
                 if (job.Product.Controllers != null)
@@ -177,7 +179,6 @@ namespace Smartproj
 
                 if (list.Result.TryGetValue(key, out tags))
                 {
-
                     string[] groupsOrder = new string[7] { "File", "EXIF", "JFIF", "XMP", "Composite", "PNG", "QuickTime" };
 
                     ValueTuple<string, string, string> FindValue(IEnumerable<KeyValuePair<string, IEnumerable<JProperty>>> _tags, string _name, bool _exactName, params string[] _groupsName)

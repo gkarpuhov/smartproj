@@ -114,14 +114,14 @@
       <item TypeId="-426664719">
         <UID TypeId="-1913220081">ccbd5a9f-4adb-424a-83a7-2efaa4da2a94</UID>
         <PositionToImage TypeId="-535090374">
-          <Shift TypeId="969405874">{X=0,Y=20}</Shift>
+          <Shift TypeId="969405874">{X=0,Y=5}</Shift>
           <LinkTo TypeId="-1100425429">TopLeft</LinkTo>
         </PositionToImage>
         <GraphicType TypeId="1066637078">TextFrame</GraphicType>
         <ReadOnly TypeId="-491435614">False</ReadOnly>
-        <Interval TypeId="-1119076432">2</Interval>
+        <Interval TypeId="-1119076432">3</Interval>
         <Position TypeId="34379097">Center</Position>
-        <Space TypeId="-1119076432">2</Space>
+        <Space TypeId="-1119076432">0</Space>
         <Layer TypeId="1727199146">3</Layer>
         <FrameSide TypeId="-532340399">Left</FrameSide>
         <Bounds TypeId="489541115">{X=0,Y=0,Width=0,Height=0}</Bounds>

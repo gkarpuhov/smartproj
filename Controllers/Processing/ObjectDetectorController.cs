@@ -13,40 +13,49 @@ namespace Smartproj
     public class ObjectDetectorController : AbstractController
     {
         public override ProcessStatusEnum CurrentStatus { get; protected set; }
-        public override bool Start(object[] _settings)
+        public override void Start(object[] _settings)
         {
             if (CurrentStatus == ProcessStatusEnum.Disposed) throw new ObjectDisposedException(this.GetType().FullName);
             if (Enabled)
             {
-                StartParameters = _settings;
-                Job job = (Job)StartParameters[0];
-                WorkSpace ws = job.Owner.Owner.Owner;
-                Log?.WriteInfo("ObjectDetectorController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер начал начал работу с процессом '{job.UID}'");
+                CurrentStatus = ProcessStatusEnum.Processing;
+                Job job = (Job)_settings[0];
 
-                ObjectDetect detector = new ObjectDetect();
-                detector.DetectLog = Log;
-                detector.ObjectDetectType = ObjectDetectImageEnum.FrontFace | ObjectDetectImageEnum.ProfileFace;
-                detector.CascadesPath = Path.Combine(ws.MLData, "haarcascades");
                 try
                 {
-                    detector.Detect(job.DataContainer, x => Path.Combine(job.JobPath, "~Files", x.GUID + (job.Product.Optimization == FileSizeOptimization.Lossless ? ".tiff" : ".jpeg")));
+                    StartParameters = _settings;
+                    WorkSpace ws = job.Owner.Owner.Owner;
+                    Log?.WriteInfo("ObjectDetectorController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер начал начал работу с процессом '{job.UID}'");
+
+                    ObjectDetect detector = new ObjectDetect();
+                    detector.DetectLog = Log;
+                    detector.ObjectDetectType = ObjectDetectImageEnum.FrontFace | ObjectDetectImageEnum.ProfileFace;
+                    detector.CascadesPath = Path.Combine(ws.MLData, "haarcascades");
+
+                    if (!detector.Detect(job.DataContainer, x => Path.Combine(job.JobPath, "~Files", x.GUID + (job.Product.Optimization == FileSizeOptimization.Lossless ? ".tiff" : ".jpeg"))))
+                    {
+                        job.Status = ProcessStatusEnum.Error;
+                        Log?.WriteError("ObjectDetectorController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Ошибка при выполненнии процесса '{job.UID}'");
+                    }
+                    else
+                    {
+                        Log?.WriteInfo("ObjectDetectorController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер завершил работу с процессом '{job.UID}'");
+                    }
                 }
                 catch (Exception ex)
                 {
                     job.Status = ProcessStatusEnum.Error;
                     Log?.WriteError("ObjectDetectorController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Обработанное исключение. Процесс '{job.UID}' прерван '{ex.Message}'");
-                    return false;
                 }
-
-                Log?.WriteInfo("ObjectDetectorController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер завершил работу с процессом '{job.UID}'");
-                return true;
+                finally
+                {
+                    CurrentStatus = ProcessStatusEnum.Finished;
+                }
             }
             else
             {
-                Log?.WriteInfo("ImageConverterController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер деактивирован. Процессы не выполнены");
+                Log?.WriteInfo("ObjectDetectorController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер деактивирован. Процессы не выполнены");
             }
-
-            return false;
         }
         protected override void Dispose(bool _disposing)
         {

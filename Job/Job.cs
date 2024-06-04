@@ -6,6 +6,14 @@ using System.IO;
 
 namespace Smartproj
 {
+    public class JobDocument
+    {
+        public Dictionary<string, FontClass> Fonts { get; }
+        public JobDocument() 
+        {
+            Fonts = new Dictionary<string, FontClass>();
+        }    
+    }
     /// <summary>
     /// Структура, содержащая все необходимае ссылки на объекты и параметры для выполнения конкретного процесса. Время жизни - пока происходит процесс.
     /// Выполяется от имени выбранного экземпляра проекта <see cref="Project"/>, и инициализируется методами запускающего контроллера <see cref="AbstractInputProvider"/> проекта.
@@ -20,6 +28,10 @@ namespace Smartproj
         /// </summary>
         public ProcessStatusEnum Status { get { lock (mSyncRoot) { return mStatus; } } set { lock (mSyncRoot) { mStatus = value; } } }
         public Logger Log => Owner?.Log; 
+        /// <summary>
+        /// Контейнер, содержащий ресурсы документов
+        /// </summary>
+        public JobDocument Document { get; }
         public Project Owner { get; }
         /// <summary>
         /// Номер заказа. 
@@ -96,6 +108,7 @@ namespace Smartproj
             OutData = new Dictionary<string, ImposedDataContainer>();
             JobPath = Path.Combine(Owner.ProjectPath, "Jobs", UID.ToString());
             Directory.CreateDirectory(JobPath);
+            Document = new JobDocument();
         }
         /// <summary>
         /// Инициализация процесса, установки необходимых параметров для работы. Создает внутреннюю структуру продукта
