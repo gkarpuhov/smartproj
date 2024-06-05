@@ -138,7 +138,11 @@ namespace Smartproj
                 {
                     foreach (AbstractController controller in job.Product.Controllers.OrderByDescending(x => x.Priority))
                     {
-                        if (job.Status != ProcessStatusEnum.Processing) break;
+                        if (job.Status != ProcessStatusEnum.Processing)
+                        {
+                            Log?.WriteInfo("HotFolderImagesInputProvider.ProcessHandler", $"{Owner.Project.ProjectId} => Процесс прерван '{job.UID}'");
+                            break;
+                        }
                         controller.Start(new object[] { job });
                     }
                 }
@@ -146,7 +150,11 @@ namespace Smartproj
                 {
                     foreach (AbstractController controller in DefaultOutput.OrderByDescending(x => x.Priority))
                     {
-                        if (job.Status != ProcessStatusEnum.Processing) break;
+                        if (job.Status != ProcessStatusEnum.Processing)
+                        {
+                            Log?.WriteInfo("HotFolderImagesInputProvider.ProcessHandler", $"{Owner.Project.ProjectId} => Процесс прерван '{job.UID}'");
+                            break;
+                        }
                         controller.Start(new object[] { job });
                     }
                 }

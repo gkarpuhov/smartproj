@@ -104,7 +104,7 @@
         <Bounds TypeId="489541115">{X=50,Y=20,Width=306,Height=66}</Bounds>
         <FillColor TypeId="-742668771">Green</FillColor>
         <StrokeColor TypeId="-742668771">Black</StrokeColor>
-        <StrokeWeight TypeId="-1119076432">1</StrokeWeight>
+        <StrokeWeight TypeId="-1119076432">0.2</StrokeWeight>
         <TransformationMatrix TypeId="-536951104">0.866 0.5 -0.5 0.866 0 0</TransformationMatrix>
         <KeyId TypeId="1642033309">null</KeyId>
         <TreeNodeItems TypeId="2018040348" />
@@ -118,13 +118,13 @@
           <LinkTo TypeId="-1100425429">TopLeft</LinkTo>
         </PositionToImage>
         <GraphicType TypeId="1066637078">TextFrame</GraphicType>
-        <ReadOnly TypeId="-491435614">False</ReadOnly>
-        <Interval TypeId="-1119076432">3</Interval>
+        <ReadOnly TypeId="-491435614">True</ReadOnly>
+        <Interval TypeId="-1119076432">2</Interval>
         <Position TypeId="34379097">Center</Position>
         <Space TypeId="-1119076432">0</Space>
         <Layer TypeId="1727199146">3</Layer>
         <FrameSide TypeId="-532340399">Left</FrameSide>
-        <Bounds TypeId="489541115">{X=0,Y=0,Width=0,Height=0}</Bounds>
+        <Bounds TypeId="489541115">{X=19,Y=15,Width=90,Height=100}</Bounds>
         <FillColor TypeId="-742668771">White</FillColor>
         <StrokeColor TypeId="-742668771">Transparent</StrokeColor>
         <StrokeWeight TypeId="-1119076432">0</StrokeWeight>

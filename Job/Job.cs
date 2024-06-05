@@ -28,10 +28,6 @@ namespace Smartproj
         /// </summary>
         public ProcessStatusEnum Status { get { lock (mSyncRoot) { return mStatus; } } set { lock (mSyncRoot) { mStatus = value; } } }
         public Logger Log => Owner?.Log; 
-        /// <summary>
-        /// Контейнер, содержащий ресурсы документов
-        /// </summary>
-        public JobDocument Document { get; }
         public Project Owner { get; }
         /// <summary>
         /// Номер заказа. 
@@ -108,7 +104,6 @@ namespace Smartproj
             OutData = new Dictionary<string, ImposedDataContainer>();
             JobPath = Path.Combine(Owner.ProjectPath, "Jobs", UID.ToString());
             Directory.CreateDirectory(JobPath);
-            Document = new JobDocument();
         }
         /// <summary>
         /// Инициализация процесса, установки необходимых параметров для работы. Создает внутреннюю структуру продукта

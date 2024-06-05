@@ -12,12 +12,17 @@ namespace Smartproj
     {
         private List<ImposedLayout> mItems;
         public Job Owner { get; }
+        /// <summary>
+        /// Контейнер, содержащий ресурсы документов
+        /// </summary>
+        public JobDocument DocumentData { get; }
         public int Count => mItems.Count;
         public ImposedLayout this[int _index] => mItems[_index];
         public ImposedDataContainer(Job _owner) 
         {
             Owner = _owner;
             mItems = new List<ImposedLayout>();
+            DocumentData = new JobDocument();
         }
         public ImposedLayout Add(ImposedLayout _item)
         {

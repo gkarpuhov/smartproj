@@ -76,7 +76,7 @@ namespace Smartproj
                             if (!job.OutData.TryGetValue(matchTempName.Groups[1].Value.ToUpper(), out imposedlist))
                             {
                                 // Группировка по коду детали
-                                imposedlist = new ImposedDataContainer(job);
+                                imposedlist = new ImposedPdfDataContainer(job);
                                 job.OutData.Add(matchTempName.Groups[1].Value.ToUpper(), imposedlist);
                             }
 

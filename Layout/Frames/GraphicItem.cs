@@ -221,6 +221,7 @@ namespace Smartproj
     /// </summary>
     public class ImageFrame : ImageItem
     {
+
         /// <summary>
         /// Идентификатор ссылка на коллекция объектов параметров файла, который будет вставлен в фрейм
         /// </summary>

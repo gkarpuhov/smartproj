@@ -48,13 +48,13 @@
             <AdapterId TypeId="-1913220081">a4674aa6-06b7-4b2d-8864-d61315899100</AdapterId>
             <Source TypeId="1642033309">C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\_Input</Source>
             <DefaultOutput TypeId="1481613391">
-              <item TypeId="1501519237">
-                <DetailType TypeId="217811671">Block</DetailType>
-                <Label TypeId="1642033309">null</Label>
-                <UID TypeId="-1913220081">cac357ae-23a2-4186-b0b6-c710c780936e</UID>
-                <Priority TypeId="1727199146">0</Priority>
-                <Enabled TypeId="-491435614">False</Enabled>
-              </item>
+			  <item TypeId="1501519237">
+				<Destination TypeId="1642033309">C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\_Output</Destination>
+				<Label TypeId="1642033309">Генерация макета в PDF формате</Label>
+				<UID TypeId="-1913220081">a7e882a8-52a1-4473-8bc9-721dc372e75f</UID>
+				<Priority TypeId="1727199146">0</Priority>
+				<Enabled TypeId="-491435614">True</Enabled>
+			  </item>
             </DefaultOutput>
             <Label TypeId="1642033309">Запуск процесса обработки изображений из горячей папки</Label>
             <UID TypeId="-1913220081">e0ded6f2-9449-4d28-a6bb-e4358081788d</UID>

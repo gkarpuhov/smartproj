@@ -32,13 +32,6 @@
         <Priority TypeId="1727199146">1</Priority>
         <Enabled TypeId="-491435614">True</Enabled>
       </item>
-      <item TypeId="1501519237">
-        <Destination TypeId="1642033309">C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\_Output</Destination>
-        <Label TypeId="1642033309">Генерация макета в PDF формате</Label>
-        <UID TypeId="-1913220081">a7e882a8-52a1-4473-8bc9-721dc372e75f</UID>
-        <Priority TypeId="1727199146">0</Priority>
-        <Enabled TypeId="-491435614">True</Enabled>
-      </item>
     </Controllers>
     <KeyId TypeId="1642033309">null</KeyId>
     <TreeNodeItems TypeId="2018040348">

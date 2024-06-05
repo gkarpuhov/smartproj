@@ -161,15 +161,15 @@ namespace Smartproj
                             }
                             catch (Exception ex)
                             {
-                                Log?.WriteError("CreateLayoutSpace", $"Ошибка при загрузке шаблона ({size.Width}x{size.Height})'{Path.GetFileName(file)}: {ex.Message}");
-                                Log?.WriteError("CreateLayoutSpace", $"Ошибка при загрузке шаблона ({size.Width}x{size.Height})'{Path.GetFileName(file)}: {ex.StackTrace}");
+                                Log?.WriteError("Product.CreateLayoutSpace", $"Ошибка при загрузке шаблона ({size.Width}x{size.Height})'{Path.GetFileName(file)}: {ex.Message}");
+                                Log?.WriteError("Product.CreateLayoutSpace", $"Ошибка при загрузке шаблона ({size.Width}x{size.Height})'{Path.GetFileName(file)}: {ex.StackTrace}");
                             }
                         }
                         if (TempletesAutoUpdate)
                         {
-                            Log?.WriteInfo("CreateLayoutSpace", $"Обновление шаблонов продукта выполнено {size.Width}x{size.Height}");
+                            Log?.WriteInfo("Product.CreateLayoutSpace", $"Обновление шаблонов продукта выполнено {size.Width}x{size.Height}");
                         }
-                        Log?.WriteInfo("CreateLayoutSpace", $"Загружено шаблонов {size.Width}x{size.Height}. Всего: {TemplateKeys.Count}; Добавлено: {lay.TemplateCollection.Count}");
+                        Log?.WriteInfo("Product.CreateLayoutSpace", $"Загружено шаблонов {size.Width}x{size.Height}. Всего: {TemplateKeys.Count}; Добавлено: {lay.TemplateCollection.Count}");
                     }
                 }
             }
