@@ -9,8 +9,8 @@ namespace Smartproj.Utils
 {
     public static class TypeEx
     {
-        private static Type[] ExConvertersFrom = new Type[] { typeof(Rectangle), typeof(RectangleF), typeof(byte[]), typeof(float[]), typeof(PointF), typeof(float), typeof(double) };
-        private static Type[] ExConvertersTo = new Type[] { typeof(byte[]), typeof(float[]), typeof(RectangleF), typeof(PointF), typeof(float), typeof(double) };
+        private static Type[] ExConvertersFrom = new Type[] { typeof(Rectangle), typeof(RectangleF), typeof(byte[]), typeof(float[]), typeof(PointF), typeof(float), typeof(double), typeof(Margins) };
+        private static Type[] ExConvertersTo = new Type[] { typeof(byte[]), typeof(float[]), typeof(RectangleF), typeof(PointF), typeof(float), typeof(double), typeof(Margins) };
         public static bool CanConvertFromString(this Type _type) => ExConvertersFrom.Contains(_type);
         public static bool CanConvertToString(this Type _type) => ExConvertersTo.Contains(_type);
         public static string ContertToString(this Type _type, object _value)
@@ -31,6 +31,11 @@ namespace Smartproj.Utils
                 {
                     RectangleF rect = (RectangleF)_value;
                     return $"{{X={rect.X.ToString(format)},Y={rect.Y.ToString(format)},Width={rect.Width.ToString(format)},Height={rect.Height.ToString(format)}}}";
+                }
+                if (_type == typeof(Margins))
+                {
+                    Margins margins = (Margins)_value;
+                    return $"{{Top={margins.Top.ToString(format)},Left={margins.Left.ToString(format)},Bottom={margins.Bottom.ToString(format)},Right={margins.Right.ToString(format)}}}";
                 }
                 if (_type == typeof(PointF))
                 {
@@ -53,6 +58,8 @@ namespace Smartproj.Utils
         {
             if (_type != null && _value != null && CanConvertFromString(_type))
             {
+                NumberFormatInfo format = new NumberFormatInfo() { NumberDecimalSeparator = "." };
+
                 if (_type == typeof(Color))
                 {
                     Match match = Regex.Match(_value, @"(^[0-2]|^)([0-2]?[0-5]?[0-5])[\;\,\s]+([0-2]?[0-5]?[0-5])[\;\,\s]+([0-2]?[0-5]?[0-5])[\;\,\s]+([0-2]?[0-5]?[0-5])(^[0-5]|$)", RegexOptions.Compiled);
@@ -66,11 +73,23 @@ namespace Smartproj.Utils
                     Match match = Regex.Match(_value, @"(X=)?(-?[\d\.]+)[\s,;]+(Y=)?(-?[\d\.]+)[\s,;]+(Width=)?(-?[\d\.]+)[\s,;]+(Height=)?(-?[\d\.]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
                     if (match.Success) 
                     {
-                        float x = float.Parse(match.Groups[2].Value, NumberStyles.Float, new NumberFormatInfo() { NumberDecimalSeparator = "." });
-                        float y = float.Parse(match.Groups[4].Value, NumberStyles.Float, new NumberFormatInfo() { NumberDecimalSeparator = "." });
-                        float w = float.Parse(match.Groups[6].Value, NumberStyles.Float, new NumberFormatInfo() { NumberDecimalSeparator = "." });
-                        float h = float.Parse(match.Groups[8].Value, NumberStyles.Float, new NumberFormatInfo() { NumberDecimalSeparator = "." });
+                        float x = float.Parse(match.Groups[2].Value, NumberStyles.Float, format);
+                        float y = float.Parse(match.Groups[4].Value, NumberStyles.Float, format);
+                        float w = float.Parse(match.Groups[6].Value, NumberStyles.Float, format);
+                        float h = float.Parse(match.Groups[8].Value, NumberStyles.Float, format);
                         return new RectangleF(x, y, w, h);
+                    }
+                }
+                if (_type == typeof(Margins))
+                {
+                    Match match = Regex.Match(_value, @"(Top=)?(-?[\d\.]+)[\s,;]+(Left=)?(-?[\d\.]+)[\s,;]+(Bottom=)?(-?[\d\.]+)[\s,;]+(Right=)?(-?[\d\.]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                    if (match.Success)
+                    {
+                        float t = float.Parse(match.Groups[2].Value, NumberStyles.Float, format);
+                        float l = float.Parse(match.Groups[4].Value, NumberStyles.Float, format);
+                        float b = float.Parse(match.Groups[6].Value, NumberStyles.Float, format);
+                        float r = float.Parse(match.Groups[8].Value, NumberStyles.Float, format);
+                        return new Margins(t, l, b, r );
                     }
                 }
                 if (_type == typeof(PointF))
@@ -78,18 +97,18 @@ namespace Smartproj.Utils
                     Match match = Regex.Match(_value, @"(X=)?(-?[\d\.]+)[\s,;]+(Y=)?(-?[\d\.]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
                     if (match.Success)
                     {
-                        float x = float.Parse(match.Groups[2].Value, NumberStyles.Float, new NumberFormatInfo() { NumberDecimalSeparator = "." });
-                        float y = float.Parse(match.Groups[4].Value, NumberStyles.Float, new NumberFormatInfo() { NumberDecimalSeparator = "." });
+                        float x = float.Parse(match.Groups[2].Value, NumberStyles.Float, format);
+                        float y = float.Parse(match.Groups[4].Value, NumberStyles.Float, format);
                         return new PointF(x, y);
                     }
                 }
                 if (_type == typeof(float))
                 {
-                    return float.Parse(_value, new NumberFormatInfo() { NumberDecimalSeparator = "." });
+                    return float.Parse(_value, format);
                 }
                 if (_type == typeof(double))
                 {
-                    return double.Parse(_value, new NumberFormatInfo() { NumberDecimalSeparator = "." });
+                    return double.Parse(_value, format);
                 }
                 if (_type == typeof(Rectangle))
                 {
@@ -124,7 +143,7 @@ namespace Smartproj.Utils
                     {
                         foreach (Match match in matches)
                         {
-                            values.Add(float.Parse(match.Groups[1].Value, NumberStyles.Float, new NumberFormatInfo() { NumberDecimalSeparator = "." }));
+                            values.Add(float.Parse(match.Groups[1].Value, NumberStyles.Float, format));
                         }
                     }
                     return values.ToArray();

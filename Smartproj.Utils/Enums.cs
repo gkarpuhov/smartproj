@@ -90,6 +90,9 @@ namespace Smartproj.Utils
         RGB_with_Alpha = 6,
         Unknown = 10
     }
+    /// <summary>
+    /// Тип макета шаблона
+    /// </summary>
     [Flags]
     public enum DetailLayoutTypeEnum
     {
@@ -132,18 +135,18 @@ namespace Smartproj.Utils
     /// Флаг, определяющий что из себя представляет сторона шаблона, и для какого продукта она может быть применима.
     /// None - Данный параметр не определен. 
     /// Single - Не определено понятия левая/правая (карточки, календари).
-    /// Left - Применимо к левой полосе
-    ///    Right = 4, // Применимо к правой полосе
-    ///    Front = 8, // Применимо к лицевой стороне листа
-    ///    Back = 16, // Применимо к оборотной стороне листа
-    ///    LeftAndRight = 32, // Формат включает в себя, и левую, и правую стороны (layflat, КШС)
-    ///    DefaultPage = Left | Right | Front | Back, // Классика, флекс
-    /// DefaultPremium = Left | Right | Front, // Бабочки разрезные
-    /// DefaultTwoPage = LeftAndRight | Front, // Бабочки
-    /// DefaultDuplex = Single | Front | Back, // Карточки, календари двухстороннии
-    /// DefaultSimplex = Single | Front, // Карточки, календари одностороннии
-    /// DefaultFirst = Right | Front, // Первая страница классики
-    /// DefaultLast = Left | Back // Последняя страница классики
+    /// Left - Применимо к левой полосе.
+    /// Right - Применимо к правой полосе.
+    /// Front - Применимо к лицевой стороне листа.
+    /// Back - Применимо к оборотной стороне листа.
+    /// LeftAndRight - Формат включает в себя, и левую, и правую стороны (layflat, КШС).
+    /// DefaultPage - Left | Right | Front | Back, // Классика, флекс.
+    /// DefaultPremium - Left | Right | Front, // Бабочки разрезные.
+    /// DefaultTwoPage - LeftAndRight | Front, // Бабочки.
+    /// DefaultDuplex - Single | Front | Back, // Карточки, календари двухстороннии.
+    /// DefaultSimplex - Single | Front, // Карточки, календари одностороннии.
+    /// DefaultFirst - Right | Front, // Первая страница классики.
+    /// DefaultLast - Left | Back // Последняя страница классики
     /// </summary>
     [Flags]
     public enum PageSide
@@ -251,7 +254,7 @@ namespace Smartproj.Utils
         Ellipse
     }
     /// <summary>
-    /// Lossless сжатие ZIP кодеком; MaxQuality - JPEG кодек 100% качество; Medium - JPEG кодек 100% качество; Preview - JPEG кодек 50% качество
+    /// Lossless сжатие ZIP кодеком; MaxQuality - JPEG кодек 100% качество; Medium - JPEG кодек 75% качество; Preview - JPEG кодек 50% качество
     /// </summary>
     public enum FileSizeOptimization
     {
@@ -260,14 +263,14 @@ namespace Smartproj.Utils
         Medium,
         Preview
     }
+    [Flags]
     public enum AutoPositionObjectTypeEnum
     {
-        Off,
-        Face
+        Off = 0,
+        OneFace = 1,
+        GroupFaces = 2,
+        ProtectFaces = 4,
+        AnyFaces = OneFace| GroupFaces
     }
-    public enum AutoPositionBoundTypeEnum
-    {
-        Off,
-        Face
-    }
+
 }

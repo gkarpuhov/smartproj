@@ -374,6 +374,11 @@ namespace Smartproj
                                         string filename = Path.Combine(job.JobPath, "~Files", filedata.GUID + (job.Product.Optimization == FileSizeOptimization.Lossless ? ".tiff" : ".jpeg"));
                                         // Координаты фреймов имеют ноль в обрезном формате. Вылет идет в минус. Поэтому сдвигаем на величину вылета (отнимая от общего смещения влево)
                                         DrawImageFrame(_detaildata, frame, xShift, bleedsize, filename, framedata);
+
+                                        if ((job.Status & ProcessStatusEnum.Error) != ProcessStatusEnum.Error)
+                                        {
+                                            filedata.AddStatus(ImageStatusEnum.Placed);
+                                        }
                                     }
 
                                     if (item.GraphicType == GraphicTypeEnum.TextFrame)

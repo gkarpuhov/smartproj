@@ -1,9 +1,31 @@
-﻿using System;
+﻿using Microsoft.SqlServer.Server;
+using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
+using System.Globalization;
 using System.Linq;
 
 namespace Smartproj.Utils
 {
+    public struct Margins
+    {
+        public float Top;
+        public float Left;
+        public float Bottom;
+        public float Right;
+        public Margins(float _top, float _left, float _bottom, float _right)
+        {
+            Top = _top;
+            Left = _left;
+            Bottom = _bottom;
+            Right = _right;
+        }
+        public override string ToString()
+        {
+            NumberFormatInfo format = new NumberFormatInfo() { NumberDecimalSeparator = "." };
+            return $"{{Top={Top.ToString(format)},Left={Left.ToString(format)},Bottom={Bottom.ToString(format)},Right={Right.ToString(format)}}}";
+        }
+    }
     public class Interval
     {
         public Interval(int _x1, int _x2)
@@ -23,9 +45,7 @@ namespace Smartproj.Utils
             int x1 = int.MinValue;
             int x2 = int.MaxValue;
             _intersection = null;
-
             if (_inetrvals == null || _inetrvals.Count() == 0) return false;
-
             foreach (Interval interval in _inetrvals)
             {
                 if (interval.X1 > x1) x1 = interval.X1;

@@ -52,8 +52,7 @@ namespace Smartproj
     public class ImposedImageData : IEqualityComparer<ImposedImageData>
     {
         public int FileId { get; set; }
-        public PointF Shift { get; set; }
-        public float Scale { get; set; }
+        public RectangleF Bounds { get; set; }
         public int OrderBy { get; set; }
         public ImposedDataContainer Owner { get; set; }
         public ImposedImageData()

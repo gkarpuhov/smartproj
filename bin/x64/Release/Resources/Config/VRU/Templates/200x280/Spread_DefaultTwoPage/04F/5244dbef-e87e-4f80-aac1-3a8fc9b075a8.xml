@@ -18,6 +18,10 @@
     <Location TypeId="1642033309">C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Templates\200x280\Spread_DefaultTwoPage\04F\5244dbef-e87e-4f80-aac1-3a8fc9b075a8.xml</Location>
     <Graphics TypeId="-1673037392">
       <item TypeId="1364886211">
+        <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
+        <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
+        <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
+        <AutoDetectAndFocusWidth TypeId="-1119076432">0</AutoDetectAndFocusWidth>
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">0; 0</FrameID>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
@@ -39,6 +43,10 @@
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="1364886211">
+        <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
+        <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
+        <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
+        <AutoDetectAndFocusWidth TypeId="-1119076432">0</AutoDetectAndFocusWidth>
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">0; 0</FrameID>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
@@ -58,6 +66,10 @@
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="1364886211">
+        <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
+        <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
+        <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
+        <AutoDetectAndFocusWidth TypeId="-1119076432">0</AutoDetectAndFocusWidth>
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">0; 1</FrameID>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
@@ -77,6 +89,10 @@
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="1364886211">
+        <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
+        <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
+        <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
+        <AutoDetectAndFocusWidth TypeId="-1119076432">0</AutoDetectAndFocusWidth>
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">1; 0</FrameID>
         <FrameShape TypeId="1484013679">Rectangle</FrameShape>
@@ -177,6 +193,8 @@
     <HorizontalPositionEnum Id="1284647405" Guid="(51c0778e-3afa-320d-9207-808571ee774a)">Smartproj.Utils.HorizontalPositionEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</HorizontalPositionEnum>
     <PositionEnum Id="-1100425429" Guid="(97a51212-5739-30cb-ae07-e839b04708f2)">Smartproj.Utils.PositionEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</PositionEnum>
     <ImageFrameShapeEnum Id="1484013679" Guid="(8126d31c-2e1a-31a7-aa1f-fb201ea15e6d)">Smartproj.Utils.ImageFrameShapeEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</ImageFrameShapeEnum>
+    <Margins Id="1003947508" Guid="(fe0ae27a-bbba-363c-8799-e4d5760f36e2)">Smartproj.Utils.Margins, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Margins>
+    <AutoPositionObjectTypeEnum Id="-2073753911" Guid="(09e6b752-c3a4-33ce-80a6-d30c82b3ef2c)">Smartproj.Utils.AutoPositionObjectTypeEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AutoPositionObjectTypeEnum>
     <PinnedTextCollection Id="-2008165553" Guid="(3a978222-4ee1-3dd2-b77d-2f6fede2177a)">Smartproj.ImageFrame+PinnedTextCollection, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</PinnedTextCollection>
   </Types>
 </root>

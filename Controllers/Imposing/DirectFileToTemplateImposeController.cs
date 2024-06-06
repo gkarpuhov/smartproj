@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Smartproj
 {
@@ -25,6 +26,16 @@ namespace Smartproj
     /// </summary>
     public class DirectFileToTemplateImposeController : AbstractController
     {
+        /// <summary>
+        /// Разрешение с которым изображение должно быть автоматически образмерено. 0 - Не выполнять ничего
+        /// </summary>
+        [XmlElement]
+        public float AutoResample { get; set; }
+        /// <summary>
+        /// Минимально допустимое эффективное разрешение
+        /// </summary>
+        [XmlElement]
+        public float MinimalResolution { get; set; }
         public override ProcessStatusEnum CurrentStatus { get; protected set; }
         public override void Start(object[] _settings)
         {
@@ -100,7 +111,7 @@ namespace Smartproj
                             {
                                 // Нужный шаблон успешно найден. Попытка заполнить файлами из директории сегмента
                                 var toTryinmpse = imposedlist.Add(new ImposedLayout(template, directory));
-                                if (TryImageImpose(toTryinmpse, job))
+                                if (TryImageImpose(toTryinmpse))
                                 {
 
                                 }
@@ -137,8 +148,9 @@ namespace Smartproj
                 Log?.WriteInfo("DirectFileToTemplateImposeController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер деактивирован. Процессы не выполнены");
             }
         }
-        private bool TryImageImpose(ImposedLayout _toTryinmpse, Job _job)
+        private bool TryImageImpose(ImposedLayout _toTryinmpse)
         {
+            var job = _toTryinmpse.Owner.Owner;
             List<int> data = new List<int>();
             for (int j = 0; j < _toTryinmpse.Segments[0].ChildNodes.Count; j++)
             {
@@ -155,14 +167,112 @@ namespace Smartproj
                     {
                         if (frames[k, m] != default && current < data.Count)
                         {
-                            _toTryinmpse.Imposed[i][k, m].FileId = data[current++];
+                            ImageFrame graphic = (ImageFrame)_toTryinmpse.Templ.Graphics.SingleOrDefault(x =>
+                            {
+                                if (x.GraphicType == GraphicTypeEnum.ImageFrame && (_toTryinmpse.Templ.Frames.SidesCount == 1 || (i == 0 && x.FrameSide == PageSide.Left) || (i == 1 && x.FrameSide == PageSide.Right)))
+                                {
+                                    return ((ImageFrame)x).FrameID.X == k && ((ImageFrame)x).FrameID.Y == m;
+                                }
+                                return false;
+                            });
+                            if (graphic == null) return false;
+
+                            int fileid = data[current++];
+
+                            _toTryinmpse.Imposed[i][k, m].FileId = fileid;
                             _toTryinmpse.Imposed[i][k, m].Owner = _toTryinmpse.Owner;
+
+                            if (graphic.AutoFitObjectType != AutoPositionObjectTypeEnum.Off)
+                            {
+                                TryImageFit(_toTryinmpse, graphic, _toTryinmpse.Imposed[i][k, m]);
+                            }
+
+                            job.DataContainer[fileid].AddStatus(ImageStatusEnum.Imposed);
                         }
                     }
                 }
             }
 
             return _toTryinmpse.Available == 0;
+        }
+        private void TryImageFit(ImposedLayout _toTryinmpse, ImageFrame _graphic, ImposedImageData _data)
+        {
+            var job = _toTryinmpse.Owner.Owner;
+
+            if (_graphic.AutoFitObjectType == AutoPositionObjectTypeEnum.ProtectFaces) 
+            {
+            }
+            else
+            {
+                if ((_graphic.AutoFitObjectType & AutoPositionObjectTypeEnum.OneFace) == AutoPositionObjectTypeEnum.OneFace && job.DataContainer[_data.FileId].ObjectDetect.Count == 1)
+                {
+                    if (_graphic.AutoDetectAndFocusWidth > 0)
+                    {
+                        float resolution = (job.DataContainer[_data.FileId].ObjectDetect[0].Width * 25.4f) / _graphic.AutoDetectAndFocusWidth;
+
+                        if (resolution >= MinimalResolution)
+                        {
+                            // Позиционирование лицо во фрейм
+                            // Координаты  области лица в миллиметрах относительно левого нижнего угла фрейма
+                            float frame_face_dx = 0;
+                            float frame_face_dy = 0;
+                            float faceHeiht = (job.DataContainer[_data.FileId].ObjectDetect[0].Height * 25.4f) / resolution;
+                            //
+                            if ((_graphic.AutoFitPaddling & PositionEnum.Left) == PositionEnum.Left)
+                            {
+                                frame_face_dx = _graphic.AutoFitMargins.Left;
+                            }
+                            if ((_graphic.AutoFitPaddling & PositionEnum.Right) == PositionEnum.Right)
+                            {
+                                frame_face_dx = _graphic.Bounds.Width - _graphic.AutoFitMargins.Right - _graphic.AutoDetectAndFocusWidth;
+                            }
+                            if ((_graphic.AutoFitPaddling & PositionEnum.CenterHorizontal) == PositionEnum.CenterHorizontal)
+                            {
+                                frame_face_dx = _graphic.AutoFitMargins.Left + (_graphic.Bounds.Width - _graphic.AutoFitMargins.Left - _graphic.AutoFitMargins.Right - _graphic.AutoDetectAndFocusWidth) / 2;
+                            }
+                            if ((_graphic.AutoFitPaddling & PositionEnum.Bottom) == PositionEnum.Bottom)
+                            {
+                                frame_face_dy = _graphic.AutoFitMargins.Bottom;
+                            }
+                            if ((_graphic.AutoFitPaddling & PositionEnum.Top) == PositionEnum.Top)
+                            {
+                                frame_face_dy = _graphic.Bounds.Height - _graphic.AutoFitMargins.Top - faceHeiht;
+                            }
+                            if ((_graphic.AutoFitPaddling & PositionEnum.CenterVertical) == PositionEnum.CenterVertical)
+                            {
+                                frame_face_dy = _graphic.AutoFitMargins.Bottom + (_graphic.Bounds.Height - _graphic.AutoFitMargins.Bottom - _graphic.AutoFitMargins.Top - faceHeiht) / 2;
+                            }
+                            // Размер изображения в миллиметрах
+                            float widht = (job.DataContainer[_data.FileId].ImageSize.Width * 25.4f) / resolution;
+                            float height = (job.DataContainer[_data.FileId].ImageSize.Height * 25.4f) / resolution;
+                            // Смещение левого нижнего угла лица относительно левого нижнего угла изображения в миллиметрах
+                            float image_face_dx = (job.DataContainer[_data.FileId].ObjectDetect[0].X * 25.4f) / resolution;
+                            float image_face_dy = ((job.DataContainer[_data.FileId].ObjectDetect[0].Y - job.DataContainer[_data.FileId].ObjectDetect[0].Height) * 25.4f) / resolution;
+                            // Смещение изображения относительно фрейма в миллиметрах
+                            float image_frame_dx = image_face_dx - frame_face_dx;
+                            float image_frame_dy = image_face_dy - frame_face_dy;
+                            // Проверка что изображение не вышло из фрейма
+                            if (image_frame_dx >= 0 && image_frame_dy >= 0 && image_frame_dx + _graphic.Bounds.Width <= widht && image_frame_dy + _graphic.Bounds.Height <= height)
+                            {
+                                _data.Bounds = new RectangleF(_graphic.Bounds.X - image_frame_dx, _graphic.Bounds.Y - image_frame_dy, widht, height);
+                            }
+                            else
+                            {
+                                // Error
+                            }
+                        }
+                        else
+                        {
+                            // Error
+                        }
+                    }
+                }
+                if ((_graphic.AutoFitObjectType & AutoPositionObjectTypeEnum.GroupFaces) == AutoPositionObjectTypeEnum.GroupFaces && job.DataContainer[_data.FileId].ObjectDetect.Count > 1)
+                {
+
+                }
+
+            }
         }
         protected override void Dispose(bool _disposing)
         {
@@ -171,6 +281,8 @@ namespace Smartproj
         public DirectFileToTemplateImposeController() : base()
         {
             CurrentStatus = ProcessStatusEnum.New;
+            AutoResample = 0;
+            MinimalResolution = 200;
         }
     }
 }

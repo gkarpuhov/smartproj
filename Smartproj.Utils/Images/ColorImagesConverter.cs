@@ -354,7 +354,6 @@ namespace Smartproj.Utils
                                             BitmapData rgbData = rgb.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
                                             rgbValues = new byte[Math.Abs(rgbData.Stride) * bitmap.Height];
 
-                                            //StreamLogger.WriteLine($"Нормализация ID {item.Index}: Параметры Трансформации: Stride = {bitmapData.Stride}, Width = {bitmap.Width}, Height = {bitmap.Height}, PixelFormat = {bitmap.PixelFormat}. Файл: {item.FileName}");
                                             transform_XXX_To_RGB.DoTransform(bitmapValues, rgbValues, bitmap.Width, bitmap.Height, bitmapData.Stride, rgbData.Stride, bitmapData.Stride, rgbData.Stride);
 
                                             Marshal.Copy(rgbValues, 0, rgbData.Scan0, rgbValues.Length);
@@ -363,7 +362,7 @@ namespace Smartproj.Utils
                                             rgb.Save(Path.Combine(tempFiles, $"{item.GUID}.{OutType.ToString().ToLower()}"), imageCodecInfo, encoderParameters);
 
                                             item.AddStatus(ImageStatusEnum.ColorTransformed);
-                                            if (item.ImageType != TagFileTypeEnum.JPEG)
+                                            if (item.ImageType != OutType)
                                             {
                                                 item.AddStatus(ImageStatusEnum.FormatTransformed);
                                             }
