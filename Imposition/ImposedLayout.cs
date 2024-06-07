@@ -318,7 +318,7 @@ namespace Smartproj
                 {
                     for (int m = 0; m < h; m++)
                     {
-                        frames[k, m] = new ImposedImageData() { FileId = -1, Shift = new Point(0, 0), Scale = 1.0f, OrderBy = 0 };
+                        frames[k, m] = new ImposedImageData() { FileId = -1, OrderBy = 0 };
                     }
                 }
                 Imposed.Add(frames);

@@ -72,6 +72,7 @@ namespace Smartproj
                             _job.ProductionQty = 1;
                             _job.Create((Product)Serializer.LoadXml(productFile), productSize, metadata, MetadataType, FileDataFilter);
                             //_job.Product.Save();
+                            _job.MinimalResolution = 72;
                             _project.Log?.WriteInfo("VruAdapter.GetNext", $"Продукт  {_project.ProjectId} => {_job.Product.ProductKeyCode} ({productSize.Width}X{productSize.Height}) успешно иницализирован процессом {_job.UID}");
 
                             return true;

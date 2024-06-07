@@ -61,4 +61,40 @@ namespace Smartproj.Utils
             return true;
         }
     }
+    public class IntervalF
+    {
+        public IntervalF(float _x1, float _x2)
+        {
+            X1 = _x1;
+            X2 = _x2;
+        }
+        public IntervalF(ValueTuple<float, float> _interval) : this(_interval.Item1, _interval.Item2) { }
+        public float X1 { get; set; }
+        public float X2 { get; set; }
+        public float Length => X2 - X1;
+        public bool IsPoint => X1 == X2;
+        public bool Contains(IntervalF _interval) => X2 >= _interval.X2 && X1 <= _interval.X1;
+        public bool Contains(float _point) => X2 >= _point && X1 <= _point;
+        public static bool Intersection(IEnumerable<IntervalF> _inetrvals, out IntervalF _intersection)
+        {
+            float x1 = float.MinValue;
+            float x2 = float.MaxValue;
+            _intersection = null;
+            if (_inetrvals == null || _inetrvals.Count() == 0) return false;
+            foreach (IntervalF interval in _inetrvals)
+            {
+                if (interval.X1 > x1) x1 = interval.X1;
+                if (interval.X2 < x2) x2 = interval.X2;
+
+                if (x1 > x2)
+                {
+                    return false;
+                }
+            }
+
+            _intersection = new IntervalF(x1, x2);
+            return true;
+        }
+    }
+
 }

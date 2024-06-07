@@ -24,11 +24,9 @@
         <Label TypeId="1642033309">Распознование лиц на изображениях</Label>
         <UID TypeId="-1913220081">53a73f9f-bc6b-4a55-9c5c-0e4ec4e7c6de</UID>
         <Priority TypeId="1727199146">2</Priority>
-        <Enabled TypeId="-491435614">False</Enabled>
+        <Enabled TypeId="-491435614">True</Enabled>
       </item>
       <item TypeId="-390503294">
-        <AutoResample TypeId="-1119076432">0</AutoResample>
-        <MinimalResolution TypeId="-1119076432">200</MinimalResolution>
         <Label TypeId="1642033309">Контроллер осуществляет сборку макета только на основании содержимого исходных папок</Label>
         <UID TypeId="-1913220081">83fbc4c5-1fd6-4529-8fe7-b5a5be2d590c</UID>
         <Priority TypeId="1727199146">1</Priority>

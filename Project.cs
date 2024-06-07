@@ -123,48 +123,6 @@ namespace Smartproj
         /// </summary>
         [XmlCollection(true, false, typeof(AbstractInputProvider))]
         public ControllerCollection InputProviders { get; }
-        //
-        /*
-        internal void CreateProducts()
-        {
-            Products = new ProductCollection(this);
-
-            string[] files = Directory.GetFiles(Path.Combine(Home, "Products"), "*.xml", SearchOption.AllDirectories);
-
-            foreach (var file in files)
-            {
-                try
-                {
-                    Product product = (Product)Serializer.LoadXml(file);
-
-                    if (ProductsAutoUpdate && !ProductKeys.Contains(product.UID))
-                    {
-                        ProductKeys.Add(product.UID);
-                    }
-
-                    if (ProductKeys.Contains(product.UID))
-                    {
-                        if (ProductsAutoUpdate)
-                        {
-                            product.TemplateKeys.Clear();
-                        }
-
-                        Products.Add(product);
-
-                        if (ProductsAutoUpdate)
-                        {
-                            product.Save();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.WriteError("CreateProducts", $"Ошибка при загрузке продукта '{file}: {ex.Message}");
-                    Log.WriteError("CreateProducts", $"Ошибка при загрузке продукта '{file}: {ex.StackTrace}");
-                }   
-            }
-        }
-        */
         /// <summary>
         /// Конструктор для создания экземпляра класса путём десериализации
         /// </summary>
@@ -1405,44 +1363,6 @@ namespace Smartproj
             doc.Dispose();
         }
         */
-
-      
-        private float FileToFrame(GdPicturePDF _doc, GdPictureImaging _obj, Rectangle _frame, int _shift, string _file, Point _correction)
-        {
-            int id = _obj.CreateGdPictureImageFromFile(_file);
-            int iWidth = _obj.GetWidth(id);
-            int iHeight = _obj.GetHeight(id);
-            string imagename = _doc.AddImageFromGdPictureImage(id, false, false);
-            float effectiveRes = 0f;
-
-            _doc.SaveGraphicsState();
-            try
-            {
-                GdPictureStatus res;
-
-                PointF[] points = new PointF[4] { new PointF(_frame.X - _shift, _frame.Y), new PointF(_frame.X - _shift, _frame.Y + _frame.Height), new PointF(_frame.X - _shift + _frame.Width, _frame.Y + _frame.Height), new PointF(_frame.X - _shift + _frame.Width, _frame.Y) };
-                _doc.AddGraphicsToPath(new GraphicsPath(points, new byte[4] { (byte)(PathPointType.Start | PathPointType.Line), (byte)PathPointType.Line, (byte)PathPointType.Line, (byte)PathPointType.Line }));
-                _doc.ClipPath();
-
-                var fitedRect = _frame.FitToFrame(iWidth, iHeight, _shift);
-                res = _doc.DrawImage(imagename, fitedRect.Item1.X + _correction.X, fitedRect.Item1.Y + _correction.Y, fitedRect.Item1.Width, fitedRect.Item1.Height);
-                effectiveRes = fitedRect.Item2;
-                
-                if (res != GdPictureStatus.OK)
-                {
-                    Log?.WriteError("FileToFrame", $"Ошибка отрисовки изображения во фрейм. Status = {res}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log?.WriteError("FileToFrame", $"Исключение при отрисовке изображения во фрейм '{ex.Message}'");
-            }
-
-            _doc.RestoreGraphicsState();
-            _obj.ReleaseGdPictureImage(id);
-
-            return effectiveRes;
-        }
         /// <summary>
         /// Освобождение ресурсов объекта <see cref="Project"/>. Также освобождает ресурсы связанных объектов <see cref="AbstractInputProvider"/>. Метод ожидает завершения работы контроллеров, и процессов, происходящих в них, и только после этого передает управление
         /// </summary>

@@ -36,26 +36,25 @@ namespace Smartproj.Utils
                 return new ValueTuple<Rectangle, float>(new Rectangle(X, Y, _frame.Width, (_frame.Width * _imageH) / _imageW), (float)_imageW / (float)_frame.Width);
             }
         }
-        public static ValueTuple<RectangleF, float> FitToFrameF(this RectangleF _frame, float _imageW, float _imageH, float _shift, float _bleed)
+        public static ValueTuple<RectangleF, float> FitToFrameF(this RectangleF _frame, float _imageW, float _imageH)
         {
             // Возврат:
             // 1-е значение: реальное расположение изображения в миллиметрах
             // 2-е значение: эффективное разрешение в точках на миллиметр
 
-            //float kHor = _imageW / _imageH;
             float X;
             float Y;
 
             if (_imageW / _imageH > _frame.Width / _frame.Height)
             {
-                X = _frame.X - _shift + _bleed - ((_frame.Height * _imageW) / _imageH - _frame.Width) / 2;
-                Y = _frame.Y + _bleed;
+                X = _frame.X - ((_frame.Height * _imageW) / _imageH - _frame.Width) / 2;
+                Y = _frame.Y;
                 return new ValueTuple<RectangleF, float>(new RectangleF(X, Y, (_frame.Height * _imageW) / _imageH, _frame.Height), _imageH / _frame.Height);
             }
             else
             {
-                X = _frame.X - _shift + _bleed;
-                Y = _frame.Y + _bleed - ((_frame.Width * _imageH) / _imageW - _frame.Height) / 2;
+                X = _frame.X;
+                Y = _frame.Y - ((_frame.Width * _imageH) / _imageW - _frame.Height) / 2;
                 return new ValueTuple<RectangleF, float>(new RectangleF(X, Y, _frame.Width, (_frame.Width * _imageH) / _imageW), _imageW / _frame.Width);
             }
         }

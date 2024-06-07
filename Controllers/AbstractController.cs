@@ -1,7 +1,10 @@
-﻿using Smartproj.Utils;
+﻿using ProjectPage;
+using Smartproj.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace Smartproj
@@ -116,6 +119,304 @@ namespace Smartproj
         /// </summary>
         public abstract ProcessStatusEnum CurrentStatus { get; protected set; }
         public Logger Log => Owner?.Log;
+        public static void TryImageFit(ImposedLayout _toTryinmpse, ImageFrame _graphic, ImposedImageData _data)
+        {
+            var job = _toTryinmpse.Owner.Owner;
+
+            if ((_graphic.AutoFitObjectType & AutoPositionObjectTypeEnum.OneFace) == AutoPositionObjectTypeEnum.OneFace && job.DataContainer[_data.FileId].ObjectDetect.Count == 1)
+            {
+                float faceWidht = 0;
+                float faceHeiht = 0;
+                float frame_face_dx = 0;
+                float frame_face_dy = 0;
+                // точек/мм
+                float resolution = 0;
+
+                if (_graphic.AutoDetectAndFocusWidth > 0)
+                {
+                    faceWidht = _graphic.AutoDetectAndFocusWidth;
+                    resolution = job.DataContainer[_data.FileId].ObjectDetect[0].Width / faceWidht;
+                    faceHeiht = job.DataContainer[_data.FileId].ObjectDetect[0].Height / resolution;
+                    // Позиционирование лицо во фрейм
+                    // Координаты  области лица в миллиметрах относительно левого нижнего угла фрейма
+                    if ((_graphic.AutoFitPaddling & PositionEnum.Left) == PositionEnum.Left)
+                    {
+                        frame_face_dx = _graphic.AutoFitMargins.Left;
+                    }
+                    if ((_graphic.AutoFitPaddling & PositionEnum.Right) == PositionEnum.Right)
+                    {
+                        frame_face_dx = _graphic.Bounds.Width - _graphic.AutoFitMargins.Right - faceWidht;
+                    }
+                    if ((_graphic.AutoFitPaddling & PositionEnum.CenterHorizontal) == PositionEnum.CenterHorizontal)
+                    {
+                        frame_face_dx = _graphic.AutoFitMargins.Left + (_graphic.Bounds.Width - _graphic.AutoFitMargins.Left - _graphic.AutoFitMargins.Right - faceWidht) / 2;
+                    }
+                    if ((_graphic.AutoFitPaddling & PositionEnum.Bottom) == PositionEnum.Bottom)
+                    {
+                        frame_face_dy = _graphic.AutoFitMargins.Bottom;
+                    }
+                    if ((_graphic.AutoFitPaddling & PositionEnum.Top) == PositionEnum.Top)
+                    {
+                        frame_face_dy = _graphic.Bounds.Height - _graphic.AutoFitMargins.Top - faceHeiht;
+                    }
+                    if ((_graphic.AutoFitPaddling & PositionEnum.CenterVertical) == PositionEnum.CenterVertical)
+                    {
+                        frame_face_dy = _graphic.AutoFitMargins.Bottom + (_graphic.Bounds.Height - _graphic.AutoFitMargins.Bottom - _graphic.AutoFitMargins.Top - faceHeiht) / 2;
+                    }
+                }
+                else
+                {
+                    // Впихиваем целиком лицо в доступную область фрейма
+                    if (job.DataContainer[_data.FileId].ObjectDetect[0].Width / job.DataContainer[_data.FileId].ObjectDetect[0].Height > (_graphic.Bounds.Width - _graphic.AutoFitMargins.Right - _graphic.AutoFitMargins.Left) / (_graphic.Bounds.Height - _graphic.AutoFitMargins.Bottom - _graphic.AutoFitMargins.Top))
+                    {
+                        // Выравниваем лицо по ширине области
+                        faceWidht = _graphic.Bounds.Width - _graphic.AutoFitMargins.Right - _graphic.AutoFitMargins.Left;
+                        resolution = job.DataContainer[_data.FileId].ObjectDetect[0].Width / faceWidht;
+                        faceHeiht = job.DataContainer[_data.FileId].ObjectDetect[0].Height / resolution;
+                        //
+                        frame_face_dx = _graphic.AutoFitMargins.Left;
+                        //
+                        if ((_graphic.AutoFitPaddling & PositionEnum.Bottom) == PositionEnum.Bottom)
+                        {
+                            frame_face_dy = _graphic.AutoFitMargins.Bottom;
+                        }
+                        if ((_graphic.AutoFitPaddling & PositionEnum.Top) == PositionEnum.Top)
+                        {
+                            frame_face_dy = _graphic.Bounds.Height - _graphic.AutoFitMargins.Top - faceHeiht;
+                        }
+                        if ((_graphic.AutoFitPaddling & PositionEnum.CenterVertical) == PositionEnum.CenterVertical)
+                        {
+                            frame_face_dy = _graphic.AutoFitMargins.Bottom + (_graphic.Bounds.Height - _graphic.AutoFitMargins.Bottom - _graphic.AutoFitMargins.Top - faceHeiht) / 2;
+                        }
+                    }
+                    else
+                    {
+                        // По высоте
+                        faceHeiht = _graphic.Bounds.Height - _graphic.AutoFitMargins.Top - _graphic.AutoFitMargins.Bottom;
+                        resolution = job.DataContainer[_data.FileId].ObjectDetect[0].Height / faceHeiht;
+                        faceWidht = job.DataContainer[_data.FileId].ObjectDetect[0].Width / resolution;
+                        //
+                        frame_face_dy = _graphic.AutoFitMargins.Bottom;
+                        //
+                        if ((_graphic.AutoFitPaddling & PositionEnum.Left) == PositionEnum.Left)
+                        {
+                            frame_face_dx = _graphic.AutoFitMargins.Left;
+                        }
+                        if ((_graphic.AutoFitPaddling & PositionEnum.Right) == PositionEnum.Right)
+                        {
+                            frame_face_dx = _graphic.Bounds.Width - _graphic.AutoFitMargins.Right - faceWidht;
+                        }
+                        if ((_graphic.AutoFitPaddling & PositionEnum.CenterHorizontal) == PositionEnum.CenterHorizontal)
+                        {
+                            frame_face_dx = _graphic.AutoFitMargins.Left + (_graphic.Bounds.Width - _graphic.AutoFitMargins.Left - _graphic.AutoFitMargins.Right - faceWidht) / 2;
+                        }
+                    }
+                }
+
+                if (resolution * 25.4 < job.MinimalResolution)
+                {
+                    job.Log?.WriteError("VruAdapter.GetNext", $"resolution < job.MinimalResolution");
+                }
+
+                // Размер изображения в миллиметрах
+                float widht = job.DataContainer[_data.FileId].ImageSize.Width / resolution;
+                float height = job.DataContainer[_data.FileId].ImageSize.Height / resolution;
+                // Смещение левого нижнего угла лица относительно левого нижнего угла изображения в миллиметрах
+                float image_face_dx = job.DataContainer[_data.FileId].ObjectDetect[0].X / resolution;
+                float image_face_dy = (job.DataContainer[_data.FileId].ImageSize.Height - job.DataContainer[_data.FileId].ObjectDetect[0].Height - job.DataContainer[_data.FileId].ObjectDetect[0].Y) / resolution;
+                // Смещение изображения относительно фрейма в миллиметрах
+                float image_frame_dx = image_face_dx - frame_face_dx;
+                float image_frame_dy = image_face_dy - frame_face_dy;
+                // Проверка что изображение не вышло из фрейма
+                if (image_frame_dx >= 0 && image_frame_dy >= 0 && image_frame_dx + _graphic.Bounds.Width <= widht && image_frame_dy + _graphic.Bounds.Height <= height)
+                {
+                    // Сохраняем область изображения
+                    _data.Bounds = new RectangleF(_graphic.Bounds.X - image_frame_dx, _graphic.Bounds.Y - image_frame_dy, widht, height);
+                }
+                else
+                {
+                    job.Log?.WriteError("VruAdapter.GetNext", $"image_frame_dx >= 0 && image_frame_dy >= 0 && image_frame_dx + _graphic.Bounds.Width <= widht && image_frame_dy + _graphic.Bounds.Height <= height");
+                }
+
+                return;
+            }
+            
+            var fitedRect = _graphic.Bounds.FitToFrameF(job.DataContainer[_data.FileId].ImageSize.Width, job.DataContainer[_data.FileId].ImageSize.Height);
+            if (fitedRect.Item2 * 25.4 < job.MinimalResolution)
+            {
+                // Error
+            }
+
+            if (_graphic.AutoFitObjectType == AutoPositionObjectTypeEnum.Off || job.DataContainer[_data.FileId].ObjectDetect.Count == 0)
+            {
+                // Просто вставка без условий
+                _data.Bounds = fitedRect.Item1;
+                return;
+            }
+
+            IEnumerable<RectangleF> faceAreas = job.DataContainer[_data.FileId].ObjectDetect.Select(face =>
+            {
+                // Трансформация масштабирования не требуется, так как размер в пикселях не изменился. Меняем точку отсчета Y
+                // Единицы разрешения fitdata.Item2 - точки/мм (внутри области fitdata)
+                // Координаты лиц относительно фрейма в миллиметрах
+                float X_ABS = fitedRect.Item1.X + Math.Abs(face.X / fitedRect.Item2);
+                float Y_ABS = fitedRect.Item1.Y + Math.Abs((job.DataContainer[_data.FileId].ImageSize.Height - face.Y - face.Height) / fitedRect.Item2);
+                float W_ABS = Math.Abs(face.Width / fitedRect.Item2);
+                float H_ABS = Math.Abs(face.Height / fitedRect.Item2);
+
+                return new RectangleF(X_ABS, Y_ABS, W_ABS, H_ABS);
+            });
+
+            if ((_graphic.AutoFitObjectType & AutoPositionObjectTypeEnum.GroupFaces) == AutoPositionObjectTypeEnum.GroupFaces && job.DataContainer[_data.FileId].ObjectDetect.Count > 1)
+            {
+
+            }
+
+            if (_graphic.AutoFitObjectType == AutoPositionObjectTypeEnum.ProtectFaces)
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public static bool LayoutCorrect(SizeF _size, ValueTuple<float, float> _safezone, IEnumerable<RectangleF> _safeAreas, RectangleF _frame, float _maxshift_X, float _maxshift_Y, float _bleed, out PointF _shift)
+        {
+            /* 
+            _safeAreas - Зоны распознаных лиц в миллиметрах. Координаты - левый нижний угол относительно левого нижнего угла всего pdf документа (обрезного формата)
+            _frame - Область фрейма шаблона для вставки изображения
+            _maxshift_X, _maxshift_Y - Максимально возможный сдвиг изображения относительно фрейма
+            _size - Формат шаблона
+            */
+
+            _shift = new PointF(0, 0);
+
+            if (_safeAreas == null || _safeAreas.Count() == 0)
+            {
+                return true;
+            }
+
+            float xshift = 0;
+            float yshift = 0;
+            float W = _size.Width;
+            float H = _size.Height;
+            float safezone_F = _safezone.Item1;
+            float safezone_C = _safezone.Item2;
+            //
+            List<ValueTuple<IntervalF, IntervalF>> intervalsX = new List<ValueTuple<IntervalF, IntervalF>>();
+            // Два типа интревалов при смещении по горизонтали, (условно левый и правый):
+            // X1 - интервалы относящиеся к объектам на левой стороне разворота, отсутствие разворота, или интервал для которого не имеет значение расположение на развороте
+            // X2 - интервалы рассчитанные из предположения что лицо должно находится целиком на правой стороне разворота, и для данного интервала это важно
+            // При анализе интервалов, в случае когда определены оба интервала, есть возможность выбрать один из двух. Это даст больше вероятность найти область пересечения
+            List<IntervalF> intervalsY = new List<IntervalF>();
+
+            ValueTuple<float, float, float, float> frame = new ValueTuple<float, float, float, float>(_frame.X, _frame.Y, _frame.X + _frame.Width, _frame.Y + _frame.Height);
+
+            foreach (var item in _safeAreas)
+            {
+                var face = new ValueTuple<float, float, float, float>(item.X, item.Y, item.X + item.Width, item.Y + item.Height);
+                IntervalF dx_frame = null;
+                IntervalF dx_cut_1 = null;
+                IntervalF dx_cut_2 = null;
+                IntervalF dy_frame = null;
+                IntervalF dy_cut = null;
+
+                // Предполагается что важны абсолютно все области лиц, и их обязательно надо поместить в живописное поле
+
+                dx_frame = new IntervalF(safezone_F - face.Item1 + frame.Item1, frame.Item3 - face.Item3 - safezone_F);
+
+                if (frame.Item3 <= _bleed + W || face.Item3 < _bleed + W)
+                {
+                    // 1. весь фрейм (или все лицо на фрейме) на левой стороне разворота  
+                    dx_cut_1 = new IntervalF(safezone_C - face.Item1 + _bleed, _bleed + W - face.Item3 - safezone_C);
+                }
+                else
+                {
+                    // Фрейм переходит на правую сторону разворота (лицо или целиком на правой, или находит на корешок)
+                    if (face.Item1 > _bleed + W)
+                    {
+                        // 2. лицо целиком на правой
+                        dx_cut_1 = new IntervalF(safezone_C - face.Item1 + _bleed + W, _bleed + 2 * W - face.Item3 - safezone_C);
+                    }
+                    else
+                    {
+                        // 3. Если изображение лица изначально попало на корешок, есть вероятность его сдвинуть как в левую, так и в правую сторону
+                        dx_cut_1 = new IntervalF(safezone_C - face.Item1 + _bleed, _bleed + W - face.Item3 - safezone_C);
+                        dx_cut_2 = new IntervalF(safezone_C - face.Item1 + _bleed + W, _bleed + 2 * W - face.Item3 - safezone_C);
+                    }
+                }
+
+                intervalsX.Add(new ValueTuple<IntervalF, IntervalF>(dx_frame, null));
+                intervalsX.Add(new ValueTuple<IntervalF, IntervalF>(dx_cut_1, dx_cut_2));
+
+
+                dy_frame = new IntervalF(safezone_F - face.Item2 + frame.Item2, frame.Item4 - face.Item4 - safezone_F);
+                dy_cut = new IntervalF(safezone_C - face.Item2 + _bleed, _bleed + H - face.Item4 - safezone_C);
+
+                intervalsY.Add(dy_frame);
+                intervalsY.Add(dy_cut);
+            }
+
+            // Поиск оптимального интервала при наличии лиц на корешке
+            IntervalF iX = null;
+            IntervalF iY = null;
+            IntervalF minInterval = null;
+
+            if (intervalsX.Count > 0)
+            {
+                IntervalF.Intersection(intervalsX.Select(x => x.Item1), out minInterval);
+
+                for (int i = 0; i < intervalsX.Count; i++)
+                {
+                    if (intervalsX[i].Item2 != null)
+                    {
+                        IntervalF[] next = intervalsX.Select(x => x.Item1).ToArray();
+                        for (int j = i; j < intervalsX.Count; j++)
+                        {
+                            if (intervalsX[j].Item2 != null)
+                            {
+                                IntervalF ix;
+                                next[j] = intervalsX[j].Item2;
+                                if (IntervalF.Intersection(next, out ix))
+                                {
+                                    if (minInterval == null || Math.Min(Math.Abs(ix.X1), Math.Abs(ix.X2)) < Math.Min(Math.Abs(minInterval.X1), Math.Abs(minInterval.X2)))
+                                    {
+                                        minInterval = ix;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            bool inrange = false;
+
+            if ((intervalsX.Count == 0 || minInterval != null) && (IntervalF.Intersection(intervalsY, out iY) || intervalsY.Count == 0))
+            {
+                inrange = true;
+
+                if (inrange && intervalsX.Count > 0)
+                {
+                    iX = minInterval;
+                    if (!iX.Contains(0)) xshift = (Math.Abs(iX.X1) < Math.Abs(iX.X2) ? iX.X1 : iX.X2);
+                    inrange = Math.Abs(xshift) <= _maxshift_X;
+                }
+                if (inrange && intervalsY.Count > 0)
+                {
+                    if (!iY.Contains(0)) yshift = (Math.Abs(iY.X1) < Math.Abs(iY.X2) ? iY.X1 : iY.X2);
+                    inrange = Math.Abs(yshift) <= _maxshift_Y;
+                }
+            }
+
+            if (inrange)
+            {
+                _shift = new PointF(xshift, yshift);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// Конструктор по умолчанию
         /// </summary>

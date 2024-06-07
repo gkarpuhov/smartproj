@@ -3,6 +3,7 @@ using GdPicture14;
 using Smartproj.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
@@ -662,8 +663,8 @@ namespace Smartproj
         {
             var doc = _data.PdfObject;
             var rect = _frame.Bounds;
-            PointF correction = _imagedata.Shift;
-            float scale = _imagedata.Scale;
+            //PointF correction = _imagedata.Shift;
+            //float scale = _imagedata.Scale;
 
             using (GdPictureImaging oImage = new GdPictureImaging())
             {
@@ -671,7 +672,7 @@ namespace Smartproj
                 float iWidth = oImage.GetWidth(id);
                 float iHeight = oImage.GetHeight(id);
                 string imagename = doc.AddImageFromGdPictureImage(id, false, false);
-                float effectiveRes = 0f;
+                //float effectiveRes = 0f;
 
                 doc.SaveGraphicsState();
                 try
@@ -688,9 +689,10 @@ namespace Smartproj
                     doc.AddGraphicsToPath(new GraphicsPath(points, new byte[4] { (byte)(PathPointType.Start | PathPointType.Line), (byte)PathPointType.Line, (byte)PathPointType.Line, (byte)PathPointType.Line }));
                     doc.ClipPath();
 
-                    var fitedRect = rect.FitToFrameF(iWidth, iHeight, _shift, _bleed);
-                    res = doc.DrawImage(imagename, fitedRect.Item1.X + correction.X, fitedRect.Item1.Y + correction.Y, fitedRect.Item1.Width, fitedRect.Item1.Height);
-                    effectiveRes = fitedRect.Item2;
+                    //var fitedRect = rect.FitToFrameF(iWidth, iHeight, _shift, _bleed);
+                    //res = doc.DrawImage(imagename, fitedRect.Item1.X + correction.X, fitedRect.Item1.Y + correction.Y, fitedRect.Item1.Width, fitedRect.Item1.Height);
+                    //effectiveRes = fitedRect.Item2;
+                    res = doc.DrawImage(imagename, _imagedata.Bounds.X - _shift + _bleed, _imagedata.Bounds.Y + _bleed, _imagedata.Bounds.Width, _imagedata.Bounds.Height);
 
                     if (res != GdPictureStatus.OK)
                     {

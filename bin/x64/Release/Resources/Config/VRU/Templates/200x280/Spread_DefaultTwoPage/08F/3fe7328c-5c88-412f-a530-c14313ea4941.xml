@@ -18,7 +18,7 @@
     <Location TypeId="1642033309">C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Templates\200x280\Spread_DefaultTwoPage\08F\3fe7328c-5c88-412f-a530-c14313ea4941.xml</Location>
     <Graphics TypeId="-1673037392">
       <item TypeId="1364886211">
-        <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
+        <AutoFitMargins TypeId="1003947508">{Top=15,Left=10,Bottom=10,Right=5}</AutoFitMargins>
         <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
         <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
         <AutoDetectAndFocusWidth TypeId="-1119076432">0</AutoDetectAndFocusWidth>

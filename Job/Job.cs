@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace Smartproj
 {
@@ -22,6 +23,14 @@ namespace Smartproj
     {
         private bool mIsDisposed;
         private object mSyncRoot = new Object();
+        /// <summary>
+        /// Разрешение с которым изображение должно быть автоматически образмерено. 0 - Не выполнять ничего
+        /// </summary>
+        public float AutoResample { get; set; }
+        /// <summary>
+        /// Минимально допустимое эффективное разрешение
+        /// </summary>
+        public float MinimalResolution { get; set; }
         private ProcessStatusEnum mStatus;
         /// <summary>
         /// Текущий статус процесса. Доступ потокобезопасен
@@ -104,6 +113,8 @@ namespace Smartproj
             OutData = new Dictionary<string, ImposedDataContainer>();
             JobPath = Path.Combine(Owner.ProjectPath, "Jobs", UID.ToString());
             Directory.CreateDirectory(JobPath);
+            AutoResample = 0;
+            MinimalResolution = 200;
         }
         /// <summary>
         /// Инициализация процесса, установки необходимых параметров для работы. Создает внутреннюю структуру продукта
