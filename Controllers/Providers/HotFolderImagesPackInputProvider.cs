@@ -72,7 +72,7 @@ namespace Smartproj
             List<KeyValuePair<string, List<string>>> extractData = new List<KeyValuePair<string, List<string>>>();
             FileProcess.ExtractFiles(Path.Combine(job.JobPath, "~Original"), extractData, adapter.FileDataFilter, true, true);
 
-            ExifTaggedFileSegments topSegment = (ExifTaggedFileSegments)job.Clusters;
+            ExifTaggedFileSegments topSegment = (ExifTaggedFileSegments)job.ProcessingSpace.Clusters;
             ExifTaggedFileSegments fsSegment = (ExifTaggedFileSegments)topSegment.Add(SegmentTypeEnum.FileStructure, "0");
 
             int count = extractData.Sum(x => x.Value.Count);
@@ -87,7 +87,7 @@ namespace Smartproj
                 if (AutoExifParse)
                 {
                     parsed = ExifParser(extractData[i].Key, extractData[i].Value, index, adapter.FileDataFilter);
-                    job.DataContainer.AddRange(parsed);
+                    job.InputDataContainer.AddRange(parsed);
                 }
                 else
                 {
@@ -96,7 +96,7 @@ namespace Smartproj
                     {
                         ExifTaggedFile item = new ExifTaggedFile(index, extractData[i].Value[j], extractData[i].Key);
                         parsed.Add(item);
-                        job.DataContainer.Add(item);
+                        job.InputDataContainer.Add(item);
                     }
                 }
 
@@ -108,7 +108,7 @@ namespace Smartproj
                 }
             }
 
-            if (job.DataContainer.Count > 0)
+            if (job.InputDataContainer.Count > 0)
             {
                 // В результате формирования сегментов файловой структуры (ImportFiles), порядок сортировки файлов может быть изменен
                 // Свойство Index уже не будет отражать порядок расположения файлов, теперь за это будет отвечать свойство OrderBy
@@ -123,7 +123,7 @@ namespace Smartproj
                         List<int> d = (List<int>)directory.ChildNodes[j].Data;
                         for (int k = 0; k < d.Count; k++)
                         {
-                            job.DataContainer[d[k]].OrderBy = ordercounter++;
+                            job.InputDataContainer[d[k]].OrderBy = ordercounter++;
                         }
                         // Меняем список на хеш-контейнер для более быстрой обработки
                         //directory.ChildNodes[j].Data = new HashSet<int>(directory.ChildNodes[j].Data);

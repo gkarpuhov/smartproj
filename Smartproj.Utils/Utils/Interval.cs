@@ -26,6 +26,122 @@ namespace Smartproj.Utils
             return $"{{Top={Top.ToString(format)},Left={Left.ToString(format)},Bottom={Bottom.ToString(format)},Right={Right.ToString(format)}}}";
         }
     }
+    public class Interval<T> where T : IComparable<T>
+    {
+        public Interval(T _x1, T _x2, string _floatseparator)
+        {
+            mX1 = _x1;
+            mX2 = _x2;
+            mNumberDecimalSeparator = _floatseparator;
+        }
+        public Interval(T _x1, T _x2) : this(_x1, _x2, ".")
+        {
+        }
+        public bool Contains(T _val)
+        {
+            return _val.CompareTo(mX1) >= 0 && _val.CompareTo(mX2) <= 0;
+        }
+        public bool TrySet(string _val)
+        {
+            string[] val = _val.Split('-');
+            if (val.Length == 2 && val[0] != "" && val[1] != "")
+            {
+                if (typeof(T) == typeof(int))
+                {
+                    int val1 = 0;
+                    int val2 = 0;
+                    if (int.TryParse(val[0], out val1) && int.TryParse(val[1], out val2))
+                    {
+                        mX1 = (T)(object)val1;
+                        mX2 = (T)(object)val2;
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+                if (typeof(T) == typeof(byte))
+                {
+                    byte val1 = 0;
+                    byte val2 = 0;
+                    if (byte.TryParse(val[0], out val1) && byte.TryParse(val[1], out val2))
+                    {
+                        mX1 = (T)(object)val1;
+                        mX2 = (T)(object)val2;
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+                if (typeof(T) == typeof(float))
+                {
+                    float val1 = 0;
+                    float val2 = 0;
+
+                    NumberFormatInfo ni = new NumberFormatInfo();
+                    ni.NumberDecimalSeparator = mNumberDecimalSeparator;
+
+                    if (float.TryParse(val[0], NumberStyles.Float, ni, out val1) && float.TryParse(val[1], NumberStyles.Float, ni, out val2))
+                    {
+                        mX1 = (T)(object)val1;
+                        mX2 = (T)(object)val2;
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+                if (typeof(T) == typeof(double))
+                {
+                    double val1 = 0;
+                    double val2 = 0;
+
+                    NumberFormatInfo ni = new NumberFormatInfo();
+                    ni.NumberDecimalSeparator = mNumberDecimalSeparator;
+
+                    if (double.TryParse(val[0], NumberStyles.Float, ni, out val1) && double.TryParse(val[1], NumberStyles.Float, ni, out val2))
+                    {
+                        mX1 = (T)(object)val1;
+                        mX2 = (T)(object)val2;
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+
+                if (!this.Parse(_val))
+                {
+                    throw new ArgumentException("Недопустимый обобщенный тип Т");
+                }
+                else
+                    return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        protected string mNumberDecimalSeparator;
+        protected T mX1;
+        public T X1 => mX1;
+        protected T mX2;
+        public T X2 => mX2;
+        protected virtual bool Parse(string _val)
+        {
+            return false;
+        }
+        public static Interval<T> FromString(string _val)
+        {
+            Interval<T> ret = new Interval<T>(default(T), default(T));
+
+            if (ret.TrySet(_val))
+            {
+                return ret;
+            }
+            else
+                return null;
+        }
+    }
+
     public class Interval
     {
         public Interval(int _x1, int _x2)

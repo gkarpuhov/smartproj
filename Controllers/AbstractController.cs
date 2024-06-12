@@ -1,4 +1,5 @@
-﻿using ProjectPage;
+﻿using Emgu.CV.Face;
+using ProjectPage;
 using Smartproj.Utils;
 using System;
 using System.Collections;
@@ -119,24 +120,45 @@ namespace Smartproj
         /// </summary>
         public abstract ProcessStatusEnum CurrentStatus { get; protected set; }
         public Logger Log => Owner?.Log;
-        public static void TryImageFit(ImposedLayout _toTryinmpse, ImageFrame _graphic, ImposedImageData _data)
+        public static void TryImageFit(ImageFrame _graphic, ImposedImageData _data)
         {
-            var job = _toTryinmpse.Owner.Owner;
+            var toTryinmpse = _data.Owner;
+            var job = toTryinmpse.Owner.Owner;
 
-            if ((_graphic.AutoFitObjectType & AutoPositionObjectTypeEnum.OneFace) == AutoPositionObjectTypeEnum.OneFace && job.DataContainer[_data.FileId].ObjectDetect.Count == 1)
+            List<RectangleF> allfaces = new List<RectangleF>();
+            if (job.InputDataContainer[_data.FileId].HasStatus(ImageStatusEnum.FacesDetected))
+            {
+                List<KeyValuePair<ObjectDetectImageEnum, List<RectangleF>>> allForThisItem;
+                if (job.ProcessingSpace.ObjectDetectedAreas.TryGetValue(_data.FileId, out allForThisItem))
+                {
+                    foreach (var pair in allForThisItem)
+                    {
+                        if (pair.Key == ObjectDetectImageEnum.FrontFace || pair.Key == ObjectDetectImageEnum.ProfileFace) allfaces.AddRange(pair.Value);
+                    }
+                }
+                if (allfaces.Count > 0)
+                {
+                    allfaces = allfaces.UnionAll();
+                }
+            }
+
+            if ((_graphic.AutoFitObjectType & AutoPositionObjectTypeEnum.OneFace) == AutoPositionObjectTypeEnum.OneFace && allfaces.Count == 1)
             {
                 float faceWidht = 0;
                 float faceHeiht = 0;
                 float frame_face_dx = 0;
                 float frame_face_dy = 0;
+                // из нормализованного размера в абсолютный
+                RectangleF detectedFace = new RectangleF(job.InputDataContainer[_data.FileId].ImageSize.Width * allfaces[0].X, job.InputDataContainer[_data.FileId].ImageSize.Height * allfaces[0].Y, job.InputDataContainer[_data.FileId].ImageSize.Width * allfaces[0].Width, job.InputDataContainer[_data.FileId].ImageSize.Height * allfaces[0].Height);
                 // точек/мм
                 float resolution = 0;
 
                 if (_graphic.AutoDetectAndFocusWidth > 0)
                 {
+                    // в миллиметры
                     faceWidht = _graphic.AutoDetectAndFocusWidth;
-                    resolution = job.DataContainer[_data.FileId].ObjectDetect[0].Width / faceWidht;
-                    faceHeiht = job.DataContainer[_data.FileId].ObjectDetect[0].Height / resolution;
+                    resolution = detectedFace.Width / faceWidht;
+                    faceHeiht = detectedFace.Height / resolution;
                     // Позиционирование лицо во фрейм
                     // Координаты  области лица в миллиметрах относительно левого нижнего угла фрейма
                     if ((_graphic.AutoFitPaddling & PositionEnum.Left) == PositionEnum.Left)
@@ -167,12 +189,12 @@ namespace Smartproj
                 else
                 {
                     // Впихиваем целиком лицо в доступную область фрейма
-                    if (job.DataContainer[_data.FileId].ObjectDetect[0].Width / job.DataContainer[_data.FileId].ObjectDetect[0].Height > (_graphic.Bounds.Width - _graphic.AutoFitMargins.Right - _graphic.AutoFitMargins.Left) / (_graphic.Bounds.Height - _graphic.AutoFitMargins.Bottom - _graphic.AutoFitMargins.Top))
+                    if (detectedFace.Width / detectedFace.Height > (_graphic.Bounds.Width - _graphic.AutoFitMargins.Right - _graphic.AutoFitMargins.Left) / (_graphic.Bounds.Height - _graphic.AutoFitMargins.Bottom - _graphic.AutoFitMargins.Top))
                     {
                         // Выравниваем лицо по ширине области
                         faceWidht = _graphic.Bounds.Width - _graphic.AutoFitMargins.Right - _graphic.AutoFitMargins.Left;
-                        resolution = job.DataContainer[_data.FileId].ObjectDetect[0].Width / faceWidht;
-                        faceHeiht = job.DataContainer[_data.FileId].ObjectDetect[0].Height / resolution;
+                        resolution = detectedFace.Width / faceWidht;
+                        faceHeiht = detectedFace.Height / resolution;
                         //
                         frame_face_dx = _graphic.AutoFitMargins.Left;
                         //
@@ -193,8 +215,8 @@ namespace Smartproj
                     {
                         // По высоте
                         faceHeiht = _graphic.Bounds.Height - _graphic.AutoFitMargins.Top - _graphic.AutoFitMargins.Bottom;
-                        resolution = job.DataContainer[_data.FileId].ObjectDetect[0].Height / faceHeiht;
-                        faceWidht = job.DataContainer[_data.FileId].ObjectDetect[0].Width / resolution;
+                        resolution = detectedFace.Height / faceHeiht;
+                        faceWidht = detectedFace.Width / resolution;
                         //
                         frame_face_dy = _graphic.AutoFitMargins.Bottom;
                         //
@@ -219,11 +241,11 @@ namespace Smartproj
                 }
 
                 // Размер изображения в миллиметрах
-                float widht = job.DataContainer[_data.FileId].ImageSize.Width / resolution;
-                float height = job.DataContainer[_data.FileId].ImageSize.Height / resolution;
+                float widht = job.InputDataContainer[_data.FileId].ImageSize.Width / resolution;
+                float height = job.InputDataContainer[_data.FileId].ImageSize.Height / resolution;
                 // Смещение левого нижнего угла лица относительно левого нижнего угла изображения в миллиметрах
-                float image_face_dx = job.DataContainer[_data.FileId].ObjectDetect[0].X / resolution;
-                float image_face_dy = (job.DataContainer[_data.FileId].ImageSize.Height - job.DataContainer[_data.FileId].ObjectDetect[0].Height - job.DataContainer[_data.FileId].ObjectDetect[0].Y) / resolution;
+                float image_face_dx = detectedFace.X / resolution;
+                float image_face_dy = (job.InputDataContainer[_data.FileId].ImageSize.Height - detectedFace.Height - detectedFace.Y) / resolution;
                 // Смещение изображения относительно фрейма в миллиметрах
                 float image_frame_dx = image_face_dx - frame_face_dx;
                 float image_frame_dy = image_face_dy - frame_face_dy;
@@ -241,49 +263,98 @@ namespace Smartproj
                 return;
             }
             
-            var fitedRect = _graphic.Bounds.FitToFrameF(job.DataContainer[_data.FileId].ImageSize.Width, job.DataContainer[_data.FileId].ImageSize.Height);
+            var fitedRect = _graphic.Bounds.FitToFrameF(job.InputDataContainer[_data.FileId].ImageSize.Width, job.InputDataContainer[_data.FileId].ImageSize.Height);
             if (fitedRect.Item2 * 25.4 < job.MinimalResolution)
             {
                 // Error
             }
 
-            if (_graphic.AutoFitObjectType == AutoPositionObjectTypeEnum.Off || job.DataContainer[_data.FileId].ObjectDetect.Count == 0)
+            if (_graphic.AutoFitObjectType == AutoPositionObjectTypeEnum.Off || allfaces.Count == 0)
             {
                 // Просто вставка без условий
                 _data.Bounds = fitedRect.Item1;
                 return;
             }
 
-            IEnumerable<RectangleF> faceAreas = job.DataContainer[_data.FileId].ObjectDetect.Select(face =>
-            {
-                // Трансформация масштабирования не требуется, так как размер в пикселях не изменился. Меняем точку отсчета Y
-                // Единицы разрешения fitdata.Item2 - точки/мм (внутри области fitdata)
-                // Координаты лиц относительно фрейма в миллиметрах
-                float X_ABS = fitedRect.Item1.X + Math.Abs(face.X / fitedRect.Item2);
-                float Y_ABS = fitedRect.Item1.Y + Math.Abs((job.DataContainer[_data.FileId].ImageSize.Height - face.Y - face.Height) / fitedRect.Item2);
-                float W_ABS = Math.Abs(face.Width / fitedRect.Item2);
-                float H_ABS = Math.Abs(face.Height / fitedRect.Item2);
-
-                return new RectangleF(X_ABS, Y_ABS, W_ABS, H_ABS);
-            });
-
-            if ((_graphic.AutoFitObjectType & AutoPositionObjectTypeEnum.GroupFaces) == AutoPositionObjectTypeEnum.GroupFaces && job.DataContainer[_data.FileId].ObjectDetect.Count > 1)
-            {
-
-            }
-
             if (_graphic.AutoFitObjectType == AutoPositionObjectTypeEnum.ProtectFaces)
             {
-                throw new NotImplementedException();
+                PointF shift;
+                if (LayoutCorrect(_graphic, _data, out shift))
+                {
+                    _data.Bounds = new RectangleF(fitedRect.Item1.X + shift.X, fitedRect.Item1.Y + shift.Y, fitedRect.Item1.Width, fitedRect.Item1.Height);
+                }
+                else
+                {
+                    // Error
+                }
+                return;
+            }
+
+            if ((_graphic.AutoFitObjectType & AutoPositionObjectTypeEnum.GroupFaces) == AutoPositionObjectTypeEnum.GroupFaces && allfaces.Count > 1)
+            {
+
             }
         }
-        public static bool LayoutCorrect(SizeF _size, ValueTuple<float, float> _safezone, IEnumerable<RectangleF> _safeAreas, RectangleF _frame, float _maxshift_X, float _maxshift_Y, float _bleed, out PointF _shift)
+        public static bool LayoutCorrect(ImageFrame _graphic, ImposedImageData _data, out PointF _shift)
+        {
+            var toTryinmpse = _data.Owner;
+            var job = toTryinmpse.Owner.Owner;
+            SizeF size = toTryinmpse.Templ.Owner.Owner.ProductSize;
+            float safezoneCut = toTryinmpse.Templ.SafeCutZone;
+            float safezoneFrame = _graphic.SafeFrameZone;
+            float bleed = toTryinmpse.Templ.Bleed;
+            RectangleF frame = _graphic.Bounds;
+            var fitedRect = _graphic.Bounds.FitToFrameF(job.InputDataContainer[_data.FileId].ImageSize.Width, job.InputDataContainer[_data.FileId].ImageSize.Height);
+
+            float maxShiftX = (fitedRect.Item1.Width - frame.Width) / 2;
+            float maxShiftY = (fitedRect.Item1.Height - frame.Height) / 2;
+
+            List<RectangleF> faceAreas = new List<RectangleF>();
+
+            if (job.InputDataContainer[_data.FileId].HasStatus(ImageStatusEnum.FacesDetected))
+            {
+                List<RectangleF> allfaces = new List<RectangleF>();
+                if (job.InputDataContainer[_data.FileId].HasStatus(ImageStatusEnum.FacesDetected))
+                {
+                    List<KeyValuePair<ObjectDetectImageEnum, List<RectangleF>>> allForThisItem;
+                    if (job.ProcessingSpace.ObjectDetectedAreas.TryGetValue(_data.FileId, out allForThisItem))
+                    {
+                        foreach (var pair in allForThisItem)
+                        {
+                            if (pair.Key == ObjectDetectImageEnum.FrontFace || pair.Key == ObjectDetectImageEnum.ProfileFace) allfaces.AddRange(pair.Value);
+                        }
+                    }
+                    if (allfaces.Count > 0)
+                    {
+                        allfaces = allfaces.UnionAll();
+                    }
+                }
+
+                foreach (var facerect in allfaces)
+                {
+                    // из нормализованного размера в абсолютный
+                    RectangleF detectedFace = new RectangleF(job.InputDataContainer[_data.FileId].ImageSize.Width * facerect.X, job.InputDataContainer[_data.FileId].ImageSize.Height * facerect.Y, job.InputDataContainer[_data.FileId].ImageSize.Width * facerect.Width, job.InputDataContainer[_data.FileId].ImageSize.Height * facerect.Height);
+                    // Меняем точку отсчета Y
+                    // Единицы разрешения fitedRect.Item2 - точки/мм
+                    // Координаты лиц относительно фрейма в миллиметрах
+                    float X_ABS = fitedRect.Item1.X + Math.Abs(detectedFace.X / fitedRect.Item2);
+                    float Y_ABS = fitedRect.Item1.Y + Math.Abs((job.InputDataContainer[_data.FileId].ImageSize.Height - detectedFace.Y - detectedFace.Height) / fitedRect.Item2);
+                    float W_ABS = Math.Abs(detectedFace.Width / fitedRect.Item2);
+                    float H_ABS = Math.Abs(detectedFace.Height / fitedRect.Item2);
+                    faceAreas.Add(new RectangleF(X_ABS, Y_ABS, W_ABS, H_ABS));
+                }
+            }
+
+            return LayoutCorrect(size, safezoneFrame, safezoneCut, faceAreas, frame, maxShiftX, maxShiftY, bleed, out _shift);
+        }
+
+        private static bool LayoutCorrect(SizeF _size, float _safezoneFrame, float _safezoneCut, IEnumerable<RectangleF> _safeAreas, RectangleF _frame, float _maxshift_X, float _maxshift_Y, float _bleed, out PointF _shift)
         {
             /* 
             _safeAreas - Зоны распознаных лиц в миллиметрах. Координаты - левый нижний угол относительно левого нижнего угла всего pdf документа (обрезного формата)
             _frame - Область фрейма шаблона для вставки изображения
             _maxshift_X, _maxshift_Y - Максимально возможный сдвиг изображения относительно фрейма
-            _size - Формат шаблона
+            _size - Формат продукта (полосы)
             */
 
             _shift = new PointF(0, 0);
@@ -297,8 +368,6 @@ namespace Smartproj
             float yshift = 0;
             float W = _size.Width;
             float H = _size.Height;
-            float safezone_F = _safezone.Item1;
-            float safezone_C = _safezone.Item2;
             //
             List<ValueTuple<IntervalF, IntervalF>> intervalsX = new List<ValueTuple<IntervalF, IntervalF>>();
             // Два типа интревалов при смещении по горизонтали, (условно левый и правый):
@@ -320,12 +389,12 @@ namespace Smartproj
 
                 // Предполагается что важны абсолютно все области лиц, и их обязательно надо поместить в живописное поле
 
-                dx_frame = new IntervalF(safezone_F - face.Item1 + frame.Item1, frame.Item3 - face.Item3 - safezone_F);
+                dx_frame = new IntervalF(_safezoneFrame - face.Item1 + frame.Item1, frame.Item3 - face.Item3 - _safezoneFrame);
 
                 if (frame.Item3 <= _bleed + W || face.Item3 < _bleed + W)
                 {
                     // 1. весь фрейм (или все лицо на фрейме) на левой стороне разворота  
-                    dx_cut_1 = new IntervalF(safezone_C - face.Item1 + _bleed, _bleed + W - face.Item3 - safezone_C);
+                    dx_cut_1 = new IntervalF(_safezoneCut - face.Item1 + _bleed, _bleed + W - face.Item3 - _safezoneCut);
                 }
                 else
                 {
@@ -333,13 +402,13 @@ namespace Smartproj
                     if (face.Item1 > _bleed + W)
                     {
                         // 2. лицо целиком на правой
-                        dx_cut_1 = new IntervalF(safezone_C - face.Item1 + _bleed + W, _bleed + 2 * W - face.Item3 - safezone_C);
+                        dx_cut_1 = new IntervalF(_safezoneCut - face.Item1 + _bleed + W, _bleed + 2 * W - face.Item3 - _safezoneCut);
                     }
                     else
                     {
                         // 3. Если изображение лица изначально попало на корешок, есть вероятность его сдвинуть как в левую, так и в правую сторону
-                        dx_cut_1 = new IntervalF(safezone_C - face.Item1 + _bleed, _bleed + W - face.Item3 - safezone_C);
-                        dx_cut_2 = new IntervalF(safezone_C - face.Item1 + _bleed + W, _bleed + 2 * W - face.Item3 - safezone_C);
+                        dx_cut_1 = new IntervalF(_safezoneCut - face.Item1 + _bleed, _bleed + W - face.Item3 - _safezoneCut);
+                        dx_cut_2 = new IntervalF(_safezoneCut - face.Item1 + _bleed + W, _bleed + 2 * W - face.Item3 - _safezoneCut);
                     }
                 }
 
@@ -347,8 +416,8 @@ namespace Smartproj
                 intervalsX.Add(new ValueTuple<IntervalF, IntervalF>(dx_cut_1, dx_cut_2));
 
 
-                dy_frame = new IntervalF(safezone_F - face.Item2 + frame.Item2, frame.Item4 - face.Item4 - safezone_F);
-                dy_cut = new IntervalF(safezone_C - face.Item2 + _bleed, _bleed + H - face.Item4 - safezone_C);
+                dy_frame = new IntervalF(_safezoneFrame - face.Item2 + frame.Item2, frame.Item4 - face.Item4 - _safezoneFrame);
+                dy_cut = new IntervalF(_safezoneCut - face.Item2 + _bleed, _bleed + H - face.Item4 - _safezoneCut);
 
                 intervalsY.Add(dy_frame);
                 intervalsY.Add(dy_cut);

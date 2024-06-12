@@ -22,11 +22,11 @@ namespace Smartproj.Utils
     public class ColorImagesConverter
     {
         private TagFileTypeEnum mOutType;
-        public string DefaultRGBProfile { get; set; }
-        public string DefaultCMYKProfile { get; set; }
-        public string DefaultGRAYProfile { get; set; }
-        public string DefaultLABProfile { get; set; }
-        public string DefaultColorPath { get; set; }
+        public static string DefaultRGBProfile { get; set; }
+        public static string DefaultCMYKProfile { get; set; }
+        public static string DefaultGRAYProfile { get; set; }
+        public static string DefaultLABProfile { get; set; }
+        public static string DefaultColorPath { get; set; }
         public string ProfilesPath { get; set; }
         public string OutPath { get; set; }
         public long QualityParameter { get; set; }
@@ -47,13 +47,16 @@ namespace Smartproj.Utils
             }
         }
         public Logger ConverterLog { get; set; }
-        public ColorImagesConverter()
+        static ColorImagesConverter()
         {
             DefaultColorPath = @"C:\Windows\System32\spool\drivers\color";
             DefaultRGBProfile = "sRGB Color Space Profile.icm";
             DefaultCMYKProfile = "ISOcoated_v2_eci.icc";
             DefaultGRAYProfile = "Generic Gray Gamma 2.2 Profile.icc";
             DefaultLABProfile = "lab1to1.icc";
+        }
+        public ColorImagesConverter()
+        {
             OutType = TagFileTypeEnum.JPEG;
             QualityParameter = 100L;
         }
@@ -113,7 +116,7 @@ namespace Smartproj.Utils
             ConcurrentQueue<ExifTaggedFile> queue = new ConcurrentQueue<ExifTaggedFile>(_inputData);
             var options = new ProcessThreadOptions() { Queue = queue, DefaultProfiles = defaultProfiles, TempPath = OutPath };
 
-            int threadsCount = 4;
+            int threadsCount = 6;
             Thread[] pool = new Thread[threadsCount];
             ManualResetEvent[] callback = new ManualResetEvent[threadsCount];
             ProcessThreadOptions[] processoptions = new ProcessThreadOptions[threadsCount];
@@ -236,31 +239,34 @@ namespace Smartproj.Utils
                     if (item.HasStatus(ImageStatusEnum.Error)) continue;
 
 
-                    if (item.ColorSpace == TagColorModeEnum.RGB && !item.HasTransparency && item.Bpc == 8 && (!item.HasColorProfile || isDefaultProfile))
+                    if (item.ColorSpace == TagColorModeEnum.RGB && !item.HasTransparency && (!item.HasColorProfile || isDefaultProfile))
                     {
+                        // Просто сохраняем
+                        // При это все свойства изображения должны быть стандартными: RGB, 24bit (без прозрачностей), не иметь встроенного профиля или иметь стандартный 
+                        // Переделивание в таком случае не требуется
                         try
                         {
                             if (item.ImageType == OutType) 
                             {
                                 File.Copy(Path.Combine(item.FilePath, item.FileName), Path.Combine(tempFiles, $"{item.GUID}.{OutType.ToString().ToLower()}"));
                                 item.AddStatus(ImageStatusEnum.OriginalIsReady);
-                                m.Add($"ID {item.Index}: Не требуется. Файл: {item.FileName} -> {item.GUID}.{OutType.ToString().ToLower()}");
+                                m.Add($"ID {item.Index}: Действий не требуется. Файл: {item.FileName} -> {item.GUID}.{OutType.ToString().ToLower()}");
                             }
                             else
                             {
                                 using (Bitmap bitmap = new Bitmap(Path.Combine(item.FilePath, item.FileName), false))
                                 {
-                                    if ((bitmap.PixelFormat == PixelFormat.Format24bppRgb && !item.HasTransparency) || (bitmap.PixelFormat == PixelFormat.Format32bppArgb && item.HasTransparency))
+                                    if (bitmap.PixelFormat == PixelFormat.Format24bppRgb)
                                     {
                                         bitmap.Save(Path.Combine(tempFiles, $"{item.GUID}.{OutType.ToString().ToLower()}"), imageCodecInfo, encoderParameters);
                                         
                                         item.AddStatus(ImageStatusEnum.FormatTransformed);
-                                        m.Add($"ID {item.Index}: Формат изменен: {item.ImageType.ToString()} -> {OutType}. Файл: {item.FileName} -> {item.GUID}.{OutType.ToString().ToLower()}");
+                                        m.Add($"ID {item.Index}: Формат изменен: {item.ImageType} -> {OutType}. Файл: {item.FileName} -> {item.GUID}.{OutType.ToString().ToLower()}");
                                     }
                                     else
                                     {
                                         item.AddStatus(ImageStatusEnum.Error);
-                                        e.Add($"ID {item.Index}: ОШИБКА - Неожиданный формат цветового пространства: Ожидается '{"Format24bppRgb или PixelFormat.Format32bppArgb"}'. Обнаружен '{bitmap.PixelFormat}' (HasTransparency = {item.HasTransparency}). Файл: {item.FileName}");
+                                        e.Add($"ID {item.Index}: ОШИБКА - Неожиданный формат цветового пространства: Ожидается '{"Format24bppRgb"}'. Обнаружен '{bitmap.PixelFormat}'. Файл: {item.FileName}");
                                         opt.HasErrors = true;
                                     }
                                 }
@@ -316,45 +322,59 @@ namespace Smartproj.Utils
                                 var id = inputProfile.HeaderProfileID;
                                 string description = inputProfile.GetProfileInfo(InfoType.Description, "en", "US");
 
-                                m.Add($"ID {item.Index}: Использован входной профиль {ColorSpaceSignature.RgbData}: Ver = {inputProfile.Version}; '[{String.Join(" ", id)}] [{description}]'. Файл: {item.FileName}");
-
                                 Transform transform_XXX_To_RGB = null;
+                                //Transform transform_XXX_To_Lab = null;
+                                //Transform transform_Lab_To_RGB = null;
 
                                 if (bitmap.PixelFormat == PixelFormat.Format24bppRgb)
                                 {
                                     transform_XXX_To_RGB = Transform.Create(inputProfile, Cms.TYPE_RGB_8, opt.DefaultProfiles[TagColorModeEnum.RGB], Cms.TYPE_RGB_8, Intent.Perceptual, CmsFlags.BlackPointCompensation);
+                                    //transform_XXX_To_Lab = Transform.Create(inputProfile, Cms.TYPE_RGB_8, opt.DefaultProfiles[TagColorModeEnum.Lab], Cms.TYPE_Lab_16, Intent.AbsoluteColorimetric, CmsFlags.BlackPointCompensation);
                                 }
                                 if (bitmap.PixelFormat == PixelFormat.Format32bppArgb)
                                 {
                                     transform_XXX_To_RGB = Transform.Create(inputProfile, Cms.TYPE_RGBA_8, opt.DefaultProfiles[TagColorModeEnum.RGB], Cms.TYPE_RGB_8, Intent.Perceptual, CmsFlags.BlackPointCompensation);
+                                    //transform_XXX_To_Lab = Transform.Create(inputProfile, Cms.TYPE_RGBA_8, opt.DefaultProfiles[TagColorModeEnum.Lab], Cms.TYPE_Lab_16, Intent.AbsoluteColorimetric, CmsFlags.BlackPointCompensation);
                                 }
                                 if (bitmap.PixelFormat == PixelFormat.Format8bppIndexed)
                                 {
                                     transform_XXX_To_RGB = Transform.Create(inputProfile, Cms.TYPE_GRAY_8, opt.DefaultProfiles[TagColorModeEnum.RGB], Cms.TYPE_BGR_8, Intent.Perceptual, CmsFlags.BlackPointCompensation);
+                                    //transform_XXX_To_Lab = Transform.Create(inputProfile, Cms.TYPE_GRAY_8, opt.DefaultProfiles[TagColorModeEnum.Lab], Cms.TYPE_Lab_16, Intent.AbsoluteColorimetric, CmsFlags.BlackPointCompensation);
                                 }
                                 if ((int)bitmap.PixelFormat == 0x200F)
                                 {
                                     transform_XXX_To_RGB = Transform.Create(inputProfile, Cms.TYPE_CMYK_8, opt.DefaultProfiles[TagColorModeEnum.RGB], Cms.TYPE_BGR_8, Intent.Perceptual, CmsFlags.BlackPointCompensation);
+                                    //transform_XXX_To_Lab = Transform.Create(inputProfile, Cms.TYPE_CMYK_8, opt.DefaultProfiles[TagColorModeEnum.Lab], Cms.TYPE_Lab_16, Intent.AbsoluteColorimetric, CmsFlags.BlackPointCompensation);
                                 }
 
                                 if (transform_XXX_To_RGB != null)
                                 {
+                                    Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+                                    BitmapData bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+                                    byte[] bitmapValues = new byte[Math.Abs(bitmapData.Stride) * bitmap.Height];
+                                    Marshal.Copy(bitmapData.Scan0, bitmapValues, 0, bitmapValues.Length);
+                                    bitmap.UnlockBits(bitmapData);
+
+                                    /*
+                                    byte[] labValues = new byte[6 * bitmap.Width * bitmap.Height];
+                                    using (transform_XXX_To_Lab)
+                                    {
+                                        transform_XXX_To_Lab.DoTransform(bitmapValues, labValues, bitmap.Width, bitmap.Height, bitmapData.Stride, bitmap.Width * 6, bitmapData.Stride, bitmap.Width * 6);
+                                        
+                                    }
+                                    */
+
                                     using (transform_XXX_To_RGB)
                                     {
-                                        Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-                                        BitmapData bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-
-                                        byte[] bitmapValues = new byte[Math.Abs(bitmapData.Stride) * bitmap.Height];
-                                        byte[] rgbValues;
-                                        Marshal.Copy(bitmapData.Scan0, bitmapValues, 0, bitmapValues.Length);
-                                        bitmap.UnlockBits(bitmapData);
-
+                                        byte[] rgbValues = null;
                                         using (Bitmap rgb = new Bitmap(bitmap.Width, bitmap.Height, PixelFormat.Format24bppRgb))
                                         {
                                             BitmapData rgbData = rgb.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
                                             rgbValues = new byte[Math.Abs(rgbData.Stride) * bitmap.Height];
 
                                             transform_XXX_To_RGB.DoTransform(bitmapValues, rgbValues, bitmap.Width, bitmap.Height, bitmapData.Stride, rgbData.Stride, bitmapData.Stride, rgbData.Stride);
+                                            //transform_Lab_To_RGB.DoTransform(labValues, rgbValues, bitmap.Width, bitmap.Height, bitmap.Width * 6, rgbData.Stride, bitmap.Width * 6, rgbData.Stride);
+                                            m.Add($"ID {item.Index}: Использован входной профиль {inputProfile.ColorSpace}: Ver = {inputProfile.Version}; '[{description}]'. Файл: {item.FileName}");
 
                                             Marshal.Copy(rgbValues, 0, rgbData.Scan0, rgbValues.Length);
                                             rgb.UnlockBits(rgbData);
@@ -369,6 +389,58 @@ namespace Smartproj.Utils
                                             m.Add($"ID {item.Index}: Трансформация выполнена: {item.ColorSpace}:{bitmap.PixelFormat} -> {"RGB"}. Файл: {item.FileName} -> {item.GUID}.{OutType.ToString().ToLower()}");
                                         }
                                     }
+
+/*
+if ((AreasDetection & ImageAreasEnum.Skin) == ImageAreasEnum.Skin)
+{
+DisjointSets skinDisjointSets = new DisjointSets();
+m.Add($"ID {item.Index}: Анализ и кластеризация... объём = {labValues.Length}: Файл: {item.FileName}");
+for (int j = 0; j < labValues.Length; j = j + 6)
+{
+Point pointXY = new Point((j % (bitmap.Width * 6)) / 6, j / (bitmap.Width * 6));
+
+for (int x = -1; x <= 0; x++)
+{
+for (int y = -1; y <= 0; y++)
+{
+if ((x != 0 || y != 0) && x + pointXY.X >= 0 && x + pointXY.X < bitmap.Width && y + pointXY.Y >= 0)
+{
+Point nextPoint = new Point(pointXY.X + x, pointXY.Y + y);
+
+int nextShift = ((pointXY.Y + y) * bitmap.Width + (pointXY.X + x)) * 6;
+
+ColorUtils.Lab nextLab = ColorUtils.Lab.FromWordBufferToLab(labValues, nextShift);
+
+if (nextLab.IsSkinColor())
+{
+int set1, set2;
+if (!skinDisjointSets.IsInSameSet(pointXY, nextPoint, out set1, out set2))
+{
+skinDisjointSets.Union(set1, set2);
+}
+}
+}
+}
+}
+}
+                                      
+var setsSkinGroups = skinDisjointSets.GetData();
+int clindex = 0;
+foreach (var set in setsSkinGroups)
+{
+if (set.Value.Count > 500 && set.Value.Frame.Width > 20 && set.Value.Frame.Height > 20)
+{
+int skinCounter = 0;
+foreach (var point in set.Value)
+{
+//int maskPosition = point.Y * grayStride + point.X;
+skinCounter++;
+}
+m.Add($"ID {item.Index}: Кластер: {clindex}; Объём = {skinCounter}: Файл: {item.FileName}");
+clindex++;
+}
+}
+*/
                                 }
                                 else
                                 {

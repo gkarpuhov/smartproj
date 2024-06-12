@@ -16,8 +16,10 @@
     <Name TypeId="1642033309">null</Name>
     <Bleed TypeId="-1119076432">3</Bleed>
     <Location TypeId="1642033309">C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Templates\200x280\Spread_DefaultTwoPage\09F\380cfb65-9614-4abe-9430-46f8ef0cfcae.xml</Location>
+    <SafeCutZone TypeId="-1119076432">5</SafeCutZone>
     <Graphics TypeId="-1673037392">
       <item TypeId="1364886211">
+        <SafeFrameZone TypeId="-1119076432">3</SafeFrameZone>
         <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
         <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
         <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
@@ -41,6 +43,7 @@
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="1364886211">
+        <SafeFrameZone TypeId="-1119076432">3</SafeFrameZone>
         <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
         <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
         <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
@@ -64,6 +67,7 @@
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="1364886211">
+        <SafeFrameZone TypeId="-1119076432">3</SafeFrameZone>
         <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
         <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
         <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
@@ -87,6 +91,7 @@
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="1364886211">
+        <SafeFrameZone TypeId="-1119076432">3</SafeFrameZone>
         <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
         <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
         <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
@@ -110,6 +115,7 @@
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="1364886211">
+        <SafeFrameZone TypeId="-1119076432">3</SafeFrameZone>
         <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
         <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
         <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
@@ -133,9 +139,10 @@
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="1364886211">
+        <SafeFrameZone TypeId="-1119076432">3</SafeFrameZone>
         <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
         <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
-        <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
+        <AutoFitObjectType TypeId="-2073753911">ProtectFaces</AutoFitObjectType>
         <AutoDetectAndFocusWidth TypeId="-1119076432">0</AutoDetectAndFocusWidth>
         <GraphicType TypeId="1066637078">ImageFrame</GraphicType>
         <FrameID TypeId="-584691058">1; 0</FrameID>
@@ -156,6 +163,7 @@
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="1364886211">
+        <SafeFrameZone TypeId="-1119076432">3</SafeFrameZone>
         <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
         <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
         <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
@@ -179,6 +187,7 @@
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="1364886211">
+        <SafeFrameZone TypeId="-1119076432">3</SafeFrameZone>
         <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
         <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
         <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
@@ -202,6 +211,7 @@
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="1364886211">
+        <SafeFrameZone TypeId="-1119076432">3</SafeFrameZone>
         <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
         <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
         <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>

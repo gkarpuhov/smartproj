@@ -22,7 +22,6 @@ namespace Smartproj.Utils
         public readonly byte[] ColorProfile;
         public readonly string FileName;
         public readonly string FilePath;
-        public readonly List<Rectangle> ObjectDetect;
         public readonly IEnumerable<KeyValuePair<string, IEnumerable<JProperty>>> Tags;
         public bool HasColorProfile => ColorProfile != null && ColorProfile.Length != 0;
         public string KeyId => FileName;
@@ -33,7 +32,6 @@ namespace Smartproj.Utils
         public ExifTaggedFile(int _index, string _file, string _dir)
         {
             mStatus = ImageStatusEnum.New;
-            ObjectDetect = new List<Rectangle>();
             Index = _index;
             FileName = _file;
             FilePath = _dir;
@@ -45,7 +43,6 @@ namespace Smartproj.Utils
         public ExifTaggedFile(int _index, string _file, string _dir, Size _size, DateTime _date, TagFileTypeEnum _type, IEnumerable<KeyValuePair<string, IEnumerable<JProperty>>> _tag, TagColorModeEnum _space, bool _hasgeo, ValueTuple<int, int> _gps, byte[] _profile = null, byte _bpc = 8, bool _layers = false, bool _transparency = false, bool _hastransform = false)
         {
             mStatus = ImageStatusEnum.New;
-            ObjectDetect = new List<Rectangle>();
             Index = _index;
             FileName = _file;
             Tags = _tag;

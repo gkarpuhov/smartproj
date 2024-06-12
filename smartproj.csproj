@@ -246,6 +246,7 @@
     <Compile Include="Adapters\Interface.cs" />
     <Compile Include="Adapters\VruAdapter.cs" />
     <Compile Include="Controllers\Imposing\DirectFileToTemplateImposeController.cs" />
+    <Compile Include="Controllers\Processing\ImageProcessController.cs" />
     <Compile Include="Controllers\Providers\AbstractInputProvider.cs" />
     <Compile Include="Controllers\Providers\AbstractOutputProvider.cs" />
     <Compile Include="Controllers\ControllerColelctions.cs" />
@@ -277,9 +278,6 @@
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Imposition\ImposedLayout.cs" />
-    <Compile Include="RIP\ImageProcessor.cs" />
-    <Compile Include="RIP\Imposition\ArrangeInputData.cs" />
-    <Compile Include="RIP\RIP.cs" />
     <Compile Include="WorkSpace.cs" />
     <Compile Include="Service1.cs">
       <SubType>Component</SubType>

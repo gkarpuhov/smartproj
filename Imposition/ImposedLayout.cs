@@ -54,7 +54,7 @@ namespace Smartproj
         public int FileId { get; set; }
         public RectangleF Bounds { get; set; }
         public int OrderBy { get; set; }
-        public ImposedDataContainer Owner { get; set; }
+        public ImposedLayout Owner { get; set; }
         public ImposedImageData()
         {
         }
@@ -337,7 +337,7 @@ namespace Smartproj
 
             foreach (var id in this)
             {
-                ids.Add(Owner.Owner.DataContainer[id.FileId].OrderBy);
+                ids.Add(Owner.Owner.InputDataContainer[id.FileId].OrderBy);
             }
 
             if (ids.Count <= 1) return true;

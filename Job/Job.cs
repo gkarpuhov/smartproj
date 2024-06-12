@@ -15,6 +15,28 @@ namespace Smartproj
             Fonts = new Dictionary<string, FontClass>();
         }    
     }
+    public class JobProcessingSpace
+    {
+        public JobProcessingSpace(Job _job) 
+        {
+            Owner = _job;
+            Clusters = new ExifTaggedFileSegments();
+            OutData = new Dictionary<string, ImposedDataContainer>();
+            ObjectDetectedAreas = new Dictionary<int, List<KeyValuePair<ObjectDetectImageEnum, List<RectangleF>>>>();
+        }
+        public Job Owner { get; }
+        /// <summary>
+        /// Контейнер данных, представляющий собой результат работы контроллера сборки макета.
+        /// Является инструкцией для работы контроллера <see cref="AbstractOutputProvider"/>
+        /// </summary>
+        public Dictionary<string, ImposedDataContainer> OutData { get; }
+        /// <summary>
+        /// Коллекция сегментов данных <see cref="Segment"/>, необходимых для выполнения процесса.
+        /// Сегмент представляет собой логическую структуру данных для группировки и анализу входных данных по определенному признаку
+        /// </summary>
+        public Segment Clusters { get; }
+        public Dictionary<int, List<KeyValuePair<ObjectDetectImageEnum, List<RectangleF>>>> ObjectDetectedAreas { get; }
+    }
     /// <summary>
     /// Структура, содержащая все необходимае ссылки на объекты и параметры для выполнения конкретного процесса. Время жизни - пока происходит процесс.
     /// Выполяется от имени выбранного экземпляра проекта <see cref="Project"/>, и инициализируется методами запускающего контроллера <see cref="AbstractInputProvider"/> проекта.
@@ -61,12 +83,7 @@ namespace Smartproj
         /// Коллекция исходных данных (файлов, метаданных, параметров и т.п.) для работы процесса, представленных контейнерами <see cref="ExifTaggedFile"/>.
         /// По ходу последовательного выполнения контроллеров, данные контейнера могут корректироваться для управления поведением следующих контроллеров
         /// </summary>
-        public List<ExifTaggedFile> DataContainer { get; }
-        /// <summary>
-        /// Коллекция сегментов данных <see cref="Segment"/>, необходимых для выполнения процесса.
-        /// Сегмент представляет собой логическую структуру данных для группировки и анализу входных данных по определенному признаку
-        /// </summary>
-        public Segment Clusters { get; }
+        public List<ExifTaggedFile> InputDataContainer { get; }
         /// <summary>
         /// Ссылка не структуру типа <see cref="Smartproj.Product"/>. Данная структура содержит абсолютно всю информацию для определения вида конечного продукта. Экземпляр создается путем десериализации в момент инициализации нового процесса
         /// </summary>
@@ -93,11 +110,7 @@ namespace Smartproj
         /// Например, для продуккции типа 'Layflat' ширина макета будет в два раза больше формата блока продукта в финальном виде
         /// </summary>
         public Size ProductSize { get; private set; }
-        /// <summary>
-        /// Контейнер данных, представляющий собой результат работы контроллера сборки макета.
-        /// Является инструкцией для работы контроллера <see cref="AbstractOutputProvider"/>
-        /// </summary>
-        public Dictionary<string, ImposedDataContainer> OutData { get; }
+        public JobProcessingSpace ProcessingSpace { get; }
         /// <summary>
         /// Конструктор по умолчанию
         /// </summary>
@@ -108,13 +121,12 @@ namespace Smartproj
             mStatus = ProcessStatusEnum.New;
             mIsDisposed = false;
             UID = Guid.NewGuid();
-            Clusters = new ExifTaggedFileSegments();
-            DataContainer = new List<ExifTaggedFile>();
-            OutData = new Dictionary<string, ImposedDataContainer>();
+            InputDataContainer = new List<ExifTaggedFile>();
             JobPath = Path.Combine(Owner.ProjectPath, "Jobs", UID.ToString());
             Directory.CreateDirectory(JobPath);
             AutoResample = 0;
             MinimalResolution = 200;
+            ProcessingSpace = new JobProcessingSpace(this);
         }
         /// <summary>
         /// Инициализация процесса, установки необходимых параметров для работы. Создает внутреннюю структуру продукта

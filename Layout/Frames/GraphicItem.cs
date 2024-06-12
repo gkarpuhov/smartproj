@@ -222,6 +222,11 @@ namespace Smartproj
     public class ImageFrame : ImageItem
     {
         /// <summary>
+        /// Настройка по умолчанию величины безопасного отступа внуть фрейма, в пределах которого не должно находиться значимых элементов изображения
+        /// </summary>
+        [XmlElement]
+        public float SafeFrameZone { get; set; }
+        /// <summary>
         /// Отступы со всех сторон в пределах обрезного формата шаблона (если не применятся специальная логика), определяющие зону для автоматического позиционирования выбранной части изображения
         /// </summary>
         [XmlElement]
@@ -291,6 +296,7 @@ namespace Smartproj
             AutoFitObjectType = AutoPositionObjectTypeEnum.Off;
             AutoFitPaddling = PositionEnum.TopCenter;
             AutoFitMargins = new Margins(5, 5, 5, 5);
+            SafeFrameZone = 3;
         }
         /// <summary>
         /// Контейнер, содержащий ссылки на текстовуй информацию, прикрепленную к данному графическому объекту

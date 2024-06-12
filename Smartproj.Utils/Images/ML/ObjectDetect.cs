@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 
 namespace Smartproj.Utils
 {
@@ -10,9 +11,14 @@ namespace Smartproj.Utils
     {
         public string CascadesPath { get; set; }
         public Logger DetectLog { get; set; }
+        public int SampleSize { get; set; }
+        public float ScaleFactor { get; set; }
+        public int MinHeighbors { get; set; }
         public ObjectDetectImageEnum ObjectDetectType { get; set; }
-        public bool Detect(IEnumerable<ExifTaggedFile> _input, Func<ExifTaggedFile, string> _nameSelector)
+        public bool Detect(IEnumerable<ExifTaggedFile> _input, Func<ExifTaggedFile, string> _nameSelector, Dictionary<int, List<KeyValuePair<ObjectDetectImageEnum, List<RectangleF>>>> _objectDetectedAreas)
         {
+            if (_objectDetectedAreas == null || ObjectDetectType == ObjectDetectImageEnum.None) return false;
+
             CascadeClassifier frontalface = null;
             CascadeClassifier profileface = null;
             CascadeClassifier fullbody = null;
@@ -23,7 +29,7 @@ namespace Smartproj.Utils
             List<string> warnings = new List<string>();
             List<string> errors = new List<string>();
             DateTime start = DateTime.Now;
-
+            _objectDetectedAreas.Clear();
             bool hasErrors = false;
 
             try
@@ -48,99 +54,86 @@ namespace Smartproj.Utils
                                 hasErrors = true;
                                 continue;
                             }
-                            List<Rectangle> objectsDetected = new List<Rectangle>();
+                            List<KeyValuePair<ObjectDetectImageEnum, List<RectangleF>>> objectsDetected = new List<KeyValuePair<ObjectDetectImageEnum, List<RectangleF>>>();
 
                             using (Mat image = new Mat(file))
                             {
-                                using (UMat ugray = new UMat())
+                                if (image.Width > image.Height)
                                 {
-                                    item.ObjectDetect.Clear();
+                                    // Нормализация по ширине
+                                    if (image.Width > SampleSize) CvInvoke.Resize(image, image, new Size(SampleSize, (SampleSize * image.Height) / image.Width));
+                                }
+                                else
+                                {
+                                    // Нормализация по высоте
+                                    if (image.Height > SampleSize) CvInvoke.Resize(image, image, new Size((SampleSize * image.Width) / image.Height, SampleSize));
+                                }
 
-                                    CvInvoke.CvtColor(image, ugray, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
-                                    CvInvoke.EqualizeHist(ugray, ugray);
+                                //using (UMat ugray = new UMat())
+                                //CvInvoke.CvtColor(image, ugray, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
+                                //CvInvoke.EqualizeHist(ugray, ugray);
 
-                                    if (frontalface != null)
+                                if (frontalface != null)
+                                {
+                                    List<RectangleF> frontalfaceDetected = frontalface.DetectMultiScale(image, ScaleFactor, MinHeighbors, new Size(30, 30)).Select(x => new RectangleF((float)x.X / image.Width, (float)x.Y / image.Height, (float)x.Width / image.Width, (float)x.Height / image.Height)).ToList();
+                                    if (frontalfaceDetected.Count > 0)
                                     {
-                                        Rectangle[] frontalfaceDetected = frontalface.DetectMultiScale(ugray, 1.1, 10, new Size(20, 20));
-                                        for (int i = 0; i < frontalfaceDetected.Length; i++)
-                                        {
-                                            if (frontalfaceDetected[i].Width > 100 && frontalfaceDetected[i].Height > 100)
-                                            {
-                                                objectsDetected.Add(frontalfaceDetected[i]);
-                                            }
-                                        }
+                                        objectsDetected.Add(new KeyValuePair<ObjectDetectImageEnum, List<RectangleF>>(ObjectDetectImageEnum.FrontFace, frontalfaceDetected));
                                     }
-                                    if (profileface != null)
+                                }
+                                if (profileface != null)
+                                {
+                                    List<RectangleF> profilefaceDetected = profileface.DetectMultiScale(image, ScaleFactor, MinHeighbors, new Size(30, 30)).Select(x => new RectangleF((float)x.X / image.Width, (float)x.Y / image.Height, (float)x.Width / image.Width, (float)x.Height / image.Height)).ToList();
+                                    if (profilefaceDetected.Count > 0)
                                     {
-                                        Rectangle[] profilefaceDetected = profileface.DetectMultiScale(ugray, 1.1, 10, new Size(20, 20));
-                                        for (int i = 0; i < profilefaceDetected.Length; i++)
-                                        {
-                                            if (profilefaceDetected[i].Width > 100 && profilefaceDetected[i].Height > 100)
-                                            {
-                                                objectsDetected.Add(profilefaceDetected[i]);
-                                            }
-                                        }
+                                        objectsDetected.Add(new KeyValuePair<ObjectDetectImageEnum, List<RectangleF>>(ObjectDetectImageEnum.ProfileFace, profilefaceDetected));
                                     }
-                                    if (fullbody != null)
+                                }
+                                if (fullbody != null)
+                                {
+                                    List<RectangleF> fullbodyfaceDetected = fullbody.DetectMultiScale(image, ScaleFactor, MinHeighbors, new Size(30, 30)).Select(x => new RectangleF((float)x.X / image.Width, (float)x.Y / image.Height, (float)x.Width / image.Width, (float)x.Height / image.Height)).ToList();
+                                    if (fullbodyfaceDetected.Count > 0)
                                     {
-                                        Rectangle[] fullbodyfaceDetected = fullbody.DetectMultiScale(ugray, 1.1, 10, new Size(20, 20));
-                                        for (int i = 0; i < fullbodyfaceDetected.Length; i++)
-                                        {
-                                            if (fullbodyfaceDetected[i].Width > 100 && fullbodyfaceDetected[i].Height > 100)
-                                            {
-                                                objectsDetected.Add(fullbodyfaceDetected[i]);
-                                            }
-                                        }
+                                        objectsDetected.Add(new KeyValuePair<ObjectDetectImageEnum, List<RectangleF>>(ObjectDetectImageEnum.FullBody, fullbodyfaceDetected));
                                     }
-                                    if (upperbody != null)
+                                }
+                                if (upperbody != null)
+                                {
+                                    List<RectangleF> upperbodyfaceDetected = upperbody.DetectMultiScale(image, ScaleFactor, MinHeighbors, new Size(30, 30)).Select(x => new RectangleF((float)x.X / image.Width, (float)x.Y / image.Height, (float)x.Width / image.Width, (float)x.Height / image.Height)).ToList();
+                                    if (upperbodyfaceDetected.Count > 0)
                                     {
-                                        Rectangle[] upperbodyfaceDetected = upperbody.DetectMultiScale(ugray, 1.1, 10, new Size(20, 20));
-                                        for (int i = 0; i < upperbodyfaceDetected.Length; i++)
-                                        {
-                                            if (upperbodyfaceDetected[i].Width > 100 && upperbodyfaceDetected[i].Height > 100)
-                                            {
-                                                objectsDetected.Add(upperbodyfaceDetected[i]);
-                                            }
-                                        }
+                                        objectsDetected.Add(new KeyValuePair<ObjectDetectImageEnum, List<RectangleF>>(ObjectDetectImageEnum.UpperBody, upperbodyfaceDetected));
                                     }
-                                    if (lowerbody != null)
+                                }
+                                if (lowerbody != null)
+                                {
+                                    List<RectangleF> lowerbodyfaceDetected = lowerbody.DetectMultiScale(image, ScaleFactor, MinHeighbors, new Size(30, 30)).Select(x => new RectangleF((float)x.X / image.Width, (float)x.Y / image.Height, (float)x.Width / image.Width, (float)x.Height / image.Height)).ToList();
+                                    if (lowerbodyfaceDetected.Count > 0)
                                     {
-                                        Rectangle[] lowerbodyfaceDetected = lowerbody.DetectMultiScale(ugray, 1.1, 10, new Size(20, 20));
-                                        for (int i = 0; i < lowerbodyfaceDetected.Length; i++)
-                                        {
-                                            if (lowerbodyfaceDetected[i].Width > 100 && lowerbodyfaceDetected[i].Height > 100)
-                                            {
-                                                objectsDetected.Add(lowerbodyfaceDetected[i]);
-                                            }
-                                        }
-                                    }
-                                    if (objectsDetected.Count > 0)
-                                    {
-                                        item.AddStatus(ImageStatusEnum.FacesDetected);
+                                        objectsDetected.Add(new KeyValuePair<ObjectDetectImageEnum, List<RectangleF>>(ObjectDetectImageEnum.LowerBody, lowerbodyfaceDetected));
                                     }
                                 }
                             }
 
-                            for (int i = 0; i < objectsDetected.Count; i++)
+                            if (objectsDetected.Count > 0)
                             {
-                                bool isunnion = false;
-                                for (int j = 0; j < item.ObjectDetect.Count; j++)
+                                var allForThisItem = new List<KeyValuePair<ObjectDetectImageEnum, List<RectangleF>>>();
+                                _objectDetectedAreas.Add(item.Index, allForThisItem);
+                                item.AddStatus(ImageStatusEnum.FacesDetected);
+
+                                for (int k = 0; k < objectsDetected.Count; k++) 
                                 {
-                                    if (item.ObjectDetect[j].IntersectsWith(objectsDetected[i]))
+                                    allForThisItem.Add(new KeyValuePair<ObjectDetectImageEnum, List<RectangleF>>(objectsDetected[k].Key, objectsDetected[k].Value.UnionAll()));
+                                }
+
+                                foreach (var f in allForThisItem)
+                                {
+                                    foreach (var d in f.Value)
                                     {
-                                        item.ObjectDetect[j] = Rectangle.Union(item.ObjectDetect[j], objectsDetected[i]);
-                                        isunnion = true;
-                                        break;
+                                        messages.Add($"File = {item.FileName}; Type = {f.Key}; Face rect: {d.X.ToString("0.000")},{d.Y.ToString("0.000")}; {d.Width.ToString("0.000")}x{d.Height.ToString("0.000")}");
                                     }
                                 }
-                                if (!isunnion) item.ObjectDetect.Add(objectsDetected[i]);
                             }
-
-                            foreach (var f in item.ObjectDetect)
-                            {
-                                messages.Add($"File = {item.FileName}; Face rect: {f.X},{f.Y}; {f.Width}x{f.Height}");
-                            }
-
                         }
                         catch (Exception ex)
                         {
@@ -168,7 +161,10 @@ namespace Smartproj.Utils
         }
         public ObjectDetect()
         {
-            ObjectDetectType = ObjectDetectImageEnum.FrontFace | ObjectDetectImageEnum.ProfileFace;
+            ObjectDetectType = ObjectDetectImageEnum.DetectAll;
+            SampleSize = 2000;
+            ScaleFactor = 1.1f;
+            MinHeighbors = 10;
         }
     }
 }

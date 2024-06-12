@@ -10,7 +10,8 @@ namespace Smartproj.Utils
         ProfileFace = 2,
         FullBody = 4,
         UpperBody = 8,
-        LowerBody = 16
+        LowerBody = 16,
+        DetectAll = FrontFace | ProfileFace | FullBody | UpperBody | LowerBody
     }
     [Flags]
     public enum TagFileTypeEnum
@@ -272,5 +273,26 @@ namespace Smartproj.Utils
         ProtectFaces = 4,
         AnyFaces = OneFace| GroupFaces
     }
-
+    [Flags]
+    public enum ImageAreasEnum
+    {
+        NotDetect = 0,
+        Skin = 1
+    }
+    [Flags]
+    public enum ColorPixelFlagEnum
+    {
+        None = 0,
+        Green = 1,
+        Sky = 2,
+        Skin = 4,
+        BlueRed = 8,
+        Fill = 16,
+        Gray = 32,
+        Sepia = 64,
+        White = 128,
+        Black = 256,
+        NoInterest = 512
+    }
 }
+

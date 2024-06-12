@@ -43,7 +43,7 @@ namespace Smartproj
 
                     Log?.WriteInfo("DirectFileToTemplateImposeController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Контроллер начал сборку макета... '{job.UID}'");
 
-                    ExifTaggedFileSegments fsSegment = (ExifTaggedFileSegments)job.Clusters[SegmentTypeEnum.FileStructure];
+                    ExifTaggedFileSegments fsSegment = (ExifTaggedFileSegments)job.ProcessingSpace.Clusters[SegmentTypeEnum.FileStructure];
 
                     for (int i = 0; i < fsSegment.ChildNodes.Count; i++)
                     {
@@ -75,11 +75,11 @@ namespace Smartproj
 
                             }
                             ImposedDataContainer imposedlist = null;
-                            if (!job.OutData.TryGetValue(matchTempName.Groups[1].Value.ToUpper(), out imposedlist))
+                            if (!job.ProcessingSpace.OutData.TryGetValue(matchTempName.Groups[1].Value.ToUpper(), out imposedlist))
                             {
                                 // Группировка по коду детали
                                 imposedlist = new ImposedPdfDataContainer(job);
-                                job.OutData.Add(matchTempName.Groups[1].Value.ToUpper(), imposedlist);
+                                job.ProcessingSpace.OutData.Add(matchTempName.Groups[1].Value.ToUpper(), imposedlist);
                             }
 
                             Guid templid = default;
@@ -122,7 +122,7 @@ namespace Smartproj
                         }
                     }
 
-                    foreach (var partpages in job.OutData)
+                    foreach (var partpages in job.ProcessingSpace.OutData)
                     {
                         partpages.Value.Sort((x, y) => x.Segments[0].OrderBy.CompareTo(y.Segments[0].OrderBy));
                     }
@@ -171,11 +171,11 @@ namespace Smartproj
                             int fileid = data[current++];
 
                             _toTryinmpse.Imposed[i][k, m].FileId = fileid;
-                            _toTryinmpse.Imposed[i][k, m].Owner = _toTryinmpse.Owner;
+                            _toTryinmpse.Imposed[i][k, m].Owner = _toTryinmpse;
 
-                            TryImageFit(_toTryinmpse, graphic, _toTryinmpse.Imposed[i][k, m]);
+                            TryImageFit(graphic, _toTryinmpse.Imposed[i][k, m]);
 
-                            job.DataContainer[fileid].AddStatus(ImageStatusEnum.Imposed);
+                            job.InputDataContainer[fileid].AddStatus(ImageStatusEnum.Imposed);
                         }
                     }
                 }

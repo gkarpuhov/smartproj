@@ -45,7 +45,7 @@ namespace Smartproj
                             break;
                     }
 
-                    if (!converter.Process(job.DataContainer))
+                    if (!converter.Process(job.InputDataContainer))
                     {
                         job.Status = ProcessStatusEnum.Error;
                         Log?.WriteError("ImageConverterController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Ошибка при выполненнии процесса '{job.UID}'");

@@ -1,10 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace Smartproj.Utils
 {
     public static class Rect
     {
+        public static List<RectangleF> UnionAll(this RectangleF[] _items1, IEnumerable<RectangleF> _items2 = null)
+        {
+            return UnionAll(_items1, _items2);
+        }
+        public static List<RectangleF> UnionAll(this IEnumerable<RectangleF> _items1, IEnumerable<RectangleF> _items2 = null)
+        {
+            List<RectangleF> list = new List<RectangleF>();
+            if (_items2 != null)
+            {
+                list.AddRange(_items2);
+            }
+                
+            foreach (RectangleF item1 in _items1)
+            {
+                bool isunnion = false;
+                for (int j = 0; j < list.Count; j++)
+                {
+                    if (list[j].IntersectsWith(item1))
+                    {
+                        list[j] = RectangleF.Union(list[j], item1); isunnion = true;
+                        break;
+                    }
+                }
+                if (!isunnion) list.Add(item1);
+            }
+            return list;
+        }
         public static Rectangle ToRectangle(this RectangleF _rect)
         {
             return new Rectangle(_rect.X.ToInt(), _rect.Y.ToInt(), _rect.Width.ToInt(), _rect.Height.ToInt());

@@ -240,6 +240,7 @@
     <Compile Include="Extentions\Type.cs" />
     <Compile Include="Extentions\Xml.cs" />
     <Compile Include="Images\ColorImagesConverter.cs" />
+    <Compile Include="Images\DisjointSets.cs" />
     <Compile Include="Images\ExifTaggedFile.cs" />
     <Compile Include="Images\ExifTaggedFileSegments.cs" />
     <Compile Include="Images\ExifTaggedFileParser.cs" />

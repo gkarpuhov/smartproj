@@ -201,6 +201,8 @@ namespace Smartproj
         public float Bleed { get; set; }
         [XmlElement]
         public string Location { get; set; }
+        [XmlElement]
+        public float SafeCutZone { get; set; }
         [XmlCollection(true, false, typeof(GraphicItem), typeof(Template))]
         public GraphicsCollection Graphics { get; set; }
         [XmlCollection(true, false, typeof(GraphicItem), typeof(Template))]
@@ -261,7 +263,8 @@ namespace Smartproj
             LayoutType = _layoutType;
             Side = _side;
             Trim = _size;
-            Bleed = 3f;
+            Bleed = 3;
+            SafeCutZone = 5;
             Enabled = true;
             UID = Guid.NewGuid();
         }
@@ -275,6 +278,7 @@ namespace Smartproj
         {
             Enabled = true;
             Bleed = 3f;
+            SafeCutZone = 5;
         }
     }
     public static class TemplateEx

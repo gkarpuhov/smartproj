@@ -7,11 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Emgu.CV.Dpm;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace Smartproj
 {
     public class ObjectDetectorController : AbstractController
     {
+        [XmlElement]
+        public int SampleSize { get; set; }
         public override ProcessStatusEnum CurrentStatus { get; protected set; }
         public override void Start(object[] _settings)
         {
@@ -29,10 +32,11 @@ namespace Smartproj
 
                     ObjectDetect detector = new ObjectDetect();
                     detector.DetectLog = Log;
+                    detector.SampleSize = SampleSize;
                     detector.ObjectDetectType = ObjectDetectImageEnum.FrontFace | ObjectDetectImageEnum.ProfileFace;
                     detector.CascadesPath = Path.Combine(ws.MLData, "haarcascades");
 
-                    if (!detector.Detect(job.DataContainer, x => Path.Combine(job.JobPath, "~Files", x.GUID + (job.Product.Optimization == FileSizeOptimization.Lossless ? ".tiff" : ".jpeg"))))
+                    if (!detector.Detect(job.InputDataContainer, x => Path.Combine(job.JobPath, "~Files", x.GUID + (job.Product.Optimization == FileSizeOptimization.Lossless ? ".tiff" : ".jpeg")), job.ProcessingSpace.ObjectDetectedAreas))
                     {
                         job.Status = ProcessStatusEnum.Error;
                         Log?.WriteError("ObjectDetectorController.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Ошибка при выполненнии процесса '{job.UID}'");
@@ -68,6 +72,7 @@ namespace Smartproj
         public ObjectDetectorController() : base()
         {
             CurrentStatus = ProcessStatusEnum.New;
+            SampleSize = 2000;
         }
     }
 }

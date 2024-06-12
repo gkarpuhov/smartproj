@@ -16,8 +16,10 @@
     <Name TypeId="1642033309">null</Name>
     <Bleed TypeId="-1119076432">3</Bleed>
     <Location TypeId="1642033309">C:\Users\admin\source\repos\smartproj\bin\x64\Release\Resources\Config\VRU\Templates\200x280\Spread_DefaultTwoPage\04F\5244dbef-e87e-4f80-aac1-3a8fc9b075a8.xml</Location>
+    <SafeCutZone TypeId="-1119076432">5</SafeCutZone>
     <Graphics TypeId="-1673037392">
       <item TypeId="1364886211">
+        <SafeFrameZone TypeId="-1119076432">3</SafeFrameZone>
         <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
         <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
         <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
@@ -43,6 +45,7 @@
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="1364886211">
+        <SafeFrameZone TypeId="-1119076432">3</SafeFrameZone>
         <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
         <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
         <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
@@ -66,6 +69,7 @@
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="1364886211">
+        <SafeFrameZone TypeId="-1119076432">3</SafeFrameZone>
         <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
         <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
         <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>
@@ -89,6 +93,7 @@
         <TreeNodeItems TypeId="2018040348" />
       </item>
       <item TypeId="1364886211">
+        <SafeFrameZone TypeId="-1119076432">3</SafeFrameZone>
         <AutoFitMargins TypeId="1003947508">{Top=5,Left=5,Bottom=5,Right=5}</AutoFitMargins>
         <AutoFitPaddling TypeId="-1100425429">TopCenter</AutoFitPaddling>
         <AutoFitObjectType TypeId="-2073753911">Off</AutoFitObjectType>

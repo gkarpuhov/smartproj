@@ -48,7 +48,7 @@ namespace Smartproj
                     string outPath = Path.Combine(job.JobPath, "~Output");
                     Directory.CreateDirectory(outPath);
 
-                    foreach (var detaildata in job.OutData)
+                    foreach (var detaildata in job.ProcessingSpace.OutData)
                     {
                         ImposedPdfDataContainer pdfData = (ImposedPdfDataContainer)detaildata.Value;
 
@@ -279,7 +279,7 @@ namespace Smartproj
                                                 Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: {ex.Message} (Job '{job.UID}')");
                                                 return false;
                                             }
-                                            var filedata = job.DataContainer[framedata.FileId];
+                                            var filedata = job.InputDataContainer[framedata.FileId];
                                             if ((filedata.Status & ImageStatusEnum.Error) == ImageStatusEnum.Error || (filedata.Status & ImageStatusEnum.NotSupported) == ImageStatusEnum.NotSupported)
                                             {
                                                 Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Файл '{filedata.FileName}' недоступен для использования так как имеет статус {filedata.Status} (Job '{job.UID}')");
@@ -287,7 +287,7 @@ namespace Smartproj
                                             }
                                             string filename = Path.Combine(job.JobPath, "~Files", filedata.GUID + (job.Product.Optimization == FileSizeOptimization.Lossless ? ".tiff" : ".jpeg"));
                                             // Координаты фреймов имеют ноль в обрезном формате. Вылет идет в минус. Поэтому сдвигаем на величину вылета (отнимая от общего смещения влево)
-                                            DrawImageFrame(_detaildata, frame, xShift, bleedsize, filename, framedata);
+                                            DrawImageFrame(frame, xShift, bleedsize, filename, framedata);
                                         }
 
                                         if (item.GraphicType == GraphicTypeEnum.TextFrame)
@@ -307,7 +307,7 @@ namespace Smartproj
                                                     return false;
                                                 }
                                             }
-                                            DrawTextFrame(_detaildata, text, framedata, job, xShift, bleedsize);
+                                            DrawTextFrame(text, framedata, job, xShift, bleedsize);
                                         }
                                     }
 
@@ -366,7 +366,7 @@ namespace Smartproj
                                             Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: {ex.Message} (Job '{job.UID}')");
                                             return false;
                                         }
-                                        var filedata = job.DataContainer[framedata.FileId];
+                                        var filedata = job.InputDataContainer[framedata.FileId];
                                         if ((filedata.Status & ImageStatusEnum.Error) == ImageStatusEnum.Error || (filedata.Status & ImageStatusEnum.NotSupported) == ImageStatusEnum.NotSupported)
                                         {
                                             Log?.WriteError("PdfOutputProvider.BlockImpose", $"{Owner?.Project?.ProjectId}: Файл '{filedata.FileName}' недоступен для использования так как имеет статус {filedata.Status} (Job '{job.UID}')");
@@ -374,7 +374,7 @@ namespace Smartproj
                                         }
                                         string filename = Path.Combine(job.JobPath, "~Files", filedata.GUID + (job.Product.Optimization == FileSizeOptimization.Lossless ? ".tiff" : ".jpeg"));
                                         // Координаты фреймов имеют ноль в обрезном формате. Вылет идет в минус. Поэтому сдвигаем на величину вылета (отнимая от общего смещения влево)
-                                        DrawImageFrame(_detaildata, frame, xShift, bleedsize, filename, framedata);
+                                        DrawImageFrame(frame, xShift, bleedsize, filename, framedata);
 
                                         if ((job.Status & ProcessStatusEnum.Error) != ProcessStatusEnum.Error)
                                         {
@@ -401,7 +401,7 @@ namespace Smartproj
                                                     return false;
                                                 }
                                             }
-                                            DrawTextFrame(_detaildata, text, framedata, job, xShift, bleedsize);
+                                            DrawTextFrame(text, framedata, job, xShift, bleedsize);
                                         }
                                     }
                                 }
@@ -424,9 +424,10 @@ namespace Smartproj
 
             return true;
         }
-        protected void DrawTextFrame(ImposedPdfDataContainer _data, TextFrame _item, ImposedImageData _framedata, Job _job, float _shift, float _bleed)
+        protected void DrawTextFrame(TextFrame _item, ImposedImageData _framedata, Job _job, float _shift, float _bleed)
         {
-            var doc = _data.PdfObject;
+            ImposedPdfDataContainer data = (ImposedPdfDataContainer)_framedata.Owner.Owner;
+            var doc = data.PdfObject;
 
             // Привязан ли текст чему то?
             if (_framedata != null && !_item.ReadOnly)
@@ -434,8 +435,8 @@ namespace Smartproj
                 string[] strings = null;
                 // Пробуем поискать текст подмены
                 // Если он не найдется, значит что-то не так - не будем ничего рисовать. Если надо нарисовать без привязки к фрейму, выставляем флаг ReadOnly
-                _job = _framedata.Owner.Owner;
-                var filedata = _job.DataContainer[_framedata.FileId];
+                _job = data.Owner;
+                var filedata = _job.InputDataContainer[_framedata.FileId];
 
                 string txtFileName = Path.Combine(filedata.FilePath, Path.ChangeExtension(filedata.FileName, ".txt"));
 
@@ -444,7 +445,7 @@ namespace Smartproj
                     strings = File.ReadAllLines(txtFileName);
                     if (strings.Length == 0 || !strings.Any(x => x.Replace(" ", "") != "")) return;
 
-                    List<ValueTuple<string, string, float, float, Color, Color, HorizontalPositionEnum>> textfordraw = UserTextData(_data, _item, strings);
+                    List<ValueTuple<string, string, float, float, Color, Color, HorizontalPositionEnum>> textfordraw = UserTextData(data, _item, strings);
 
                     if (textfordraw == null)
                     {
@@ -554,7 +555,7 @@ namespace Smartproj
             else
             {
                 // Просто рисуем текст из шаблона
-                List<List<ValueTuple<string, string, float, float, Color, Color, HorizontalPositionEnum>>> textfordraw = FrameTextData(_data, _item);
+                List<List<ValueTuple<string, string, float, float, Color, Color, HorizontalPositionEnum>>> textfordraw = FrameTextData(data, _item);
                 if (textfordraw == null)
                 {
                     _job.Status = ProcessStatusEnum.Error;
@@ -659,9 +660,10 @@ namespace Smartproj
                 doc.RestoreGraphicsState();
             }
         }
-        protected void DrawImageFrame(ImposedPdfDataContainer _data, ImageFrame _frame, float _shift, float _bleed, string _file, ImposedImageData _imagedata)
+        protected void DrawImageFrame(ImageFrame _frame, float _shift, float _bleed, string _file, ImposedImageData _imagedata)
         {
-            var doc = _data.PdfObject;
+            ImposedPdfDataContainer data = (ImposedPdfDataContainer)_imagedata.Owner.Owner;
+            var doc = data.PdfObject;
             var rect = _frame.Bounds;
             //PointF correction = _imagedata.Shift;
             //float scale = _imagedata.Scale;
@@ -697,13 +699,13 @@ namespace Smartproj
                     if (res != GdPictureStatus.OK)
                     {
                         Log?.WriteError("FileToFrame", $"{Owner?.Project?.ProjectId}: Ошибка отрисовки изображения во фрейм. Status = {res}");
-                        _data.Owner.Status = ProcessStatusEnum.Error;
+                        data.Owner.Status = ProcessStatusEnum.Error;
                     }
                 }
                 catch (Exception ex)
                 {
                     Log?.WriteError("FileToFrame", $"{Owner?.Project?.ProjectId}: Исключение при отрисовке изображения во фрейм '{ex.Message}'");
-                    _data.Owner.Status = ProcessStatusEnum.Error;
+                    data.Owner.Status = ProcessStatusEnum.Error;
                 }
                 finally
                 {
