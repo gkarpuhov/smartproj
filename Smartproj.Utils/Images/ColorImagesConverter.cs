@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Smartproj.Utils
 {
-    public class ProcessThreadOptions
+    public class ColorImagesConverterThreadOptions
     {
         public Dictionary<TagColorModeEnum, Profile> DefaultProfiles;
         public ConcurrentQueue<ExifTaggedFile> Queue;
@@ -114,14 +114,11 @@ namespace Smartproj.Utils
             }
 
             ConcurrentQueue<ExifTaggedFile> queue = new ConcurrentQueue<ExifTaggedFile>(_inputData);
-            var options = new ProcessThreadOptions() { Queue = queue, DefaultProfiles = defaultProfiles, TempPath = OutPath };
 
             int threadsCount = 6;
             Thread[] pool = new Thread[threadsCount];
             ManualResetEvent[] callback = new ManualResetEvent[threadsCount];
-            ProcessThreadOptions[] processoptions = new ProcessThreadOptions[threadsCount];
-
-            DateTime start = DateTime.Now;
+            ColorImagesConverterThreadOptions[] processoptions = new ColorImagesConverterThreadOptions[threadsCount];
 
             for (int i = 0; i < threadsCount; i++)
             {
@@ -130,13 +127,10 @@ namespace Smartproj.Utils
                     IsBackground = true
                 };
                 callback[i] = new ManualResetEvent(false);
-                pool[i].Start(processoptions[i] = new ProcessThreadOptions() { Queue = queue, DefaultProfiles = defaultProfiles, TempPath = OutPath, ResetEvent = callback[i]});
+                pool[i].Start(processoptions[i] = new ColorImagesConverterThreadOptions() { Queue = queue, DefaultProfiles = defaultProfiles, TempPath = OutPath, ResetEvent = callback[i]});
             }
 
             WaitHandle.WaitAll(callback);
-
-            messages.Add($"Общее время обработки = {Math.Round((DateTime.Now - start).TotalSeconds)} сек");
-
 
             foreach (var profile in defaultProfiles)
             {
@@ -154,7 +148,7 @@ namespace Smartproj.Utils
 
             void parallelAction(object _object)
             {
-                ProcessThreadOptions opt = (ProcessThreadOptions)_object;
+                ColorImagesConverterThreadOptions opt = (ColorImagesConverterThreadOptions)_object;
                 ExifTaggedFile item;
                 List<string> m = new List<string>();
                 List<string> w = new List<string>();
@@ -323,28 +317,22 @@ namespace Smartproj.Utils
                                 string description = inputProfile.GetProfileInfo(InfoType.Description, "en", "US");
 
                                 Transform transform_XXX_To_RGB = null;
-                                //Transform transform_XXX_To_Lab = null;
-                                //Transform transform_Lab_To_RGB = null;
 
                                 if (bitmap.PixelFormat == PixelFormat.Format24bppRgb)
                                 {
                                     transform_XXX_To_RGB = Transform.Create(inputProfile, Cms.TYPE_RGB_8, opt.DefaultProfiles[TagColorModeEnum.RGB], Cms.TYPE_RGB_8, Intent.Perceptual, CmsFlags.BlackPointCompensation);
-                                    //transform_XXX_To_Lab = Transform.Create(inputProfile, Cms.TYPE_RGB_8, opt.DefaultProfiles[TagColorModeEnum.Lab], Cms.TYPE_Lab_16, Intent.AbsoluteColorimetric, CmsFlags.BlackPointCompensation);
                                 }
                                 if (bitmap.PixelFormat == PixelFormat.Format32bppArgb)
                                 {
                                     transform_XXX_To_RGB = Transform.Create(inputProfile, Cms.TYPE_RGBA_8, opt.DefaultProfiles[TagColorModeEnum.RGB], Cms.TYPE_RGB_8, Intent.Perceptual, CmsFlags.BlackPointCompensation);
-                                    //transform_XXX_To_Lab = Transform.Create(inputProfile, Cms.TYPE_RGBA_8, opt.DefaultProfiles[TagColorModeEnum.Lab], Cms.TYPE_Lab_16, Intent.AbsoluteColorimetric, CmsFlags.BlackPointCompensation);
                                 }
                                 if (bitmap.PixelFormat == PixelFormat.Format8bppIndexed)
                                 {
                                     transform_XXX_To_RGB = Transform.Create(inputProfile, Cms.TYPE_GRAY_8, opt.DefaultProfiles[TagColorModeEnum.RGB], Cms.TYPE_BGR_8, Intent.Perceptual, CmsFlags.BlackPointCompensation);
-                                    //transform_XXX_To_Lab = Transform.Create(inputProfile, Cms.TYPE_GRAY_8, opt.DefaultProfiles[TagColorModeEnum.Lab], Cms.TYPE_Lab_16, Intent.AbsoluteColorimetric, CmsFlags.BlackPointCompensation);
                                 }
                                 if ((int)bitmap.PixelFormat == 0x200F)
                                 {
                                     transform_XXX_To_RGB = Transform.Create(inputProfile, Cms.TYPE_CMYK_8, opt.DefaultProfiles[TagColorModeEnum.RGB], Cms.TYPE_BGR_8, Intent.Perceptual, CmsFlags.BlackPointCompensation);
-                                    //transform_XXX_To_Lab = Transform.Create(inputProfile, Cms.TYPE_CMYK_8, opt.DefaultProfiles[TagColorModeEnum.Lab], Cms.TYPE_Lab_16, Intent.AbsoluteColorimetric, CmsFlags.BlackPointCompensation);
                                 }
 
                                 if (transform_XXX_To_RGB != null)
@@ -355,15 +343,6 @@ namespace Smartproj.Utils
                                     Marshal.Copy(bitmapData.Scan0, bitmapValues, 0, bitmapValues.Length);
                                     bitmap.UnlockBits(bitmapData);
 
-                                    /*
-                                    byte[] labValues = new byte[6 * bitmap.Width * bitmap.Height];
-                                    using (transform_XXX_To_Lab)
-                                    {
-                                        transform_XXX_To_Lab.DoTransform(bitmapValues, labValues, bitmap.Width, bitmap.Height, bitmapData.Stride, bitmap.Width * 6, bitmapData.Stride, bitmap.Width * 6);
-                                        
-                                    }
-                                    */
-
                                     using (transform_XXX_To_RGB)
                                     {
                                         byte[] rgbValues = null;
@@ -373,7 +352,7 @@ namespace Smartproj.Utils
                                             rgbValues = new byte[Math.Abs(rgbData.Stride) * bitmap.Height];
 
                                             transform_XXX_To_RGB.DoTransform(bitmapValues, rgbValues, bitmap.Width, bitmap.Height, bitmapData.Stride, rgbData.Stride, bitmapData.Stride, rgbData.Stride);
-                                            //transform_Lab_To_RGB.DoTransform(labValues, rgbValues, bitmap.Width, bitmap.Height, bitmap.Width * 6, rgbData.Stride, bitmap.Width * 6, rgbData.Stride);
+
                                             m.Add($"ID {item.Index}: Использован входной профиль {inputProfile.ColorSpace}: Ver = {inputProfile.Version}; '[{description}]'. Файл: {item.FileName}");
 
                                             Marshal.Copy(rgbValues, 0, rgbData.Scan0, rgbValues.Length);
@@ -389,58 +368,6 @@ namespace Smartproj.Utils
                                             m.Add($"ID {item.Index}: Трансформация выполнена: {item.ColorSpace}:{bitmap.PixelFormat} -> {"RGB"}. Файл: {item.FileName} -> {item.GUID}.{OutType.ToString().ToLower()}");
                                         }
                                     }
-
-/*
-if ((AreasDetection & ImageAreasEnum.Skin) == ImageAreasEnum.Skin)
-{
-DisjointSets skinDisjointSets = new DisjointSets();
-m.Add($"ID {item.Index}: Анализ и кластеризация... объём = {labValues.Length}: Файл: {item.FileName}");
-for (int j = 0; j < labValues.Length; j = j + 6)
-{
-Point pointXY = new Point((j % (bitmap.Width * 6)) / 6, j / (bitmap.Width * 6));
-
-for (int x = -1; x <= 0; x++)
-{
-for (int y = -1; y <= 0; y++)
-{
-if ((x != 0 || y != 0) && x + pointXY.X >= 0 && x + pointXY.X < bitmap.Width && y + pointXY.Y >= 0)
-{
-Point nextPoint = new Point(pointXY.X + x, pointXY.Y + y);
-
-int nextShift = ((pointXY.Y + y) * bitmap.Width + (pointXY.X + x)) * 6;
-
-ColorUtils.Lab nextLab = ColorUtils.Lab.FromWordBufferToLab(labValues, nextShift);
-
-if (nextLab.IsSkinColor())
-{
-int set1, set2;
-if (!skinDisjointSets.IsInSameSet(pointXY, nextPoint, out set1, out set2))
-{
-skinDisjointSets.Union(set1, set2);
-}
-}
-}
-}
-}
-}
-                                      
-var setsSkinGroups = skinDisjointSets.GetData();
-int clindex = 0;
-foreach (var set in setsSkinGroups)
-{
-if (set.Value.Count > 500 && set.Value.Frame.Width > 20 && set.Value.Frame.Height > 20)
-{
-int skinCounter = 0;
-foreach (var point in set.Value)
-{
-//int maskPosition = point.Y * grayStride + point.X;
-skinCounter++;
-}
-m.Add($"ID {item.Index}: Кластер: {clindex}; Объём = {skinCounter}: Файл: {item.FileName}");
-clindex++;
-}
-}
-*/
                                 }
                                 else
                                 {

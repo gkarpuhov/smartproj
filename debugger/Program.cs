@@ -23,6 +23,9 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using Emgu.CV;
+using Emgu.CV.Reg;
+using static Smartproj.Utils.ColorUtils;
+using Color = System.Drawing.Color;
 
 namespace debugger
 {
@@ -186,12 +189,82 @@ namespace debugger
 
         static void Main(string[] args)
         {
-            TagFileTypeEnum ssd = TagFileTypeEnum.JPEG | TagFileTypeEnum.PNG | TagFileTypeEnum.HEIC;
-            Console.WriteLine(ssd);
+            EncoderValue encodingScanMethod = EncoderValue.ScanMethodNonInterlaced;
 
-            ssd = ssd ^ TagFileTypeEnum.TEXT;
-            Console.WriteLine(ssd);
+            var imageCodecInfo = ImageCodecInfo.GetImageEncoders().First(i => i.MimeType == "image/jpeg");
+            var encoderParameter1 = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
+            var encoderParameter2 = new EncoderParameter(System.Drawing.Imaging.Encoder.ScanMethod, (long)encodingScanMethod);
+            var encoderParameters = new EncoderParameters(2);
+            encoderParameters.Param[0] = encoderParameter1;
+            encoderParameters.Param[1] = encoderParameter2;
 
+            var p1 = Profile.Open(@"C:\Windows\System32\spool\drivers\color\AdobeRGB1998.icc", "r");
+            var p2 = Profile.Open(@"C:\Windows\System32\spool\drivers\color\Display P3.icc", "r");
+            //string input1 = @"C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\1e038c52-be00-4ae8-8e5e-5b06e1dd3ddf\~Files\02c73f09-bec4-4e70-bab7-f5e7b0de3ce5.tiff";
+            //string input1 = @"C:\Users\admin\Desktop\test1\BLK\2. 09F\original (4).jpg";
+            string input1 = @"C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\Jobs\daf53bcd-2f4b-4fce-9e13-7f7d150f360d\~Files\133c6bb5-f5fc-4682-b1f1-9da5b7dbb7bd.tiff";
+            string input2 = @"C:\Temp\_a5.jpg";
+
+
+            using (var oImage = new GdPictureImaging())
+            {
+                int id1 = oImage.CreateGdPictureImageFromFile(input1);
+                Console.WriteLine($"Gd Stride 1 = {oImage.GetStride(id1)}");
+                int stride = Math.Abs(oImage.GetStride(id1));
+
+                if (oImage.GetStride(id1) < 0)
+                {
+                    oImage.Rotate(id1, RotateFlipType.Rotate180FlipX);
+                }
+                byte[] buffer = oImage.CopyToByteArray(id1);
+
+
+                int id2 = oImage.CreateNewGdPictureImage(oImage.GetWidth(id1), oImage.GetHeight(id1), PixelFormat.Format24bppRgb, Color.White);
+                Marshal.Copy(buffer, 0, oImage.GetBits(id2), buffer.Length);
+
+                Console.WriteLine($"Gd Stride 1 = {oImage.GetStride(id2)}");
+                Console.WriteLine($"Gd Stride 1 = {oImage.GetStat()}");
+                oImage.SaveAsJPEG(id2, @"c:\Temp\_b6.jpg");
+
+                //oImage.ReleaseGdPictureImage(id2);
+
+
+
+
+                using (Bitmap bitmap = new Bitmap(input1, false))
+                {
+                    var transform_XXX_To_RGB = Transform.Create(p1, Cms.TYPE_RGB_8, p2, Cms.TYPE_RGB_8, Intent.Perceptual, CmsFlags.BlackPointCompensation);
+
+                    Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+
+                    //BitmapData bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+                    //byte[] bitmapValues = new byte[Math.Abs(bitmapData.Stride) * bitmap.Height];
+                    //Marshal.Copy(bitmapData.Scan0, bitmapValues, 0, bitmapValues.Length);
+                    //bitmap.UnlockBits(bitmapData);
+
+                    byte[] bitmapValues = buffer;
+
+                    byte[] rgbValues = null;
+                    using (Bitmap rgb = new Bitmap(bitmap.Width, bitmap.Height, PixelFormat.Format24bppRgb))
+                    {
+                        BitmapData rgbData = rgb.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+                        rgbValues = new byte[Math.Abs(rgbData.Stride) * bitmap.Height];
+                        //transform_XXX_To_RGB.DoTransform(bitmapValues, rgbValues, bitmap.Width, bitmap.Height, bitmapData.Stride, rgbData.Stride, bitmapData.Stride, rgbData.Stride);
+                        transform_XXX_To_RGB.DoTransform(bitmapValues, rgbValues, bitmap.Width, bitmap.Height, stride, rgbData.Stride, stride, rgbData.Stride);
+
+                        //Console.WriteLine($"Stride 1 = {bitmapData.Stride}");
+                        Console.WriteLine($"Stride 2 = {rgbData.Stride}");
+
+                        Marshal.Copy(rgbValues, 0, rgbData.Scan0, rgbValues.Length);
+                        rgb.UnlockBits(rgbData);
+
+                        //rgb.Save(input2, imageCodecInfo, encoderParameters);
+                    }
+                }
+
+                oImage.ReleaseGdPictureImage(id1);
+            }
+            //Console.WriteLine();
             Console.ReadLine(); 
             return;
             WorkSpace.ApplicationPath = @"C:\Users\admin\source\repos\smartproj\bin\x64\Release";

@@ -114,15 +114,15 @@ namespace Smartproj.Utils
         }
         static ColorUtils()
         {
-            SkinC = new Interval<float>(2.0f, 65f);
+            SkinC = new Interval<float>(5.0f, 65f);
             SkinH = new Interval<float>(0f, 90f);
             SkinL = new Interval<float>(40f, 93f);
 
-            SkinLowC = new Interval<float>(1.0f, 40f);
+            SkinLowC = new Interval<float>(5.0f, 40f);
             SkinLowH = new Interval<float>(320f, 360f);
             SkinLowL = new Interval<float>(40f, 95f);
 
-            SkinDarkC = new Interval<float>(10f, 50f);
+            SkinDarkC = new Interval<float>(10f, 40f);
             SkinDarkH = new Interval<float>(0f, 90f);
             SkinDarkL = new Interval<float>(10f, 39.999f);
 
@@ -142,7 +142,7 @@ namespace Smartproj.Utils
             BlackLab = 0.99f;
             WhiteLab = 99.8f;
             GrayDelta = 1.0f;
-            SepiaDelta = 6.0f;
+            SepiaDelta = 5.0f;
         }
 
         public static readonly Interval<float> SkinC;

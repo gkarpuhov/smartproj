@@ -254,6 +254,7 @@
     <Compile Include="Controllers\Processing\ImageConverterController.cs" />
     <Compile Include="Controllers\Processing\ObjectDetectorController.cs" />
     <Compile Include="Controllers\Providers\PdfOutputProvider.cs" />
+    <Compile Include="Controllers\Providers\YandexDiskImagesPackInputProvider.cs" />
     <Compile Include="Detail\Detail.cs" />
     <Compile Include="DistanceStructs.cs" />
     <Compile Include="Job\Job.cs" />

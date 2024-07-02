@@ -7,6 +7,14 @@ namespace Smartproj.Utils
 {
     public static class Rect
     {
+        public static bool ContainsF(this RectangleF _rect, PointF _point)
+        {
+            if (_point.X >= _rect.X && _point.X <= _rect.X + _rect.Width && _point.Y >= _rect.Y && _point.Y <= _rect.Y + _rect.Height)
+            {
+                return true;
+            }
+            return false;
+        }
         public static List<RectangleF> UnionAll(this RectangleF[] _items1, IEnumerable<RectangleF> _items2 = null)
         {
             return UnionAll(_items1, _items2);

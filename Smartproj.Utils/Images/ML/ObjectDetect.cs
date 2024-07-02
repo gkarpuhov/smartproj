@@ -28,7 +28,7 @@ namespace Smartproj.Utils
             List<string> messages = new List<string>();
             List<string> warnings = new List<string>();
             List<string> errors = new List<string>();
-            DateTime start = DateTime.Now;
+
             _objectDetectedAreas.Clear();
             bool hasErrors = false;
 
@@ -152,8 +152,6 @@ namespace Smartproj.Utils
                 if (upperbody != null) upperbody.Dispose();
                 if (lowerbody != null) lowerbody.Dispose();
             }
-
-            messages.Add($"Общее время обработки = {Math.Round((DateTime.Now - start).TotalSeconds)} сек");
 
             if (DetectLog != null) DetectLog.WriteAll("ObjectDetect.Detect: Распознавание лиц", messages, warnings, errors);
 

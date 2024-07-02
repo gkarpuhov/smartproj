@@ -11,14 +11,11 @@ using System.Xml.Serialization;
 
 namespace Smartproj
 {
-    public class HotFolderImagesPackInputProvider : AbstractInputProvider
+    public class YandexDiskImagesPackInputProvider : AbstractInputProvider
     {
         private bool mIsLocked;
-        [XmlElement]
-        public bool AutoExifParse { get; set; }
-        public HotFolderImagesPackInputProvider() : base()
+        public YandexDiskImagesPackInputProvider() : base()
         {
-            AutoExifParse = true;
             mIsLocked = false;
         }
         bool CheckAndBlock()
@@ -50,7 +47,7 @@ namespace Smartproj
 
             if (adapter == null) 
             {
-                Log?.WriteError("HotFolderImagesInputProvider.ProcessHandler", $"{project.ProjectId} => Не определен адаптер входных данных");
+                Log?.WriteError("YandexDiskImagesPackInputProvider.ProcessHandler", $"{project.ProjectId} => Не определен адаптер входных данных");
                 return;
             }
             Job job = null;
