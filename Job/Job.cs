@@ -76,6 +76,10 @@ namespace Smartproj
         /// </summary>
         public int ProductionQty { get; set; }
         /// <summary>
+        /// Количество страниц в продукте
+        /// </summary>
+        public int Pages { get; set; }
+        /// <summary>
         /// Путь к файлам процесса в области временных данных
         /// </summary>
         public string JobPath { get; private set; }
@@ -144,7 +148,7 @@ namespace Smartproj
             ProductSize = _productSize;
             Product = _product;
             Product.Owner = this;
-            Product.CreateLayoutSpace(ProductSize);
+            Product.CreateProductSpace(ProductSize);
         }
         protected void Dispose(bool _disposing)
         {

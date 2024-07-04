@@ -67,6 +67,9 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json.Bson, Version=1.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.Bson.1.0.2\lib\net45\Newtonsoft.Json.Bson.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.AppContext.4.3.0\lib\net463\System.AppContext.dll</HintPath>
@@ -151,6 +154,9 @@
       <HintPath>packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
       <Private>True</Private>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebApi.Client.6.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
@@ -241,8 +247,12 @@
     <Reference Include="Telegram.Bot, Version=19.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Telegram.Bot.19.0.0\lib\netstandard2.0\Telegram.Bot.dll</HintPath>
     </Reference>
+    <Reference Include="YandexDisk.Client, Version=1.3.27.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\YandexDisk.Client.1.3.27\lib\netstandard2.0\YandexDisk.Client.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\Adapter.cs" />
     <Compile Include="Adapters\Interface.cs" />
     <Compile Include="Adapters\VruAdapter.cs" />
     <Compile Include="Controllers\Imposing\DirectFileToTemplateImposeController.cs" />
@@ -254,7 +264,6 @@
     <Compile Include="Controllers\Processing\ImageConverterController.cs" />
     <Compile Include="Controllers\Processing\ObjectDetectorController.cs" />
     <Compile Include="Controllers\Providers\PdfOutputProvider.cs" />
-    <Compile Include="Controllers\Providers\YandexDiskImagesPackInputProvider.cs" />
     <Compile Include="Detail\Detail.cs" />
     <Compile Include="DistanceStructs.cs" />
     <Compile Include="Job\Job.cs" />
@@ -269,6 +278,8 @@
     <Compile Include="Process.cs" />
     <Compile Include="Products\Classic.cs" />
     <Compile Include="Products\LayFlat.cs" />
+    <Compile Include="Products\Materials.cs" />
+    <Compile Include="Products\Press.cs" />
     <Compile Include="Products\Product.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="ProjectFont.cs" />

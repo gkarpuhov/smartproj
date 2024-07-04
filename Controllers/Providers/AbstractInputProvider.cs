@@ -19,6 +19,8 @@ namespace Smartproj
         private ProcessStatusEnum mCurrentStatus;
         delegate void StopAsyncMethodCaller();
         [XmlElement]
+        public int UpdateInterval { get; set; }
+        [XmlElement]
         public Guid AdapterId { get; set; }
         /// <summary>
         /// Строка, определеющая путь источника получения данных
@@ -117,7 +119,7 @@ namespace Smartproj
                     Log?.WriteInfo("AbstractInputProvider.Start", $"{Owner?.Project?.ProjectId}: '{this.GetType().Name}' => Запускающий контроллер начал работу");
 
                     StartParameters = _settings;
-                    mTimer = new Timer(ProcessHandler, _settings, 0, 5000);
+                    mTimer = new Timer(ProcessHandler, _settings, 0, UpdateInterval);
                     mCurrentStatus = ProcessStatusEnum.Processing;
                 }
             }
@@ -153,6 +155,7 @@ namespace Smartproj
             DefaultOutput = new ControllerCollection(Owner?.Project, null);
             mCurrentStatus = ProcessStatusEnum.New;
             mStopWaitHandle = new AutoResetEvent(false);
+            UpdateInterval = 5000;
         }
     }
 }

@@ -1,11 +1,5 @@
 ﻿using Smartproj.Utils;
-using Smartproj;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Emgu.CV.Dpm;
 using System.IO;
 using System.Xml.Serialization;
 

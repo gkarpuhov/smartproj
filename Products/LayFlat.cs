@@ -1,11 +1,5 @@
-﻿using Smartproj.Utils;
-using Smartproj;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using Smartproj;
+using Smartproj.Utils;
 using System.Xml.Serialization;
 
 namespace smartproj.Products

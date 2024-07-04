@@ -7,10 +7,34 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using static Emgu.CV.OCR.Tesseract;
+using System.Xml.Serialization;
 
 namespace Smartproj
 {
+    public class MailClientData
+    {
+        [XmlElement]
+        public string Host { get; set; }
+        [XmlElement]
+        public string Usermail{ get; set; }
+        [XmlElement]
+        public string Username { get; set; }
+        [XmlElement]
+        public string Login { get; set; }
+        [XmlElement]
+        public string Password { get; set; }
+        [XmlElement]
+        public int Timeout { get; set; }
+        public MailClientData()
+        {
+            Host = "smtp.yandex.ru";
+            Usermail = "robot@fineart-print.ru";
+            Username = "Поддержка FineArtPrint";
+            Login = "robot@fineart-print.ru";
+            Password = "MRG-vv7-7QM-9jn";
+            Timeout = 5000;
+        }
+    }
     /// <summary>
     /// Контейнер верхнего уровня. Инициализирует полность самодостаточную среду для работы системы, и определяет общие параметры
     /// </summary>
@@ -21,11 +45,16 @@ namespace Smartproj
         public static string ResourcesPath;
         public static string WorkingPath;
         public static readonly Logger SystemLog;
+        public static readonly MailLogger MailLogger;
         public static readonly string Fonts;
         //
         public readonly string MLData;
         public readonly string Config;
         public readonly string Profiles;
+        [XmlContainer]
+        public MailClientData SystemMail { get; set; }
+        [XmlCollection(true, false, typeof(Press))]
+        public PressCollection PressDevices { get;}
         /// <summary>
         /// 
         /// </summary>
@@ -73,6 +102,7 @@ namespace Smartproj
             GdPictureDocumentUtilities.SetCacheFolder(gdcache);
 
             SystemLog = new Logger();
+            MailLogger = new MailLogger();
         }
         /// <summary>
         /// Конструктор по умолчанию
@@ -93,6 +123,8 @@ namespace Smartproj
             Adapters = new List<IAdapter>();
             ApplicationFonts = new FontCollection(this);
             Projects = new ProjectCollection(this);
+            PressDevices = new PressCollection();
+            SystemMail = new MailClientData();
         }
         /// <summary>
         /// Инициирует работу запускающих контроллеров для доступных проектов <see cref="Project"/>

@@ -102,8 +102,9 @@ namespace Smartproj
         public List<Guid> TemplateKeys { get; set; }
         [XmlCollection(true, false, typeof(AbstractController))]
         public ControllerCollection Controllers { get; }
-        public void CreateLayoutSpace() => CreateLayoutSpace(default);
-        public void CreateLayoutSpace(Size _size)
+        public MaterialsCollection Materials { get; }
+        //public void CreateProductSpace() => CreateProductSpace(default);
+        public void CreateProductSpace(Size _size)
         {
             LayoutSpace = new LayoutCollection(this);
 
@@ -180,6 +181,7 @@ namespace Smartproj
             TemplateKeys = new List<Guid>();
             UID = Guid.NewGuid();
             Controllers = new ControllerCollection(null, this);
+            Materials = new MaterialsCollection(this);
             Optimization = FileSizeOptimization.MaxQuality;
         }
         public bool HasPart(string _id)

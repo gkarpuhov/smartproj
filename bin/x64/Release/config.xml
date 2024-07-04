@@ -1,7 +1,66 @@
 <root>
   <Data TypeId="1062216552">
+    <SystemMail TypeId="-787767543">
+      <Host TypeId="1642033309">smtp.yandex.ru</Host>
+      <Usermail TypeId="1642033309">robot@fineart-print.ru</Usermail>
+      <Username TypeId="1642033309">Поддержка FineArtPrint</Username>
+      <Login TypeId="1642033309">robot@fineart-print.ru</Login>
+      <Password TypeId="1642033309">MRG-vv7-7QM-9jn</Password>
+      <Timeout TypeId="1727199146">5000</Timeout>
+    </SystemMail>
+    <PressDevices TypeId="-46873794">
+      <item TypeId="-1843165458">
+        <Code TypeId="1642033309">Indigo7600</Code>
+        <Id TypeId="1727199146">3</Id>
+        <OpId TypeId="1727199146">10</OpId>
+        <PrintArea TypeId="-862134513">482; 330</PrintArea>
+        <PrintMargins TypeId="1003947508">{Top=5,Left=10,Bottom=5,Right=10}</PrintMargins>
+        <IsRoll TypeId="-491435614">False</IsRoll>
+      </item>
+      <item TypeId="-1843165458">
+        <Code TypeId="1642033309">Indigo12000</Code>
+        <Id TypeId="1727199146">239</Id>
+        <OpId TypeId="1727199146">10</OpId>
+        <PrintArea TypeId="-862134513">720; 520</PrintArea>
+        <PrintMargins TypeId="1003947508">{Top=10,Left=5,Bottom=10,Right=5}</PrintMargins>
+        <IsRoll TypeId="-491435614">False</IsRoll>
+      </item>
+      <item TypeId="-1843165458">
+        <Code TypeId="1642033309">Konica14000</Code>
+        <Id TypeId="1727199146">218</Id>
+        <OpId TypeId="1727199146">511</OpId>
+        <PrintArea TypeId="-862134513">700; 330</PrintArea>
+        <PrintMargins TypeId="1003947508">{Top=3,Left=3,Bottom=3,Right=3}</PrintMargins>
+        <IsRoll TypeId="-491435614">False</IsRoll>
+      </item>
+      <item TypeId="-1843165458">
+        <Code TypeId="1642033309">Konica12000</Code>
+        <Id TypeId="1727199146">205</Id>
+        <OpId TypeId="1727199146">511</OpId>
+        <PrintArea TypeId="-862134513">700; 330</PrintArea>
+        <PrintMargins TypeId="1003947508">{Top=3,Left=3,Bottom=3,Right=3}</PrintMargins>
+        <IsRoll TypeId="-491435614">False</IsRoll>
+      </item>
+    </PressDevices>
     <Adapters TypeId="-1637636998">
       <item TypeId="1367118783">
+        <Local TypeId="-371365590">
+          <Path TypeId="-1225456150">
+            <item TypeId="1642033309">C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\_Input</item>
+          </Path>
+          <Mask TypeId="1642033309">*.zip</Mask>
+          <Priority TypeId="1727199146">1</Priority>
+        </Local>
+        <Remote TypeId="28634618">
+          <Link TypeId="-1225456150">
+            <item TypeId="1642033309">disk:/smartproj</item>
+          </Link>
+          <Mask TypeId="1642033309">\.zip$</Mask>
+          <Priority TypeId="1727199146">0</Priority>
+          <Auth TypeId="1642033309">y0_AgAEA7qkZbKiAAnuBgAAAAEIIhBdAADz9OzomQBLrbm5cZrLN78BeV8VyA</Auth>
+          <Timeout TypeId="1727199146">60000</Timeout>
+          <Parameters TypeId="1642033309">null</Parameters>
+        </Remote>
         <MetadataType TypeId="-1313572491">XML</MetadataType>
         <FileDataFilter TypeId="953668548">JPEG</FileDataFilter>
         <UID TypeId="-1913220081">a4674aa6-06b7-4b2d-8864-d61315899100</UID>
@@ -45,16 +104,19 @@
         </UsingTemplateAliases>
         <InputProviders TypeId="1481613391">
           <item TypeId="-1782858820">
+            <AutoExifParse TypeId="-491435614">True</AutoExifParse>
+            <UpdateInterval TypeId="1727199146">5000</UpdateInterval>
             <AdapterId TypeId="-1913220081">a4674aa6-06b7-4b2d-8864-d61315899100</AdapterId>
-            <Source TypeId="1642033309">C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\_Input</Source>
+            <Source TypeId="1642033309">
+            </Source>
             <DefaultOutput TypeId="1481613391">
-			  <item TypeId="1501519237">
-				<Destination TypeId="1642033309">C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\_Output</Destination>
-				<Label TypeId="1642033309">Генерация макета в PDF формате</Label>
-				<UID TypeId="-1913220081">a7e882a8-52a1-4473-8bc9-721dc372e75f</UID>
-				<Priority TypeId="1727199146">0</Priority>
-				<Enabled TypeId="-491435614">True</Enabled>
-			  </item>
+              <item TypeId="1501519237">
+                <Destination TypeId="1642033309">C:\Users\admin\source\repos\smartproj\bin\x64\Release\Working\~VRU\_Output</Destination>
+                <Label TypeId="1642033309">Генерация макета в PDF формате</Label>
+                <UID TypeId="-1913220081">a7e882a8-52a1-4473-8bc9-721dc372e75f</UID>
+                <Priority TypeId="1727199146">0</Priority>
+                <Enabled TypeId="-491435614">True</Enabled>
+              </item>
             </DefaultOutput>
             <Label TypeId="1642033309">Запуск процесса обработки изображений из горячей папки</Label>
             <UID TypeId="-1913220081">e0ded6f2-9449-4d28-a6bb-e4358081788d</UID>
@@ -67,6 +129,9 @@
   </Data>
   <Types>
     <WorkSpace Id="1062216552" Guid="(4a08d5b0-6cff-396f-b806-58432a54fa85)">Smartproj.WorkSpace, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</WorkSpace>
+    <MailClientData Id="-787767543" Guid="(b4547787-254b-365a-9c6d-7c75fed91bdd)">Smartproj.MailClientData, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</MailClientData>
+    <PressCollection Id="-46873794" Guid="(b7bc0e8b-949c-3a7d-8080-de2e07478dca)">Smartproj.PressCollection, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</PressCollection>
+    <Press Id="-1843165458" Guid="(5ea4abcc-e2de-3bff-97fa-5a6f05205508)">Smartproj.Press, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Press>
     <List-1 Id="-1637636998" Guid="(5af00c2e-048b-3ab3-8ccd-548134771d38)">System.Collections.Generic.List`1[[Smartproj.IAdapter, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</List-1>
     <VruAdapter Id="1367118783" Guid="(51d743e0-d880-302f-8f47-f571d9a9f1ec)">Smartproj.VruAdapter, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</VruAdapter>
     <FontCollection Id="-304816164" Guid="(a03cd6cc-e622-3d06-b43a-29abe137d6d5)">Smartproj.FontCollection, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</FontCollection>
@@ -78,9 +143,12 @@
     <ControllerCollection Id="1481613391" Guid="(f038ac85-352a-3936-a4cd-14e25c913334)">Smartproj.ControllerCollection, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</ControllerCollection>
     <HotFolderImagesPackInputProvider Id="-1782858820" Guid="(7057daed-0ffc-3ab2-8d78-04add50f4f50)">Smartproj.HotFolderImagesPackInputProvider, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</HotFolderImagesPackInputProvider>
     <PdfOutputProvider Id="1501519237" Guid="(ca865d4a-4248-3155-abe9-4c8edee9acfe)">Smartproj.PdfOutputProvider, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</PdfOutputProvider>
-    <DetailTypeEnum Id="217811671" Guid="(4db8054a-9b81-3a86-9c2d-d035d372b265)">Smartproj.Utils.DetailTypeEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</DetailTypeEnum>
     <FontStyle Id="989716858" Guid="(e31d55f8-7c58-36fa-b7d6-b42857df44b7)">System.Drawing.FontStyle, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</FontStyle>
+    <FileSource Id="-371365590" Guid="(dae68f5e-8528-3421-a33d-306b4be6752c)">Smartproj.FileSource, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</FileSource>
+    <RemoteSource Id="28634618" Guid="(0aa4883a-46e3-307f-b7e3-68bda821ae1c)">Smartproj.RemoteSource, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</RemoteSource>
     <SourceParametersTypeEnum Id="-1313572491" Guid="(024f463e-2171-3386-b09f-2a807a7fd3e5)">Smartproj.SourceParametersTypeEnum, smartproj, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</SourceParametersTypeEnum>
     <TagFileTypeEnum Id="953668548" Guid="(96349ed6-952d-3ccc-8cde-c89e6a375f79)">Smartproj.Utils.TagFileTypeEnum, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</TagFileTypeEnum>
+    <List-1 Id="-1225456150" Guid="(5af00c2e-048b-3ab3-8ccd-548134771d38)">System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</List-1>
+    <Margins Id="1003947508" Guid="(fe0ae27a-bbba-363c-8799-e4d5760f36e2)">Smartproj.Utils.Margins, Smartproj.Utils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Margins>
   </Types>
 </root>

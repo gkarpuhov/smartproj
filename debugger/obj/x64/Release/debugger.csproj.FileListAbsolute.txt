@@ -56,3 +56,10 @@ C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\Emgu.CV.xml
 C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\Telegram.Bot.pdb
 C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\MedallionShell.xml
 C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\smartproj.exe.config
+C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\YandexDisk.Client.dll
+C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\System.Net.Http.Formatting.dll
+C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\Newtonsoft.Json.Bson.dll
+C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\YandexDisk.Client.xml
+C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\System.Net.Http.Formatting.xml
+C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\Newtonsoft.Json.Bson.pdb
+C:\Users\admin\source\repos\smartproj\debugger\bin\x64\Release\Newtonsoft.Json.Bson.xml
