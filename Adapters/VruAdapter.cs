@@ -90,12 +90,21 @@ namespace Smartproj
             {
                 try
                 {
+                    Product product = (Product)Serializer.LoadXml(productFile);
+                    //
+                    product.Block.Paper = new Paper() { SKU = "MATT_250_MAX", Thickness = 0.2f };
+                    product.Block.Coating = new Coating() { SKU = "M0", Thickness = 0.028f, Sides = 1 };
+                    product.Block.DuplexLayout = false;
+                    product.Cover.Paper = new Paper() { SKU = "MATT_170_MAX", Thickness = 0.14f };
+                    product.Cover.Coating = new Coating() { SKU = "G0", Thickness = 0.028f, Sides = 1 };
+                    product.Cover.DuplexLayout = false;
+                    //
                     _job.OrderNumber = "1000";
                     _job.ItemId = "0000";
                     _job.ProductionQty = 1;
                     _job.Pages = 40;
                     //
-                    _job.Create((Product)Serializer.LoadXml(productFile), productSize, metadata, MetadataType, FileDataFilter);
+                    _job.Create(product, productSize, metadata, MetadataType, FileDataFilter);
                     //_job.Product.Save();
                     _job.MinimalResolution = 200;
                     _project.Log?.WriteInfo("VruAdapter.GetNext", $"Продукт  {_project.ProjectId} => {_job.Product.ProductKeyCode} ({productSize.Width}X{productSize.Height}) успешно иницализирован процессом {_job.UID}");

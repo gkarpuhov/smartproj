@@ -11,7 +11,23 @@ namespace Smartproj
         public MaterialsCollection Materials => ((Product)Parent).Materials[KeyId];
         public Size Size { get; set; }
         public Press Press { get; set; }    
-        public string Coating { get; set; }
+        public bool DuplexLayout { get; set; }
+        public Coating Coating 
+        {
+            get { return Materials?.Coating; } 
+            set
+            {
+                ((Product)Parent).Materials.Add(value);
+            }
+        }
+        public Paper Paper
+        {
+            get { return Materials?.Paper; }
+            set
+            {
+                ((Product)Parent).Materials.Add(value);
+            }
+        }
         protected Detail(): base() { }
     }
     public class BlockDetail : Detail

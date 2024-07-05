@@ -86,6 +86,8 @@ namespace Smartproj
         public override Logger Log => Owner?.Log;
         public Job Owner { get; set; }
         public IEnumerable<Detail> Parts => TreeNodeItems.Cast<Detail>();
+        public BlockDetail Block => (BlockDetail)Parts.FirstOrDefault(x => x.KeyId == "BLK");
+        public CoverDetail Cover => (CoverDetail)Parts.FirstOrDefault(x => x.KeyId == "CVR");
         public virtual string ProductCode { get; set; }
         [XmlElement]
         public FileSizeOptimization Optimization { get; set; }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace Smartproj
@@ -13,30 +14,19 @@ namespace Smartproj
         public Product Owner { get; } 
         public MaterialsCollection this[string _detail] => new MaterialsCollection(mMaterials.Where(x => x.DetailId == _detail), Owner);
         public Material this[int _id] => mMaterials.SingleOrDefault(x => x.Id == _id);
-        public Material Paper => mMaterials.FirstOrDefault(x => x.TypeId == 0);
-        public Material Coating => mMaterials.FirstOrDefault(x => x.TypeId == 1);
-        public Paper AddPaper(string _partId, string _code)
-        {
-            Paper paper = new Paper();
-            paper.DetailId = _partId;
-            paper.SKU2 = _code;
-            
-            mMaterials.Add(paper);
-
-            return paper;
-        }
-        public Paper AddPaper(string _partId, int _id)
-        {
-            Paper paper = new Paper();
-            paper.DetailId = _partId;
-            paper.Id = _id;
-
-            mMaterials.Add(paper);
-
-            return paper;
-        }
+        public Paper Paper => (Paper)mMaterials.FirstOrDefault(x => x.TypeId == 0);
+        public Coating Coating => (Coating)mMaterials.FirstOrDefault(x => x.TypeId == 1);
         public void Add(Material _mat)
         {
+            if (_mat == null || mMaterials.Contains(_mat)) return;
+
+            // Для одного типа детали может быть только один материал того же типа
+            for (int i = 0; i < mMaterials.Count; i++)
+            {
+                // Если уже был ранее добавлен - заменяем
+                if (mMaterials[i].TypeId == _mat.TypeId && mMaterials[i].DetailId == _mat.DetailId) { mMaterials[i] = _mat; return; }
+            }
+
             mMaterials.Add(_mat);
         }
         public IEnumerator<Material> GetEnumerator()
@@ -73,6 +63,7 @@ namespace Smartproj
     {
         public string Name { get; set; }
         public float Thickness { get; set; }
+        public int Sides { get; set; }
         public Coating() : base("Плёнка для ламинации", 1, false) 
         {
         }
@@ -96,6 +87,8 @@ namespace Smartproj
     {
         public bool Workpiece { get; set; }
         public string Label { get; }
+        // SWITCH
+        public string SKU { get; set; }
         // MPP_SCUCODE
         public string SKU1 { get; set; }
         // XML_SCUCODE

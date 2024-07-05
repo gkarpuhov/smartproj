@@ -115,6 +115,25 @@ namespace Smartproj
         /// </summary>
         public Size ProductSize { get; private set; }
         public JobProcessingSpace ProcessingSpace { get; }
+        public float GetSpine()
+        {
+            BlockDetail block = Product?.Block;
+            if (block == null) return 0;
+
+            Paper paper = block.Paper;
+            Coating coating = block.Coating;
+
+            float blockDetails = (float)(block.DuplexLayout ? Math.Ceiling(Pages / 2d) : Pages);
+            float spine = blockDetails * (paper.Thickness + (coating == null ? 0 : coating.Thickness * coating.Sides));
+
+            if (Product.ProductCode.Contains("KHS"))
+            {
+                // Приблизительно двойной корешок для сшитых книг
+                spine = spine * 2;
+            }
+
+            return spine;
+        }
         /// <summary>
         /// Конструктор по умолчанию
         /// </summary>
